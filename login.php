@@ -1,8 +1,8 @@
 <?php
-// Získání tokenu z URL
+session_start();
+
 $token = $_GET['t'] ?? '';
 
-// Funkce pro hezké zobrazení chyby ve stylu aplikace
 function showError($message) {
     die('<!DOCTYPE html>
 <html lang="cs">
@@ -32,28 +32,14 @@ if (empty($token)) {
     showError('Neplatný nebo chybějící odkaz.');
 }
 
-// Připojení k databázi
-$host = 'localhost';
-$db   = 'alphapersonal';
-$user = 'root';
-$pass = '';
-$charset = 'utf8mb4';
+// 1. Připojení k DB (to automaticky načte i language.php)
+require_once 'db.php'; 
 
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
-
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (\PDOException $e) {
-    showError('Chyba připojení k databázi.');
-}
-
-// Dohledání uživatele podle tokenu
-$stmt = $pdo->prepare('SELECT u.*, p.jmeno, p.prijmeni FROM alpha_pracovnici_uzivatele u LEFT JOIN alpha_pracovnici p ON u.id_pracovnika = p.id WHERE u.login_qr_token = ?');
+// 2. Najdeme uživatele a vytáhneme i jeho sloupec `jazyk` z tabulky alpha_pracovnici
+$stmt = $pdo->prepare('SELECT u.*, p.jmeno, p.prijmeni, p.jazyk 
+                       FROM alpha_pracovnici_uzivatele u 
+                       LEFT JOIN alpha_pracovnici p ON u.id_pracovnika = p.id 
+                       WHERE u.login_qr_token = ?');
 $stmt->execute([$token]);
 $dbUser = $stmt->fetch();
 
@@ -61,11 +47,19 @@ if (!$dbUser || $dbUser['is_active'] != 1 || $dbUser['login_qr_enabled'] != 1) {
     showError('Tento odkaz není platný, vypršel, nebo je účet zablokován.');
 }
 
+// 3. Uložíme zjištěný jazyk do session (pokud v DB jazyk chybí, dáme 1)
+$_SESSION['lang_id'] = $dbUser['jazyk'] ?? 1;
+
+// 4. KOUZLO: Přenačteme texty pro správný jazyk a sekci 'front'
+loadTranslations($pdo, $_SESSION['lang_id'], 'front');
+
+// Příprava dat pro HTML
 $email = $dbUser['login_email'];
 $jmeno = $dbUser['jmeno'] ?? '';
 $prijmeni = $dbUser['prijmeni'] ?? '';
 $display_name = trim($jmeno . ' ' . $prijmeni) ?: $email;
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -75,7 +69,7 @@ $display_name = trim($jmeno . ' ' . $prijmeni) ?: $email;
     <meta name="author" content="Softnio">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="images/favicon.png">
-    <title>Login - CopyGen</title>
+    <title><?= htmlspecialchars(t('mess_loggin_title')) ?> - CopyGen</title>
     <link rel="stylesheet" href="assets/css/style.css?v1.1.0">
 </head>
 
@@ -86,7 +80,7 @@ $display_name = trim($jmeno . ' ' . $prijmeni) ?: $email;
                 <div class="nk-shape bg-shape-blur-a start-0 top-0"></div>
                 <div class="nk-shape bg-shape-blur-b end-0 bottom-0"></div>
                 <div class="text-center pt-5">
-                    <a href="index.php" class="logo-link">
+                    <a href="javascript:void(0)" class="logo-link">
                         <div class="logo-wrap">
                             <img class="logo-img logo-light" src="images/logo.png" srcset="images/logo2x.png 2x" alt="">
                             <img class="logo-img logo-dark" src="images/logo-dark.png" srcset="images/logo-dark2x.png 2x" alt="">
@@ -100,43 +94,40 @@ $display_name = trim($jmeno . ' ' . $prijmeni) ?: $email;
                             <div class="nk-block">
                                 <div class="nk-block-head text-center mb-4 pb-2">
                                     <div class="nk-block-head-content">
-                                        <h1 class="nk-block-title mb-1">Log into Your Account</h1>
-                                        <p class="small">Sign in to your account to customize your content generation settings and view your history.</p>
+                                        <h1 class="nk-block-title mb-1"><?= htmlspecialchars(t('mess_loggin_title')) ?></h1>
+                                        
+                                        <p class="small"><?= htmlspecialchars(t('loggin_desc') !== 'loggin_desc' ? t('loggin_desc') : 'Sign in to your account to customize your content generation settings and view your history.') ?></p>
                                     </div>
                                 </div>
                                 
                                 <div id="loginError" class="alert alert-danger d-none mb-3"></div>
                                 
-                                <!-- Přidán blok s informací o uživateli -->
                                 <div class="alert alert-info mb-4 text-center">
-                                    Přihlašujete se jako:<br><strong><?php echo htmlspecialchars($display_name); ?></strong>
+                                    <?= htmlspecialchars(t('loggin_as') !== 'loggin_as' ? t('loggin_as') : 'Přihlašujete se jako:') ?><br><strong><?php echo htmlspecialchars($display_name); ?></strong>
                                 </div>
                                 
                                 <form id="loginForm" action="api/client/auth/login-by-token.php" method="POST">
-                                    <!-- Skrytá pole pro API backend -->
                                     <input type="hidden" name="token" id="token" value="<?php echo htmlspecialchars($_GET['t']); ?>">
                                     <input type="hidden" name="email" value="<?php echo htmlspecialchars($email); ?>">
                                     
                                     <div class="row gy-3">
-                                        <!-- Odstraněn div s inputem pro email -->
                                         <div class="col-12">
                                             <div class="form-group">
-                                                <label class="form-label" for="password">Password</label>
+                                                <label class="form-label" for="password"><?= htmlspecialchars(t('loggin_pass')) ?></label>
                                                 <div class="form-control-wrap">
                                                     <a href="password" class="password-toggle form-control-icon end" title="Toggle show/hide password">
                                                         <em class="icon ni ni-eye inactive"></em>
                                                         <em class="icon ni ni-eye-off active"></em>
                                                     </a>
-                                                    <input class="form-control" type="password" id="password" name="password" placeholder="Enter password" required />
+                                                    <input class="form-control" type="password" id="password" name="password" placeholder="<?= htmlspecialchars(t('loggin_pass')) ?>" required />
                                                 </div>
-                                            </div><!-- .form-group -->
-                                        </div>
+                                            </div></div>
                                         <div class="col-12">
-                                            <a class="link small" href="forgot-password.html">Forgot password?</a>
+                                            <a class="link small" href="forgot-password.html"><?= htmlspecialchars(t('forgot_password') !== 'forgot_password' ? t('forgot_password') : 'Forgot password?') ?></a>
                                         </div>
                                         <div class="col-12">
                                             <div class="d-grid">
-                                                <button class="btn btn-primary" type="submit">Login</button>
+                                                <button class="btn btn-primary" type="submit"><?= htmlspecialchars(t('btn_loggin')) ?></button>
                                             </div>
                                         </div>
                                     </div>
@@ -152,7 +143,7 @@ $display_name = trim($jmeno . ' ' . $prijmeni) ?: $email;
                             <div class="nk-footer-links px-3">
                                 <ul class="nav nav-sm">
                                     <li class="nav-item">
-                                        <a class="nav-link" href="/#">Home</a>
+                                        <a class="nav-link" href="/#"><?= htmlspecialchars(t('home_admin') !== 'home_admin' ? t('home_admin') : 'Home') ?></a>
                                     </li>
                                     <li class="nav-item">
                                         <a class="nav-link" href="/#">Pricing</a>
@@ -187,7 +178,6 @@ $display_name = trim($jmeno . ' ' . $prijmeni) ?: $email;
                     e.preventDefault(); 
                     errorDiv.classList.add('d-none');
                     
-                    // FormData automaticky vezme skrytý 'token', 'email' a viditelný 'password'
                     fetch(form.action, {
                         method: form.method,
                         body: new FormData(form)
@@ -197,12 +187,14 @@ $display_name = trim($jmeno . ' ' . $prijmeni) ?: $email;
                         if (data.success) {
                             window.location.href = 'index.php';
                         } else {
-                            errorDiv.textContent = data.message;
+                            // Chybové hlášky, které vrací api/client/auth/login-by-token.php by ideálně také měly
+                            // brát texty z tvé DB, ale jelikož to vyhodnocuje backend, řeší se to jinde.
+                            errorDiv.textContent = data.message || 'Chyba přihlášení.';
                             errorDiv.classList.remove('d-none');
                         }
                     })
                     .catch(error => {
-                        errorDiv.textContent = 'Došlo k chybě při komunikaci se serverem.';
+                        errorDiv.textContent = '<?= htmlspecialchars(t("error_server_com") !== "error_server_com" ? t("error_server_com") : "Došlo k chybě při komunikaci se serverem.") ?>';
                         errorDiv.classList.remove('d-none');
                     });
                 });

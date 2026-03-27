@@ -3,22 +3,10 @@ session_start();
 $fullName = $_SESSION['user_name'] ?? 'Uživateli'; 
 $firstName = explode(' ', trim($fullName))[0];
 
-// 1. Připojení k DB a načtení dat
-$host = 'localhost';
-$db   = 'alphapersonal';
-$user = 'root';
-$pass = '';
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
+require_once 'db.php'; // Cestu případně uprav podle své hierarchie
 
 try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
+    // Proměnná $pdo už existuje díky db.php
     $stmt = $pdo->query('SELECT * FROM alpha_moduly WHERE is_active = 1 ORDER BY order_index ASC');
     $modules = $stmt->fetchAll();
 } catch (\PDOException $e) {
