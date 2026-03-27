@@ -53,7 +53,7 @@ try {
 }
 
 // Dohledání uživatele podle tokenu
-$stmt = $pdo->prepare('SELECT * FROM alpha_pracovnici_uzivatele WHERE login_qr_token = ?');
+$stmt = $pdo->prepare('SELECT u.*, p.jmeno, p.prijmeni FROM alpha_pracovnici_uzivatele u LEFT JOIN alpha_pracovnici p ON u.id_pracovnika = p.id WHERE u.login_qr_token = ?');
 $stmt->execute([$token]);
 $dbUser = $stmt->fetch();
 
@@ -62,6 +62,9 @@ if (!$dbUser || $dbUser['is_active'] != 1 || $dbUser['login_qr_enabled'] != 1) {
 }
 
 $email = $dbUser['login_email'];
+$jmeno = $dbUser['jmeno'] ?? '';
+$prijmeni = $dbUser['prijmeni'] ?? '';
+$display_name = trim($jmeno . ' ' . $prijmeni) ?: $email;
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,7 +86,7 @@ $email = $dbUser['login_email'];
                 <div class="nk-shape bg-shape-blur-a start-0 top-0"></div>
                 <div class="nk-shape bg-shape-blur-b end-0 bottom-0"></div>
                 <div class="text-center pt-5">
-                    <a href="index.html" class="logo-link">
+                    <a href="index.php" class="logo-link">
                         <div class="logo-wrap">
                             <img class="logo-img logo-light" src="images/logo.png" srcset="images/logo2x.png 2x" alt="">
                             <img class="logo-img logo-dark" src="images/logo-dark.png" srcset="images/logo-dark2x.png 2x" alt="">
@@ -106,7 +109,7 @@ $email = $dbUser['login_email'];
                                 
                                 <!-- Přidán blok s informací o uživateli -->
                                 <div class="alert alert-info mb-4 text-center">
-                                    Přihlašujete se jako:<br><strong><?php echo htmlspecialchars($email); ?></strong>
+                                    Přihlašujete se jako:<br><strong><?php echo htmlspecialchars($display_name); ?></strong>
                                 </div>
                                 
                                 <form id="loginForm" action="api/client/auth/login-by-token.php" method="POST">
@@ -192,7 +195,7 @@ $email = $dbUser['login_email'];
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            window.location.href = 'index.html';
+                            window.location.href = 'index.php';
                         } else {
                             errorDiv.textContent = data.message;
                             errorDiv.classList.remove('d-none');

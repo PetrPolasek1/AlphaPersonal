@@ -16,8 +16,8 @@ try {
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
     // 2. Příprava dat pro nového uživatele
-    $id_pracovnika = 2;
-    $login_email = 'lasttest@gmail.com';
+    $id_pracovnika = 3;
+    $login_email = 'petr@gmail.com';
     $heslo_v_textu = 'heslo123';
 
     // 3. Bezpečné zahashování hesla

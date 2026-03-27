@@ -38,8 +38,8 @@ try {
 }
 
 try {
-    // Dohledání uživatele podle sloupce login_email
-    $stmt = $pdo->prepare('SELECT * FROM alpha_pracovnici_uzivatele WHERE login_email = ?');
+    // Dohledání uživatele s propojením na tabulku pracovníků pro získání jména
+    $stmt = $pdo->prepare('SELECT u.*, p.jmeno, p.prijmeni FROM alpha_pracovnici_uzivatele u LEFT JOIN alpha_pracovnici p ON u.id_pracovnika = p.id WHERE u.login_email = ?');
     $stmt->execute([$email]);
     $dbUser = $stmt->fetch();
 
@@ -77,6 +77,12 @@ try {
         // Uložení relace do databáze
         $sessionStmt = $pdo->prepare('INSERT INTO alpha_pracovnici_uzivatele_sessions (user_id, refresh_token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, NOW() + INTERVAL 30 DAY)');
         $sessionStmt->execute([$dbUser['id'], $refreshTokenHash, $userAgent, $ip]);
+
+        // Uložení jména do session pro zobrazení v index.php
+        session_start();
+        $jmeno = $dbUser['jmeno'] ?? '';
+        $prijmeni = $dbUser['prijmeni'] ?? '';
+        $_SESSION['user_name'] = trim($jmeno . ' ' . $prijmeni) ?: 'Uživatel';
 
         echo json_encode([
             "success" => true,
