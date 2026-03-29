@@ -1,72 +1,50 @@
 <?php
-header('Content-Type: application/json');
+// api/client/auth/login-by-token.php
 
-// Zamezení jiných metod než POST
-if ($_SERVER['REQUEST_METHOD'] !== 'POST') {
-    echo json_encode(["success" => false, "message" => "Method not allowed"]);
-    exit;
+// 1. ZAPNEME SESSION HNED NA ZAČÁTKU (kvůli načtení db.php a language.php)
+session_start();
+
+// 2. Načteme helper a připojení k databázi (S VYUŽITÍM __DIR__ PROTI CHYBÁM CESTY)
+require_once __DIR__ . '/../../../helper.php';
+require_once __DIR__ . '/../../../controller/db.php'; 
+
+// 3. Zamezení jiných metod než POST pomocí helperu
+if (!is_post()) {
+    json_response(["success" => false, "message" => "Method not allowed"]);
 }
 
-// 1. Vstupy a základní kontrola
-$token = $_POST['token'] ?? '';
-$password = $_POST['password'] ?? '';
+// 4. Vstupy a základní kontrola pomocí helperu
+$token = post('token', '');
+$password = post('password', '');
 
 if (empty($token) || empty($password)) {
-    echo json_encode(["success" => false, "message" => "Neplatné přihlašovací údaje."]);
-    exit;
-}
-
-// Připojení k databázi
-$host = 'localhost';
-$db   = 'alphapersonal';
-$user = 'root';
-$pass = '';
-$charset = 'utf8mb4';
-
-$dsn = "mysql:host=$host;dbname=$db;charset=$charset";
-$options = [
-    PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,
-    PDO::ATTR_DEFAULT_FETCH_MODE => PDO::FETCH_ASSOC,
-    PDO::ATTR_EMULATE_PREPARES   => false,
-];
-
-try {
-    $pdo = new PDO($dsn, $user, $pass, $options);
-} catch (\PDOException $e) {
-    echo json_encode(["success" => false, "message" => "Chyba připojení k databázi."]);
-    exit;
+    json_response(["success" => false, "message" => "Neplatné přihlašovací údaje."]);
 }
 
 try {
-    // Dohledání uživatele s propojením na tabulku pracovníků pro získání jména
-    $stmt = $pdo->prepare('SELECT u.*, p.jmeno, p.prijmeni FROM alpha_pracovnici_uzivatele u LEFT JOIN alpha_pracovnici p ON u.id_pracovnika = p.id WHERE u.login_qr_token = ?');
+    // 5. Dohledání uživatele (Přidal jsem "p.jazyk" do SELECTu, abychom ho mohli uložit do session!)
+    $stmt = $pdo->prepare('SELECT u.*, p.jmeno, p.prijmeni, p.jazyk FROM alpha_pracovnici_uzivatele u LEFT JOIN alpha_pracovnici p ON u.id_pracovnika = p.id WHERE u.login_qr_token = ?');
     $stmt->execute([$token]);
     $dbUser = $stmt->fetch();
 
     if (!$dbUser) {
-        echo json_encode(["success" => false, "message" => "Neplatné přihlašovací údaje."]);
-        exit;
+        json_response(["success" => false, "message" => "Neplatné přihlašovací údaje."]);
     }
 
-    // 2. Kontrola stavu účtu
+    // Kontroly stavu účtu
     if ($dbUser['is_active'] != 1) {
-        echo json_encode(["success" => false, "message" => "Tento účet není aktivní."]);
-        exit;
+        json_response(["success" => false, "message" => "Tento účet není aktivní."]);
     }
 
-    // Kontrola povolení přihlášení pomocí QR
     if ($dbUser['login_qr_enabled'] != 1) {
-        echo json_encode(["success" => false, "message" => "Přihlášení pomocí QR není pro tento účet povoleno."]);
-        exit;
+        json_response(["success" => false, "message" => "Přihlášení pomocí QR není pro tento účet povoleno."]);
     }
 
-    // Kontrola uzamčení účtu
     if (!empty($dbUser['locked_until']) && strtotime($dbUser['locked_until']) > time()) {
-        echo json_encode(["success" => false, "message" => "Účet je uzamčen"]);
-        exit;
+        json_response(["success" => false, "message" => "Účet je uzamčen"]);
     }
 
-    // 3. Ověření hesla
+    // 6. Ověření hesla
     if (password_verify($password, $dbUser['password_hash'])) {
         // Úspěšné přihlášení
         $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
@@ -84,19 +62,21 @@ try {
         $sessionStmt = $pdo->prepare('INSERT INTO alpha_pracovnici_uzivatele_sessions (user_id, refresh_token_hash, user_agent, ip_address, expires_at) VALUES (?, ?, ?, ?, NOW() + INTERVAL 30 DAY)');
         $sessionStmt->execute([$dbUser['id'], $refreshTokenHash, $userAgent, $ip]);
 
-        // Uložení jména do session pro zobrazení v index.php
-        session_start();
+        // 7. Uložení dat do session (bez opakovaného volání session_start)
         $jmeno = $dbUser['jmeno'] ?? '';
         $prijmeni = $dbUser['prijmeni'] ?? '';
+        
         $_SESSION['user_name'] = trim($jmeno . ' ' . $prijmeni) ?: 'Uživatel';
         $_SESSION['user_id'] = $dbUser['id'];
+        $_SESSION['lang_id'] = $dbUser['jazyk'] ?? 1; // Uložení jazyka
 
-        echo json_encode([
+        // Čistá odpověď přes helper
+        json_response([
             "success" => true,
             "access_token" => $accessToken,
             "refresh_token" => $refreshToken
         ]);
-        exit;
+        
     } else {
         // Heslo je špatně
         $attempts = (int)$dbUser['failed_login_attempts'] + 1;
@@ -108,8 +88,9 @@ try {
         }
         $updateStmt->execute([$attempts, $dbUser['id']]);
         
-        echo json_encode(["success" => false, "message" => "Neplatné přihlašovací údaje."]);
+        json_response(["success" => false, "message" => "Neplatné přihlašovací údaje."]);
     }
 } catch (Exception $e) {
-    echo json_encode(["success" => false, "message" => "Interní chyba serveru."]);
+    json_response(["success" => false, "message" => "Interní chyba serveru."]);
 }
+?>

@@ -1,85 +1,3 @@
-<?php
-session_start();
-// Získání dat z přihlášení
-$userId = $_SESSION['user_id'] ?? 1; // Pro testování je default 1
-$fullName = $_SESSION['user_name'] ?? 'Uživatel';
-
-// Připojení k DB
-require_once 'db.php';
-
-$errorMsg = '';
-$successMsg = '';
-
-// Odchycení úspěchu po přesměrování (ochrana proti F5)
-if (isset($_GET['success']) && $_GET['success'] == 1) {
-    $successMsg = "Zpráva byla úspěšně odeslána.";
-}
-
-// 1. Zpracování odeslání nové zprávy
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'send') {
-    $recipientEmail = trim($_POST['recipient_email']);
-    $subject = trim($_POST['subject']);
-    $content = trim($_POST['content']);
-
-    $stmtUser = $pdo->prepare("SELECT id, is_active, locked_until FROM alpha_pracovnici_uzivatele WHERE login_email = ?");
-    $stmtUser->execute([$recipientEmail]);
-    $recipient = $stmtUser->fetch();
-
-    if (!$recipient) {
-        $errorMsg = "Uživatel s e-mailem '" . htmlspecialchars($recipientEmail) . "' nebyl nalezen.";
-    } elseif ($recipient['is_active'] != 1) {
-        $errorMsg = "Účet příjemce není aktivní.";
-    } elseif (!empty($recipient['locked_until']) && strtotime($recipient['locked_until']) > time()) {
-        $errorMsg = "Účet příjemce je dočasně uzamčen nebo vypršel.";
-    } else {
-        $stmtInsert = $pdo->prepare("INSERT INTO alpha_zpravy (sender_id, recipient_id, subject, content) VALUES (?, ?, ?, ?)");
-        $stmtInsert->execute([$userId, $recipient['id'], $subject, $content]);
-        
-        // PŘESMĚROVÁNÍ (Ochrana proti dvojitému odeslání při F5)
-        header("Location: zpravy.php?success=1");
-        exit;
-    }
-}
-
-// 2. Zpracování akcí (koš, obnova, mazání)
-if (isset($_GET['action']) && isset($_GET['id'])) {
-    $action = $_GET['action'];
-    $msgId = (int)$_GET['id'];
-
-    if ($action === 'trash') {
-        $stmt = $pdo->prepare("UPDATE alpha_zpravy SET is_deleted = 1 WHERE id = ? AND recipient_id = ?");
-        $stmt->execute([$msgId, $userId]);
-    } elseif ($action === 'restore') {
-        $stmt = $pdo->prepare("UPDATE alpha_zpravy SET is_deleted = 0 WHERE id = ? AND recipient_id = ?");
-        $stmt->execute([$msgId, $userId]);
-    } elseif ($action === 'delete') {
-        $stmt = $pdo->prepare("DELETE FROM alpha_zpravy WHERE id = ? AND recipient_id = ?");
-        $stmt->execute([$msgId, $userId]);
-    }
-    header("Location: zpravy.php");
-    exit;
-}
-
-// 3. Načtení aktivních zpráv (OPRAVENO: Bez duplikací pomocí poddotazu s LIMIT 1)
-$stmtActive = $pdo->prepare("
-    SELECT z.*, (SELECT login_email FROM alpha_pracovnici_uzivatele WHERE id = z.sender_id LIMIT 1) AS sender_email
-    FROM alpha_zpravy z
-    WHERE z.recipient_id = ? AND z.is_deleted = 0 
-    ORDER BY z.created_at DESC
-");
-$stmtActive->execute([$userId]);
-$activeMessages = $stmtActive->fetchAll();
-
-// 4. Načtení zpráv v koši (OPRAVENO: Bez duplikací)
-$stmtTrashed = $pdo->prepare("
-    SELECT z.*, (SELECT login_email FROM alpha_pracovnici_uzivatele WHERE id = z.sender_id LIMIT 1) AS sender_email
-    FROM alpha_zpravy z
-    WHERE z.recipient_id = ? AND z.is_deleted = 1 
-    ORDER BY z.created_at DESC
-");
-$stmtTrashed->execute([$userId]);
-$trashedMessages = $stmtTrashed->fetchAll();
-?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -113,7 +31,7 @@ $trashedMessages = $stmtTrashed->fetchAll();
                         <div class="nk-sidebar-menu">
                             <ul class="nk-menu">
                                 <li class="nk-menu-item"><a href="index.php" class="nk-menu-link"><span class="nk-menu-icon"><em class="icon ni ni-dashboard-fill"></em></span><span class="nk-menu-text">Dashboard</span></a></li>
-                                <li class="nk-menu-item"><a href="zpravy.php" class="nk-menu-link"><span class="nk-menu-icon"><em class="icon ni ni-chat-fill"></em></span><span class="nk-menu-text">Zprávy</span></a></li>
+                                <li class="nk-menu-item"><a href="message.php" class="nk-menu-link"><span class="nk-menu-icon"><em class="icon ni ni-chat-fill"></em></span><span class="nk-menu-text">Zprávy</span></a></li>
                                 <li class="nk-menu-item"><a href="pozadavky.html" class="nk-menu-link"><span class="nk-menu-icon"><em class="icon ni ni-file-docs"></em></span><span class="nk-menu-text">Požadavky zaměstnanců</span></a></li>
                             </ul>
                         </div>
@@ -228,7 +146,7 @@ $trashedMessages = $stmtTrashed->fetchAll();
                                                                             <button class="btn btn-sm btn-icon btn-zoom" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></button>
                                                                             <div class="dropdown-menu dropdown-menu-end">
                                                                                 <ul class="link-list link-list-hover-bg-primary link-list-md">
-                                                                                    <li><a href="zpravy.php?action=trash&id=<?= $msg['id'] ?>"><em class="icon ni ni-trash"></em><span>Do koše</span></a></li>
+                                                                                    <li><a href="message.php?action=trash&id=<?= $msg['id'] ?>"><em class="icon ni ni-trash"></em><span>Do koše</span></a></li>
                                                                                 </ul>
                                                                             </div>
                                                                         </div>
@@ -277,8 +195,8 @@ $trashedMessages = $stmtTrashed->fetchAll();
                                                                             <button class="btn btn-sm btn-icon btn-zoom" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></button>
                                                                             <div class="dropdown-menu dropdown-menu-end">
                                                                                 <ul class="link-list link-list-hover-bg-primary link-list-md">
-                                                                                    <li><a href="zpravy.php?action=restore&id=<?= $msg['id'] ?>"><em class="icon ni ni-curve-up-left"></em><span>Obnovit</span></a></li>
-                                                                                    <li><a href="zpravy.php?action=delete&id=<?= $msg['id'] ?>" class="text-danger"><em class="icon ni ni-trash"></em><span>Trvale smazat</span></a></li>
+                                                                                    <li><a href="message.php?action=restore&id=<?= $msg['id'] ?>"><em class="icon ni ni-curve-up-left"></em><span>Obnovit</span></a></li>
+                                                                                    <li><a href="message.php?action=delete&id=<?= $msg['id'] ?>" class="text-danger"><em class="icon ni ni-trash"></em><span>Trvale smazat</span></a></li>
                                                                                 </ul>
                                                                             </div>
                                                                         </div>
@@ -328,7 +246,7 @@ $trashedMessages = $stmtTrashed->fetchAll();
                     <h5 class="modal-title">Nová zpráva</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
-                <form action="zpravy.php" method="POST" id="composeMessageForm">
+                <form action="message.php" method="POST" id="composeMessageForm">
                     <input type="hidden" name="action" value="send">
                     <div class="modal-body">
                         <div class="form-group mb-3">
@@ -372,7 +290,6 @@ $trashedMessages = $stmtTrashed->fetchAll();
     </div>
 
     <script>
-        // Zabránění dvojkliku na tlačítko odeslat
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('composeMessageForm');
             if (form) {
@@ -384,7 +301,6 @@ $trashedMessages = $stmtTrashed->fetchAll();
             }
         });
 
-        // Logika pro čtení zpráv (Modální okno vs Mobilní zobrazení)
         let readModal;
         document.addEventListener('DOMContentLoaded', function() {
             const readModalEl = document.getElementById('readMessageModal');

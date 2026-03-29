@@ -5,7 +5,7 @@
  * Funkce pro načtení překladů z databáze.
  * Můžeme ji zavolat kdykoliv potřebujeme změnit jazyk za běhu (např. při loginu).
  */
-function loadTranslations($pdo, $langId, $typ = 'admin') {
+function loadTranslations($pdo, $langId, $typ = 'front') {
     try {
         $stmtLang = $pdo->prepare("SELECT name, content FROM localized WHERE id_lang = ? AND typ = ?");
         $stmtLang->execute([$langId, $typ]);
@@ -18,7 +18,7 @@ function loadTranslations($pdo, $langId, $typ = 'admin') {
 // Při běžném načtení stránky (např. index.php) se texty rovnou načtou ze session
 if (isset($pdo)) {
     $currentLangId = $_SESSION['lang_id'] ?? 1;
-    $currentPageType = $page_type ?? 'admin'; // Pokud není definováno, bere 'admin'
+    $currentPageType = $page_type ?? 'front'; // Pokud není definováno, bere 'admin'
     
     loadTranslations($pdo, $currentLangId, $currentPageType);
 }

@@ -1,0 +1,46 @@
+<?php
+// models/MessageModel.php
+
+class MessageModel {
+    private $pdo;
+
+    public function __construct($pdo) {
+        $this->pdo = $pdo;
+    }
+
+    public function getRecipientByEmail($email) {
+        $stmt = $this->pdo->prepare("SELECT id, is_active, locked_until FROM alpha_pracovnici_uzivatele WHERE login_email = ?");
+        $stmt->execute([$email]);
+        return $stmt->fetch();
+    }
+
+    public function createMessage($senderId, $recipientId, $subject, $content) {
+        $stmt = $this->pdo->prepare("INSERT INTO alpha_zpravy (sender_id, recipient_id, subject, content) VALUES (?, ?, ?, ?)");
+        return $stmt->execute([$senderId, $recipientId, $subject, $content]);
+    }
+
+    public function changeMessageStatus($msgId, $userId, $action) {
+        if ($action === 'trash') {
+            $stmt = $this->pdo->prepare("UPDATE alpha_zpravy SET is_deleted = 1 WHERE id = ? AND recipient_id = ?");
+        } elseif ($action === 'restore') {
+            $stmt = $this->pdo->prepare("UPDATE alpha_zpravy SET is_deleted = 0 WHERE id = ? AND recipient_id = ?");
+        } elseif ($action === 'delete') {
+            $stmt = $this->pdo->prepare("DELETE FROM alpha_zpravy WHERE id = ? AND recipient_id = ?");
+        } else {
+            return false;
+        }
+        return $stmt->execute([$msgId, $userId]);
+    }
+
+    public function getMessages($userId, $isDeleted) {
+        $stmt = $this->pdo->prepare("
+            SELECT z.*, (SELECT login_email FROM alpha_pracovnici_uzivatele WHERE id = z.sender_id LIMIT 1) AS sender_email
+            FROM alpha_zpravy z
+            WHERE z.recipient_id = ? AND z.is_deleted = ? 
+            ORDER BY z.created_at DESC
+        ");
+        $stmt->execute([$userId, $isDeleted]);
+        return $stmt->fetchAll();
+    }
+}
+?>
