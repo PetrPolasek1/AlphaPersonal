@@ -5,8 +5,8 @@
 session_start();
 
 // 2. Načteme helper a připojení k databázi (S VYUŽITÍM __DIR__ PROTI CHYBÁM CESTY)
-require_once __DIR__ . '/../../../helper.php';
-require_once __DIR__ . '/../../../controller/db.php'; 
+require_once __DIR__ . '/../../../core/helper.php';
+require_once __DIR__ . '/../../../core/db.php'; 
 
 // 3. Zamezení jiných metod než POST pomocí helperu
 if (!is_post()) {

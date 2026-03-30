@@ -1,6 +1,8 @@
 <?php
 // controllers/MessageController.php
 
+$fullName = $_SESSION['user_name'] ?? 'Uživatel';
+
 class MessageController {
     private $model;
     private $userId;

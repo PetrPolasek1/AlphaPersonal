@@ -7,8 +7,8 @@ error_reporting(E_ALL);
 session_start();
 
 // 1. Načtení helperu, databáze a překladů
-require_once 'helper.php'; 
-require_once 'controller/db.php'; 
+require_once 'core/helper.php'; 
+require_once 'core/db.php'; 
 
 // 2. Načtení MVC tříd
 require_once 'models/login-model.php';
