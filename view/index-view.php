@@ -333,29 +333,22 @@
 
     function initCharCounters() 
     {
-    // Najdeme všechna políčka s naší třídou
     const inputs = document.querySelectorAll('.char-countable');
     
     inputs.forEach(input => {
         const maxLength = input.getAttribute('maxlength');
-        
-        // OPRAVA: Najdeme hlavní obalovací sloupec (col-12) a až v něm hledáme text počítadla.
-        // Tímto obejdeme jakékoliv extra divy, které tvoje šablona kolem inputu vytváří.
         const wrapper = input.closest('.col-12');
-        if (!wrapper) return; // Pokud by náhodou sloupec chyběl, přeskočíme
+        if (!wrapper) return;
         
         const counterElement = wrapper.querySelector('.counter-text');
 
         if (counterElement && maxLength) {
-            // Nastavíme správnou hodnotu hned při startu (kdyby tam náhodou už nějaký text byl)
             counterElement.innerText = `${input.value.length} / ${maxLength} znaků`;
 
-            // Spustí se při každém napsaném znaku
             input.addEventListener('input', function() {
                 const currentLength = this.value.length;
                 counterElement.innerText = `${currentLength} / ${maxLength} znaků`;
 
-                // Zčervená, když zbývá 10 a méně znaků
                 if (currentLength >= maxLength - 10) {
                     counterElement.classList.add('text-danger', 'fw-bold');
                 } else {
