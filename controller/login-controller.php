@@ -1,17 +1,19 @@
 <?php
 // controller/login-controller.php
 
-class LoginController {
+class LoginController
+{
     private $model;
     private $pdo;
 
-    public function __construct($model, $pdo) {
+    public function __construct($model, $pdo)
+    {
         $this->model = $model;
-        $this->pdo = $pdo; 
+        $this->pdo = $pdo;
     }
 
-    public function handleRequest() {
-        // POUŽITÍ HELPERU: Bezpečné získání GET parametru
+    public function handleRequest()
+    {
         $token = get('t', '');
 
         if (empty($token)) {
@@ -26,7 +28,6 @@ class LoginController {
             return;
         }
 
-        // Nastavení jazyka a načtení textů z DB
         $_SESSION['lang_id'] = $dbUser['jazyk'] ?? 1;
         loadTranslations($this->pdo, $_SESSION['lang_id'], 'front');
 
@@ -35,11 +36,11 @@ class LoginController {
         $prijmeni = $dbUser['prijmeni'] ?? '';
         $display_name = trim($jmeno . ' ' . $prijmeni) ?: $email;
 
-        // Načtení finálního View
         require_once __DIR__ . '/../view/login-view.php';
     }
 
-    private function showError($message) {
+    private function showError($message)
+    {
         require_once __DIR__ . '/../view/error-view.php';
         exit;
     }
