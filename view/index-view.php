@@ -11,6 +11,7 @@
     
     <link rel="stylesheet" href="assets/css/style.css?v1.1.0">
     <style>
+        /* TVŮJ PŮVODNÍ GRID - řízený přes PHP proměnné */
         .dashboard-fullscreen-grid {
             display: grid;
             gap: 1.5rem; 
@@ -25,22 +26,45 @@
                 grid-template-rows: repeat(var(--grid-rows, 1), minmax(150px, 1fr));
             }
         }
+        
+        /* VIZUÁL KARTY A EFEKTY */
         .dashboard-fullscreen-grid .card {
             width: 100%;
             height: 100%;
             margin: 0;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
             display: flex;
             flex-direction: column;
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 12px;
         }
         .dashboard-fullscreen-grid .card-body {
             flex: 1;
             display: flex;
             flex-direction: column;
-            justify-content: center; 
+            justify-content: center;
         }
         .is-pointer { cursor: pointer; }
-        .is-pointer:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.1) !important; }
+        .is-pointer:hover { transform: translateY(-4px); box-shadow: 0 10px 25px rgba(0,0,0,0.08) !important; }
+
+        .dynamic-title {
+            font-size: 1.2rem; 
+            margin-bottom: 0.25rem;
+        }
+        .dynamic-desc {
+            font-size: 0.85rem;
+            opacity: 0.75;
+        }
+
+        @media (min-width: 768px) {
+            .dynamic-title {
+                font-size: 1.5rem; 
+                margin-bottom: 0.5rem;
+            }
+            .dynamic-desc {
+                font-size: 0.8rem;
+            }
+        }
     </style>
 </head>
 
@@ -82,9 +106,9 @@
                                     </a>
                                 </li>
                                 <li class="nk-menu-item">
-                                    <a href="pozadavky.html" class="nk-menu-link">
+                                    <a href="pozadavky.php" class="nk-menu-link">
                                         <span class="nk-menu-icon"><em class="icon ni ni-file-docs"></em></span>
-                                        <span class="nk-menu-text"><?php e(t('requests_menu') !== 'requests_menu' ? t('requests_menu') : 'Požadavky zaměstnanců'); ?></span>
+                                        <span class="nk-menu-text"><?php e(t('requests_menu') !== 'requests_menu' ? t('requests_menu') : 'Moje Žádosti'); ?></span>
                                     </a>
                                 </li>
                             </ul>
@@ -95,7 +119,7 @@
                 <div class="nk-sidebar-element nk-sidebar-footer">
                     <div class="nk-sidebar-footer-extended pt-3">
                         <div class="border border-light rounded-3">
-                            <a class="d-flex px-3 py-2 bg-primary bg-opacity-10 rounded-bottom-3" href="#">
+                            <a class="d-flex px-3 py-2 bg-primary bg-opacity-10 rounded-bottom-3" href="profile.php">
                                 <div class="media-group">
                                     <div class="media media-sm media-middle media-circle text-bg-primary">
                                         <img src="images/avatar/a.png" />
@@ -110,7 +134,6 @@
                     </div>
                 </div>
             </div>
-            
             <div class="nk-wrap">
                 <div class="nk-header nk-header-fixed">
                     <div class="container-fluid">
@@ -131,14 +154,19 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-md rounded-3">
                                             <div class="dropdown-content py-3">
-                                                <div class="border border-light rounded-3">
-                                                    <a class="d-flex px-3 py-2 bg-primary bg-opacity-10 rounded-bottom-3" href="#">
-                                                        <div class="media-group">
-                                                            <div class="media media-sm media-middle media-circle text-bg-primary"><img src="images/avatar/a.png" /></div>
-                                                            <div class="media-text"><h6 class="fs-6 mb-0"><?php e($fullName); ?></h6></div>
-                                                        </div>
-                                                    </a>
+                                                <div class="px-3 mb-2 d-flex align-items-center">
+                                                    <div class="media media-sm media-circle text-bg-primary"><img src="images/avatar/a.png" /></div>
+                                                    <div class="ms-2">
+                                                        <h6 class="fs-6 mb-0"><?php e($fullName); ?></h6>
+                                                    </div>
                                                 </div>
+                                                <hr class="mt-2 mb-2">
+                                                <a class="dropdown-item d-flex align-items-center gap-2 py-2" href="profile.php">
+                                                    <em class="icon ni ni-user"></em><span>Můj Profil</span>
+                                                </a>
+                                                <a class="dropdown-item d-flex align-items-center gap-2 py-2 text-danger" href="logout.php">
+                                                    <em class="icon ni ni-signout"></em><span>Odhlásit se</span>
+                                                </a>
                                             </div>
                                         </div>
                                     </li>
@@ -147,36 +175,49 @@
                         </div>
                     </div>
                 </div>
-                
                 <div class="nk-content">
                     <div class="container-fluid">
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
-                                <div class="nk-block-head nk-page-head">
+                                
+                                <div class="nk-block-head nk-page-head pb-4">
                                     <div class="nk-block-head-between">
                                         <div class="nk-block-head-content">
                                             <h2 class="display-6"><?php e(t('welcome_user') !== 'welcome_user' ? t('welcome_user') : 'Welcome'); ?> <?php e($firstName); ?>!</h2>
-                                            <p><?php e(t('select_module_desc') !== 'select_module_desc' ? t('select_module_desc') : 'Vyberte modul, se kterým chcete pracovat.'); ?></p>
+                                            <p><?php e(t('select_module_desc') !== 'select_module_desc' ? t('select_module_desc') : 'Vyberte formulář, který chcete vyplnit.'); ?></p>
+                                            
+                                            <?php if (isset($_SESSION['flash_success'])): ?>
+                                                <div class="alert alert-success alert-icon mt-3">
+                                                    <em class="icon ni ni-check-circle"></em> <?php e($_SESSION['flash_success']); ?>
+                                                </div>
+                                                <?php unset($_SESSION['flash_success']); ?>
+                                            <?php endif; ?>
                                         </div>
                                     </div>
                                 </div>
 
                                 <div id="dashboard-main-view">
-                                    <div class="dashboard-fullscreen-grid" style="--grid-cols: <?php e($gridCols); ?>; --grid-rows: <?php e($gridRows); ?>;">
-                                        <?php foreach ($modules as $row): ?>
-                                            <div class="card card-full <?php e($row['color']); ?> bg-opacity-10 border-0 is-pointer" onclick="handleCardClick('<?php e($row['form_id']); ?>')">
-                                                <div class="card-body">
-                                                    <div class="d-flex align-items-center justify-content-between mb-3">
-                                                        <div class="fs-6 text-light mb-0"><?php e(t('module_label') !== 'module_label' ? t('module_label') : 'Modul'); ?></div>
-                                                        <em class="icon ni <?php e($row['icon']); ?> fs-2 text-dark bg-white rounded-circle p-3 shadow-sm"></em>
-                                                    </div>
-                                                    <h5 class="fs-2 mb-0"><?php 
-                                                        $modKey = 'mod_' . $row['form_id']; 
-                                                        e(t($modKey) !== $modKey ? t($modKey) : $row['title']); 
-                                                    ?></h5>
+                                <div class="dashboard-fullscreen-grid" style="--grid-cols: <?php e($gridCols); ?>; --grid-rows: <?php e($gridRows); ?>;">
+                                    <?php foreach ($forms as $form): ?>
+                                        <div class="card card-full is-pointer <?php e($form['color'] ?? 'bg-primary'); ?> bg-opacity-10" onclick="handleCardClick('<?php e($form['id']); ?>')">
+                                            <div class="card-body">
+                                                
+                                                <div class="media media-rg media-middle media-circle bg-white shadow-sm text-dark mb-3">
+                                                    <em class="icon ni ni-file-docs"></em>
                                                 </div>
+                                                
+                                                <h5 class="dynamic-title fw-medium text-dark">
+                                                    <?php e(t($form['title_localized_key'])); ?>
+                                                </h5>
+                                                
+                                                <p class="dynamic-desc text-dark mb-0">
+                                                    <?php e(t($form['description_localized_key'])); ?>
+                                                </p>
+                                                
                                             </div>
+                                        </div>
                                         <?php endforeach; ?>
+                                        
                                     </div>
                                 </div>
 
@@ -198,30 +239,28 @@
                                         </div>
                                     </div>
                                 </div>
+                                
                             </div>
                         </div>
                     </div>
                 </div>
-                
                 <div class="nk-footer">
                     <div class="container-xl">
                         <div class="d-flex align-items-center flex-wrap justify-content-between mx-n3">
                             <div class="nk-footer-links px-3">
                                 <ul class="nav nav-sm">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/#"><?php e(t('home_admin') !== 'home_admin' ? t('home_admin') : 'Home'); ?></a>
-                                    </li>
-                                    <li class="nav-item"><a class="nav-link" href="/#">Pricing</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="/#">Privacy Policy</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="/#">FAQ</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="/#">Contact</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#">Privacy Policy</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
                                 </ul>
                             </div>
                             <div class="nk-footer-copyright fs-6 px-3"> &copy; 2023 All Rights Reserved to <a href="#">Copygen</a>. </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                </div>
         </div>
     </div>
 
@@ -245,7 +284,6 @@
 
         document.addEventListener('DOMContentLoaded', function() {
             const formModalEl = document.getElementById('formModal');
-            
             if (typeof bootstrap !== 'undefined' && formModalEl) {
                 formModal = new bootstrap.Modal(formModalEl);
                 formModalEl.addEventListener('hidden.bs.modal', function () {
@@ -278,13 +316,12 @@
 
             fetch('get_form.php?id=' + encodeURIComponent(id))
                 .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Nepodařilo se načíst obsah. Status: ' + response.status);
-                    }
+                    if (!response.ok) throw new Error('Nepodařilo se načíst obsah. Status: ' + response.status);
                     return response.text();
                 })
-                .then(html => {
-                    targetContainer.innerHTML = html;
+                .then(html => { 
+                    targetContainer.innerHTML = html; 
+                    initCharCounters();
                 })
                 .catch(error => {
                     targetContainer.innerHTML = `
@@ -294,6 +331,40 @@
                 });
         }
 
+    function initCharCounters() 
+    {
+    // Najdeme všechna políčka s naší třídou
+    const inputs = document.querySelectorAll('.char-countable');
+    
+    inputs.forEach(input => {
+        const maxLength = input.getAttribute('maxlength');
+        
+        // OPRAVA: Najdeme hlavní obalovací sloupec (col-12) a až v něm hledáme text počítadla.
+        // Tímto obejdeme jakékoliv extra divy, které tvoje šablona kolem inputu vytváří.
+        const wrapper = input.closest('.col-12');
+        if (!wrapper) return; // Pokud by náhodou sloupec chyběl, přeskočíme
+        
+        const counterElement = wrapper.querySelector('.counter-text');
+
+        if (counterElement && maxLength) {
+            // Nastavíme správnou hodnotu hned při startu (kdyby tam náhodou už nějaký text byl)
+            counterElement.innerText = `${input.value.length} / ${maxLength} znaků`;
+
+            // Spustí se při každém napsaném znaku
+            input.addEventListener('input', function() {
+                const currentLength = this.value.length;
+                counterElement.innerText = `${currentLength} / ${maxLength} znaků`;
+
+                // Zčervená, když zbývá 10 a méně znaků
+                if (currentLength >= maxLength - 10) {
+                    counterElement.classList.add('text-danger', 'fw-bold');
+                } else {
+                    counterElement.classList.remove('text-danger', 'fw-bold');
+                }
+            });
+        }
+    });
+    }
         function closeMobileForm() {
             document.getElementById('mobile-form-view').classList.add('d-none');
             document.getElementById('dashboard-main-view').classList.remove('d-none');

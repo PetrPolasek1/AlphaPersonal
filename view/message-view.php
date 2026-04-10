@@ -52,6 +52,24 @@
                         </div>
                     </div>
                 </div>
+                
+                <div class="nk-sidebar-element nk-sidebar-footer">
+                    <div class="nk-sidebar-footer-extended pt-3">
+                        <div class="border border-light rounded-3">
+                            <a class="d-flex px-3 py-2 bg-primary bg-opacity-10 rounded-bottom-3 rounded-top-3" href="profile.php">
+                                <div class="media-group">
+                                    <div class="media media-sm media-middle media-circle text-bg-primary">
+                                        <img src="images/avatar/a.png" />
+                                    </div>
+                                    <div class="media-text">
+                                        <h6 class="fs-6 mb-0"><?php e($fullName); ?></h6>
+                                    </div>
+                                    <em class="icon ni ni-chevron-right ms-auto ps-1"></em>
+                                </div>
+                            </a>
+                        </div>
+                    </div>
+                </div>
             </div>
             
             <div class="nk-wrap">
@@ -61,6 +79,7 @@
                             <div class="nk-header-logo ms-n1">
                                 <div class="nk-sidebar-toggle me-1">
                                     <button class="btn btn-sm btn-zoom btn-icon sidebar-toggle d-sm-none"><em class="icon ni ni-menu"></em></button>
+                                    <button class="btn btn-md btn-zoom btn-icon sidebar-toggle d-none d-sm-inline-flex"><em class="icon ni ni-menu"></em></button>
                                 </div>
                             </div>
                             <div class="nk-header-tools">
@@ -71,8 +90,14 @@
                                         </a>
                                         <div class="dropdown-menu dropdown-menu-md rounded-3">
                                             <div class="dropdown-content py-3">
-                                                <div class="d-flex px-3 py-2 bg-primary bg-opacity-10 rounded-bottom-3">
-                                                    <div class="media-text"><h6 class="fs-6 mb-0"><?php e($fullName); ?></h6></div>
+                                                <div class="border border-light rounded-3">
+                                                    <a class="d-flex px-3 py-2 bg-primary bg-opacity-10 rounded-bottom-3 rounded-top-3" href="profile.php">
+                                                        <div class="media-group">
+                                                            <div class="media media-sm media-middle media-circle text-bg-primary"><img src="images/avatar/a.png" /></div>
+                                                            <div class="media-text"><h6 class="fs-6 mb-0"><?php e($fullName); ?></h6></div>
+                                                            <em class="icon ni ni-chevron-right ms-auto ps-1"></em>
+                                                        </div>
+                                                    </a>
                                                 </div>
                                             </div>
                                         </div>

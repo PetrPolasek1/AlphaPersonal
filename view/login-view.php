@@ -61,7 +61,7 @@
                                                 </div>
                                             </div></div>
                                         <div class="col-12">
-                                            <a class="link small" href="forgot-password.html"><?php e(t('forgot_password') !== 'forgot_password' ? t('forgot_password') : 'Forgot password?'); ?></a>
+                                            <a class="link small" href="forgot-password.php"><?php e(t('forgot_password') !== 'forgot_password' ? t('forgot_password') : 'Forgot password?'); ?></a>
                                         </div>
                                         <div class="col-12">
                                             <div class="d-grid">

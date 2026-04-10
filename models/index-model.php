@@ -8,9 +8,9 @@ class IndexModel {
         $this->pdo = $pdo;
     }
 
-    public function getActiveModules() {
+    public function getActiveForms() {
         try {
-            $stmt = $this->pdo->query('SELECT * FROM alpha_moduly WHERE is_active = 1 ORDER BY order_index ASC');
+            $stmt = $this->pdo->query('SELECT * FROM forms WHERE is_active = 1 ORDER BY position ASC');
             return $stmt->fetchAll();
         } catch (\PDOException $e) {
             return [];

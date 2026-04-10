@@ -13,11 +13,11 @@ class IndexController {
         $fullName = $_SESSION['user_name'] ?? 'Uživateli'; 
         $firstName = explode(' ', trim($fullName))[0];
 
-        // Vytažení modulů přes Model
-        $modules = $this->model->getActiveModules();
+        // Vytažení formulářů 
+        $forms = $this->model->getActiveForms();
 
         // Výpočet sloupců a řádků pro dynamický grid
-        $count = count($modules);
+        $count = count($forms);
         $gridCols = ($count <= 6) ? 2 : 3;
         $gridRows = max(1, ceil($count / $gridCols));
 

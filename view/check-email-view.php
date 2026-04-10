@@ -6,18 +6,19 @@
     <meta name="author" content="Softnio">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="images/favicon.png">
-    <title>Check Email - CopyGen - AI Writer &amp; Copywriting Landing Page HTML Template.</title>
+    <title>Check Email - CopyGen</title>
     <link rel="stylesheet" href="assets/css/style.css?v1.1.0">
 </head>
 
 <body class="nk-body ">
-    <div class="nk-app-root " data-sidebar-collapse="lg">
+    <div class="nk-app-root ">
         <div class="nk-main">
             <div class="nk-wrap has-shape flex-column">
                 <div class="nk-shape bg-shape-blur-a start-0 top-0"></div>
                 <div class="nk-shape bg-shape-blur-b end-0 bottom-0"></div>
+                
                 <div class="text-center pt-5">
-                    <a href="index.html" class="logo-link">
+                    <a href="index.php" class="logo-link">
                         <div class="logo-wrap">
                             <img class="logo-img logo-light" src="images/logo.png" srcset="images/logo2x.png 2x" alt="">
                             <img class="logo-img logo-dark" src="images/logo-dark.png" srcset="images/logo-dark2x.png 2x" alt="">
@@ -25,6 +26,7 @@
                         </div>
                     </a>
                 </div>
+                
                 <div class="container p-2 p-sm-4 mt-auto">
                     <div class="row justify-content-center">
                         <div class="col-md-7 col-lg-4">
@@ -35,42 +37,40 @@
                                 <div class="nk-block-head text-center">
                                     <div class="nk-block-head-content">
                                         <h1 class="nk-block-title mb-1">Check Your Email</h1>
-                                        <p>Please check the email address <strong class="fw-bold">shawn@websbd.com</strong> for instructions to reset your password.</p>
+                                        
+                                        <p>Please check the email address <strong class="fw-bold"><?php e($_SESSION['reset_email'] ?? 'your email'); ?></strong> for instructions to reset your password.</p>
+                                        
+                                        <?php if (isset($_SESSION['flash_success'])): ?>
+                                            <div class="text-success mt-2 fw-medium">
+                                                <?php e($_SESSION['flash_success']); unset($_SESSION['flash_success']); ?>
+                                            </div>
+                                        <?php endif; ?>
+                                        
                                     </div>
                                 </div>
                                 <div class="d-grid mt-4 pt-2">
-                                    <a class="btn btn-primary" href="forgot-password.html">Resend Email</a>
+                                    <a class="btn btn-primary" href="forgot-password.php">Resend Email</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
+                
                 <div class="nk-footer">
                     <div class="container-xl">
                         <div class="d-flex align-items-center flex-wrap justify-content-between mx-n3">
                             <div class="nk-footer-links px-3">
                                 <ul class="nav nav-sm">
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/#">Home</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/#">Pricing</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/#">Privacy Policy</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/#">FAQ</a>
-                                    </li>
-                                    <li class="nav-item">
-                                        <a class="nav-link" href="/#">Contact</a>
-                                    </li>
+                                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#">Privacy Policy</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
                                 </ul>
                             </div>
                             <div class="nk-footer-copyright fs-6 px-3"> &copy; 2023 All Rights Reserved to <a href="#">Copygen</a>. </div>
                         </div>
                     </div>
                 </div>
+                
             </div>
         </div>
     </div>
