@@ -3,13 +3,16 @@
 session_start();
 require_once 'core/db.php';
 require_once 'core/helper.php';
-require_once 'core/FormManager.php';
+// Místo starého FormManager načteme náš nový model
+require_once 'models/form-submission-model.php';
 
 if (!is_post()) {
     redirect('index.php');
 }
 
 $formId = post('form_id');
+// Pokud neposíláš jazyk z formuláře, dáme výchozí hodnotu 1 (čeština)
+$langId = post('lang_id') ?: 1; 
 $userId = $_SESSION['user_id'] ?? 1;
 
 if (!$formId) {
@@ -19,7 +22,7 @@ if (!$formId) {
 
 $uploadedFilePaths = [];
 
-
+// === TVOJE LOGIKA PRO NAHRÁVÁNÍ SOUBORŮ (ZŮSTÁVÁ BEZE ZMĚNY) ===
 if (!empty($_FILES)) {
     $uploadDir = './documents/';
     if (!is_dir($uploadDir)) {
@@ -41,7 +44,7 @@ if (!empty($_FILES)) {
 
                 if ($fileError === UPLOAD_ERR_OK && ($fileSize / 1000000) < 20) {
                     $tmp = explode(".", $fileName);
-                    $typ = strtolower(end($tmp)); // end() vezme poslední prvek (příponu)
+                    $typ = strtolower(end($tmp));
                     
                     $timestamp = time();
                     $newFileName = $timestamp . "_user" . $userId . "_" . $i . "." . $typ;
@@ -55,15 +58,28 @@ if (!empty($_FILES)) {
     }
 }
 
-// Inicializace manažera a uložení do DB
-$formManager = new FormManager($pdo);
-$requestId = $formManager->saveRequest($userId, $formId, $_POST, $uploadedFilePaths);
 
-if ($requestId) {
+$fieldValues = [];
+
+foreach ($_POST as $key => $value) {
+    if (strpos($key, 'field_') === 0) {
+        $fieldId = str_replace('field_', '', $key);
+        $fieldValues[$fieldId] = $value;
+    }
+}
+
+foreach ($uploadedFilePaths as $fieldId => $pathsArray) {
+    $fieldValues[$fieldId] = implode(',', $pathsArray); 
+}
+
+$model = new FormSubmissionModel($pdo);
+$submissionId = $model->saveSubmission($formId, $langId, $userId, $fieldValues);
+
+if ($submissionId) {
     $_SESSION['flash_success'] = "Tvoje žádost byla úspěšně odeslána!";
-    app_log("Žádost ID $requestId úspěšně vytvořena.");
+
 } else {
-    $_SESSION['flash_error'] = "Něco se pokazilo, zkus to prosím znovu.";
+    $_SESSION['flash_error'] = "Něco se pokazilo při ukládání do databáze, zkus to prosím znovu.";
 }
 
 redirect('index.php');

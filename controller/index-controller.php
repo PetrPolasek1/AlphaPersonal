@@ -10,6 +10,7 @@ class IndexController {
 
     public function handleRequest() {
         // Získání dat ze session (z loginu)
+        $userId = $_SESSION['user_id'] ?? 1; // Přidáno získání ID pro notifikace
         $fullName = $_SESSION['user_name'] ?? 'Uživateli'; 
         $firstName = explode(' ', trim($fullName))[0];
 
@@ -18,8 +19,12 @@ class IndexController {
 
         // Výpočet sloupců a řádků pro dynamický grid
         $count = count($forms);
-        $gridCols = ($count <= 6) ? 2 : 3;
+        $gridCols = 4;
         $gridRows = max(1, ceil($count / $gridCols));
+
+        // --- NOTIFIKACE (načtení čísel pro sidebar) ---
+        $unreadMessagesCount = $this->model->getUnreadMessagesCount($userId);
+        $updatedRequestsCount = $this->model->getUpdatedRequestsCount($userId);
 
         // Načtení šablony
         require_once __DIR__ . '/../view/index-view.php';

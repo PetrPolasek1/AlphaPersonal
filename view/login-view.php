@@ -59,9 +59,17 @@
                                                     </a>
                                                     <input class="form-control" type="password" id="password" name="password" placeholder="<?php e(t('loggin_pass')); ?>" required />
                                                 </div>
-                                            </div></div>
+                                            </div>
+                                        </div>
                                         <div class="col-12">
-                                            <a class="link small" href="forgot-password.php"><?php e(t('forgot_password') !== 'forgot_password' ? t('forgot_password') : 'Forgot password?'); ?></a>
+                                            <?php
+                                            // Vytvoříme odkaz na obnovu hesla a přilepíme k němu token z přihlášení, pokud existuje
+                                            $forgotUrl = "forgot-password.php";
+                                            if (!empty($token)) {
+                                                $forgotUrl .= "?token=" . htmlspecialchars($token);
+                                            }
+                                            ?>
+                                            <a class="link small" href="<?php echo $forgotUrl; ?>"><?php e(t('forgot_password') !== 'forgot_password' ? t('forgot_password') : 'Forgot password?'); ?></a>
                                         </div>
                                         <div class="col-12">
                                             <div class="d-grid">

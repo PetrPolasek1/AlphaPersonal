@@ -34,7 +34,7 @@
                             <ul class="nk-menu">
                                 <li class="nk-menu-item"><a href="index.php" class="nk-menu-link"><span class="nk-menu-icon"><em class="icon ni ni-dashboard-fill"></em></span><span class="nk-menu-text"><?php e(t('dashboard') !== 'dashboard' ? t('dashboard') : 'Dashboard'); ?></span></a></li>
                                 <li class="nk-menu-item"><a href="message.php" class="nk-menu-link"><span class="nk-menu-icon"><em class="icon ni ni-chat-fill"></em></span><span class="nk-menu-text"><?php e(t('messages_menu') !== 'messages_menu' ? t('messages_menu') : 'Zprávy'); ?></span></a></li>
-                                <li class="nk-menu-item"><a href="pozadavky.html" class="nk-menu-link"><span class="nk-menu-icon"><em class="icon ni ni-file-docs"></em></span><span class="nk-menu-text"><?php e(t('requests_menu') !== 'requests_menu' ? t('requests_menu') : 'Požadavky zaměstnanců'); ?></span></a></li>
+                                <li class="nk-menu-item"><a href="request.php" class="nk-menu-link"><span class="nk-menu-icon"><em class="icon ni ni-file-docs"></em></span><span class="nk-menu-text"><?php e(t('requests_menu') !== 'requests_menu' ? t('requests_menu') : 'Požadavky zaměstnanců'); ?></span></a></li>
                             </ul>
                         </div>
                     </div>

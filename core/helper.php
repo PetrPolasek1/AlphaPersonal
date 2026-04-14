@@ -129,7 +129,7 @@ function vypocitejVekCZ(string $datumNarozeni): ?int
     $narozeni = DateTime::createFromFormat('d.m.Y', $datumNarozeni);
 
     if (!$narozeni) {
-        return null; // neplatné datum
+        return null; 
     }
 
     $dnes = new DateTime();

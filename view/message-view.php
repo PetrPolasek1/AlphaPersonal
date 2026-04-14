@@ -9,105 +9,11 @@
 <body class="nk-body ">
     <div class="nk-app-root " data-sidebar-collapse="lg">
         <div class="nk-main">
-            <div class="nk-sidebar nk-sidebar-fixed" id="sidebar">
-                <div class="nk-compact-toggle">
-                    <button class="btn btn-xs btn-outline-light btn-icon compact-toggle text-light bg-white rounded-3">
-                        <em class="icon off ni ni-chevron-left"></em>
-                        <em class="icon on ni ni-chevron-right"></em>
-                    </button>
-                </div>
-                <div class="nk-sidebar-element nk-sidebar-head">
-                    <div class="nk-sidebar-brand">
-                        <a href="index.php" class="logo-link">
-                            <div class="logo-wrap">
-                                <img class="logo-img logo-light" src="images/logo.png" srcset="images/logo2x.png 2x" alt="">
-                                <img class="logo-img logo-dark" src="images/logo-dark.png" srcset="images/logo-dark2x.png 2x" alt="">
-                            </div>
-                        </a>
-                    </div>
-                </div>
-                <div class="nk-sidebar-element nk-sidebar-body">
-                    <div class="nk-sidebar-content h-100" data-simplebar>
-                        <div class="nk-sidebar-menu">
-                            <ul class="nk-menu">
-                                <li class="nk-menu-item">
-                                    <a href="index.php" class="nk-menu-link">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-dashboard-fill"></em></span>
-                                        <span class="nk-menu-text"><?php e(t('dashboard') !== 'dashboard' ? t('dashboard') : 'Dashboard'); ?></span>
-                                    </a>
-                                </li>
-                                <li class="nk-menu-item">
-                                    <a href="message.php" class="nk-menu-link">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-chat-fill"></em></span>
-                                        <span class="nk-menu-text"><?php e(t('messages_menu') !== 'messages_menu' ? t('messages_menu') : 'Zprávy'); ?></span>
-                                    </a>
-                                </li>
-                                <li class="nk-menu-item">
-                                    <a href="pozadavky.html" class="nk-menu-link">
-                                        <span class="nk-menu-icon"><em class="icon ni ni-file-docs"></em></span>
-                                        <span class="nk-menu-text"><?php e(t('requests_menu') !== 'requests_menu' ? t('requests_menu') : 'Požadavky zaměstnanců'); ?></span>
-                                    </a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="nk-sidebar-element nk-sidebar-footer">
-                    <div class="nk-sidebar-footer-extended pt-3">
-                        <div class="border border-light rounded-3">
-                            <a class="d-flex px-3 py-2 bg-primary bg-opacity-10 rounded-bottom-3 rounded-top-3" href="profile.php">
-                                <div class="media-group">
-                                    <div class="media media-sm media-middle media-circle text-bg-primary">
-                                        <img src="images/avatar/a.png" />
-                                    </div>
-                                    <div class="media-text">
-                                        <h6 class="fs-6 mb-0"><?php e($fullName); ?></h6>
-                                    </div>
-                                    <em class="icon ni ni-chevron-right ms-auto ps-1"></em>
-                                </div>
-                            </a>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            
+            <?php include __DIR__ . '/../Core/sidebar.php'; ?>
             
             <div class="nk-wrap">
-                <div class="nk-header nk-header-fixed">
-                    <div class="container-fluid">
-                        <div class="nk-header-wrap">
-                            <div class="nk-header-logo ms-n1">
-                                <div class="nk-sidebar-toggle me-1">
-                                    <button class="btn btn-sm btn-zoom btn-icon sidebar-toggle d-sm-none"><em class="icon ni ni-menu"></em></button>
-                                    <button class="btn btn-md btn-zoom btn-icon sidebar-toggle d-none d-sm-inline-flex"><em class="icon ni ni-menu"></em></button>
-                                </div>
-                            </div>
-                            <div class="nk-header-tools">
-                                <ul class="nk-quick-nav ms-2">
-                                    <li class="dropdown d-inline-flex">
-                                        <a data-bs-toggle="dropdown" class="d-inline-flex" href="#">
-                                            <div class="media media-md media-circle media-middle text-bg-primary"><img src="images/avatar/a.png" /></div>
-                                        </a>
-                                        <div class="dropdown-menu dropdown-menu-md rounded-3">
-                                            <div class="dropdown-content py-3">
-                                                <div class="border border-light rounded-3">
-                                                    <a class="d-flex px-3 py-2 bg-primary bg-opacity-10 rounded-bottom-3 rounded-top-3" href="profile.php">
-                                                        <div class="media-group">
-                                                            <div class="media media-sm media-middle media-circle text-bg-primary"><img src="images/avatar/a.png" /></div>
-                                                            <div class="media-text"><h6 class="fs-6 mb-0"><?php e($fullName); ?></h6></div>
-                                                            <em class="icon ni ni-chevron-right ms-auto ps-1"></em>
-                                                        </div>
-                                                    </a>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
+                
                 <div class="nk-content">
                     <div class="container-xl">
                         <div class="nk-content-inner">
@@ -273,12 +179,7 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    
-    <script src="assets/js/bundle.js?v1.1.0"></script>
+                </div> </div> </div> </div> <script src="assets/js/bundle.js?v1.1.0"></script>
     <script src="assets/js/scripts.js?v1.1.0"></script>
 
     <div class="modal fade" id="composeMessageModal" tabindex="-1" aria-hidden="true">

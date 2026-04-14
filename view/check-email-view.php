@@ -18,7 +18,7 @@
                 <div class="nk-shape bg-shape-blur-b end-0 bottom-0"></div>
                 
                 <div class="text-center pt-5">
-                    <a href="index.php" class="logo-link">
+                    <a href="" class="logo-link">
                         <div class="logo-wrap">
                             <img class="logo-img logo-light" src="images/logo.png" srcset="images/logo2x.png 2x" alt="">
                             <img class="logo-img logo-dark" src="images/logo-dark.png" srcset="images/logo-dark2x.png 2x" alt="">
