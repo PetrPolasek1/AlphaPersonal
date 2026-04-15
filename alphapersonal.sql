@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 5.2.2deb2
+-- version 5.2.1
 -- https://www.phpmyadmin.net/
 --
--- Počítač: localhost:3306
--- Vytvořeno: Sob 14. bře 2026, 07:31
--- Verze serveru: 8.4.8-0ubuntu0.25.10.1
--- Verze PHP: 8.4.11
+-- Počítač: 127.0.0.1
+-- Vytvořeno: Stř 15. dub 2026, 09:03
+-- Verze serveru: 10.4.32-MariaDB
+-- Verze PHP: 8.2.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -28,31 +28,31 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE `activities` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `code` char(12) NOT NULL DEFAULT '0',
-  `id_partner` int NOT NULL DEFAULT '0',
-  `id_user` int NOT NULL DEFAULT '0',
+  `id_partner` int(11) NOT NULL DEFAULT 0,
+  `id_user` int(11) NOT NULL DEFAULT 0,
   `rating` enum('0','1','2','3','4','5') NOT NULL DEFAULT '3',
   `personal` enum('0','1') NOT NULL DEFAULT '0' COMMENT 'osobni 1 bussiness 0',
-  `type` int NOT NULL DEFAULT '0',
+  `type` int(11) NOT NULL DEFAULT 0,
   `subject` varchar(80) NOT NULL,
-  `expectation` text,
-  `result` text,
-  `date_from` int NOT NULL,
-  `date_to` int NOT NULL,
-  `length` int NOT NULL,
-  `alarm` int NOT NULL DEFAULT '0',
-  `alarm_time` int NOT NULL DEFAULT '0',
-  `state` int NOT NULL DEFAULT '0',
+  `expectation` text DEFAULT NULL,
+  `result` text DEFAULT NULL,
+  `date_from` int(11) NOT NULL,
+  `date_to` int(11) NOT NULL,
+  `length` int(11) NOT NULL,
+  `alarm` int(11) NOT NULL DEFAULT 0,
+  `alarm_time` int(11) NOT NULL DEFAULT 0,
+  `state` int(11) NOT NULL DEFAULT 0,
   `address` varchar(240) DEFAULT NULL,
   `source` varchar(20) DEFAULT NULL,
-  `id_source` int NOT NULL DEFAULT '0',
+  `id_source` int(11) NOT NULL DEFAULT 0,
   `googleID` varchar(160) DEFAULT NULL,
   `color` varchar(24) NOT NULL,
   `icon` varchar(30) NOT NULL DEFAULT 'today',
-  `id_repeat_parent` int NOT NULL DEFAULT '0',
+  `id_repeat_parent` int(11) NOT NULL DEFAULT 0,
   `repeat_frequency` enum('none','daily','weekly','monthly','yearly') NOT NULL DEFAULT 'none'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `activities`
@@ -72,9 +72,9 @@ INSERT INTO `activities` (`id`, `code`, `id_partner`, `id_user`, `rating`, `pers
 --
 
 CREATE TABLE `activity_colleagues` (
-  `id_activity` int NOT NULL,
-  `id_user` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_activity` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -83,9 +83,9 @@ CREATE TABLE `activity_colleagues` (
 --
 
 CREATE TABLE `activity_docs` (
-  `id_item` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_item` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -94,9 +94,9 @@ CREATE TABLE `activity_docs` (
 --
 
 CREATE TABLE `activity_participant` (
-  `id_activity` int NOT NULL,
-  `id_person` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_activity` int(11) NOT NULL,
+  `id_person` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -105,12 +105,12 @@ CREATE TABLE `activity_participant` (
 --
 
 CREATE TABLE `ai_planner_params` (
-  `id` int NOT NULL,
-  `id_user` int NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL DEFAULT 0,
   `name` varchar(250) NOT NULL DEFAULT '',
   `typ` varchar(16) NOT NULL DEFAULT 'inputText',
   `placeholder` varchar(250) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `ai_planner_params`
@@ -140,27 +140,28 @@ INSERT INTO `ai_planner_params` (`id`, `id_user`, `name`, `typ`, `placeholder`) 
 --
 
 CREATE TABLE `alpha_pracovnici` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `jmeno` varchar(20) NOT NULL DEFAULT '',
   `prijmeni` varchar(30) NOT NULL DEFAULT '',
   `datum_narozeni` datetime DEFAULT NULL,
   `misto_narozeni` varchar(250) NOT NULL DEFAULT '',
-  `obcanstvi` int NOT NULL DEFAULT '0',
-  `jazyk` int NOT NULL DEFAULT '0',
-  `pohlavi` int NOT NULL DEFAULT '0',
-  `druh_pobytu` int NOT NULL DEFAULT '0',
+  `obcanstvi` int(11) NOT NULL DEFAULT 0,
+  `jazyk` int(11) NOT NULL DEFAULT 0,
+  `pohlavi` int(11) NOT NULL DEFAULT 0,
+  `druh_pobytu` int(11) NOT NULL DEFAULT 0,
   `adresa_v_zemi_puvodu` varchar(400) NOT NULL DEFAULT '',
-  `vzdelani` int NOT NULL DEFAULT '0',
+  `vzdelani` int(11) NOT NULL DEFAULT 0,
   `poznamka` tinytext NOT NULL,
-  `stav` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `stav` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `alpha_pracovnici`
 --
 
 INSERT INTO `alpha_pracovnici` (`id`, `jmeno`, `prijmeni`, `datum_narozeni`, `misto_narozeni`, `obcanstvi`, `jazyk`, `pohlavi`, `druh_pobytu`, `adresa_v_zemi_puvodu`, `vzdelani`, `poznamka`, `stav`) VALUES
-(2, 'Lukáš', 'Pavelek', '1985-06-12 13:40:13', 'Opava', 1, 1, 1, 0, '', 0, '', 0);
+(2, 'Lukáš', 'Pavelek', '1985-06-12 13:40:13', 'Opava', 1, 1, 1, 0, '', 0, '', 0),
+(3, 'Petr', 'Polášek', '2004-12-17 13:40:13', 'Ostrava', 1, 1, 1, 0, '', 0, '', 0);
 
 -- --------------------------------------------------------
 
@@ -169,16 +170,16 @@ INSERT INTO `alpha_pracovnici` (`id`, `jmeno`, `prijmeni`, `datum_narozeni`, `mi
 --
 
 CREATE TABLE `alpha_pracovnici_adresy` (
-  `id` int NOT NULL,
-  `id_pracovnik` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_pracovnik` int(11) NOT NULL,
   `adresa` varchar(300) NOT NULL DEFAULT '',
   `byt` varchar(8) NOT NULL,
   `prispevek` float(7,2) NOT NULL,
   `srazka` float(7,2) NOT NULL,
   `datum_od` date NOT NULL,
   `datum_do` date NOT NULL,
-  `platnost` int DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `platnost` int(11) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `alpha_pracovnici_adresy`
@@ -194,13 +195,13 @@ INSERT INTO `alpha_pracovnici_adresy` (`id`, `id_pracovnik`, `adresa`, `byt`, `p
 --
 
 CREATE TABLE `alpha_pracovnici_doklady` (
-  `id` int NOT NULL,
-  `id_pracovnik` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_pracovnik` int(11) NOT NULL,
   `typ` varchar(12) NOT NULL,
   `cislo_dokladu` varchar(40) NOT NULL,
   `vydal` varchar(250) NOT NULL,
   `datum_platnosti_do` datetime NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `alpha_pracovnici_doklady`
@@ -217,13 +218,13 @@ INSERT INTO `alpha_pracovnici_doklady` (`id`, `id_pracovnik`, `typ`, `cislo_dokl
 --
 
 CREATE TABLE `alpha_pracovnici_kontakty` (
-  `id` int NOT NULL,
-  `id_pracovnik` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_pracovnik` int(11) NOT NULL,
   `typ` varchar(16) NOT NULL,
   `kontakt` varchar(250) NOT NULL DEFAULT '',
-  `platnost` int NOT NULL DEFAULT '1',
-  `vychozi` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `platnost` int(11) NOT NULL DEFAULT 1,
+  `vychozi` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `alpha_pracovnici_kontakty`
@@ -242,34 +243,34 @@ INSERT INTO `alpha_pracovnici_kontakty` (`id`, `id_pracovnik`, `typ`, `kontakt`,
 --
 
 CREATE TABLE `alpha_pracovnici_pracovni_pozice` (
-  `id` int NOT NULL,
-  `id_pracovnik` int NOT NULL,
-  `id_partner` int NOT NULL,
-  `misto_vykonu` int NOT NULL DEFAULT '0',
-  `pracoviste` int NOT NULL DEFAULT '0',
-  `pracovni_pozice` int NOT NULL DEFAULT '0',
-  `smeny` int NOT NULL DEFAULT '1',
-  `rizika` int NOT NULL DEFAULT '0',
-  `trida` int NOT NULL DEFAULT '0',
-  `profese_cz_isco` int NOT NULL DEFAULT '0',
-  `kod_cz_isco` int NOT NULL DEFAULT '0',
-  `cz_nace` int NOT NULL DEFAULT '0',
-  `kkov` int NOT NULL DEFAULT '0',
-  `zdroj` int NOT NULL DEFAULT '0',
-  `koeficient` int NOT NULL DEFAULT '0',
-  `zaklad` float(7,2) NOT NULL DEFAULT '0.00',
-  `osobni_hodnoceni` float(7,2) NOT NULL DEFAULT '0.00',
+  `id` int(11) NOT NULL,
+  `id_pracovnik` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
+  `misto_vykonu` int(11) NOT NULL DEFAULT 0,
+  `pracoviste` int(11) NOT NULL DEFAULT 0,
+  `pracovni_pozice` int(11) NOT NULL DEFAULT 0,
+  `smeny` int(11) NOT NULL DEFAULT 1,
+  `rizika` int(11) NOT NULL DEFAULT 0,
+  `trida` int(11) NOT NULL DEFAULT 0,
+  `profese_cz_isco` int(11) NOT NULL DEFAULT 0,
+  `kod_cz_isco` int(11) NOT NULL DEFAULT 0,
+  `cz_nace` int(11) NOT NULL DEFAULT 0,
+  `kkov` int(11) NOT NULL DEFAULT 0,
+  `zdroj` int(11) NOT NULL DEFAULT 0,
+  `koeficient` int(11) NOT NULL DEFAULT 0,
+  `zaklad` float(7,2) NOT NULL DEFAULT 0.00,
+  `osobni_hodnoceni` float(7,2) NOT NULL DEFAULT 0.00,
   `premie` varchar(80) NOT NULL DEFAULT '',
-  `provozni_priplatek` float(7,2) NOT NULL DEFAULT '0.00',
+  `provozni_priplatek` float(7,2) NOT NULL DEFAULT 0.00,
   `vedouci` varchar(80) NOT NULL DEFAULT '',
   `osobni_cislo` varchar(25) NOT NULL,
   `datum_sepsani` date DEFAULT NULL,
   `datum_nastupu` date DEFAULT NULL,
   `datum_zmeny` date DEFAULT NULL,
   `datum_ukonceni` date DEFAULT NULL,
-  `duvod_ukonceni` text,
-  `stav` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `duvod_ukonceni` text DEFAULT NULL,
+  `stav` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `alpha_pracovnici_pracovni_pozice`
@@ -285,24 +286,32 @@ INSERT INTO `alpha_pracovnici_pracovni_pozice` (`id`, `id_pracovnik`, `id_partne
 --
 
 CREATE TABLE `alpha_pracovnici_uzivatele` (
-  `id` int NOT NULL,
-  `id_pracovnika` int NOT NULL,
-  `login_email` varchar(190) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `password_hash` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `login_qr_token` varchar(100) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `login_qr_enabled` tinyint(1) NOT NULL DEFAULT '1',
-  `is_active` tinyint(1) NOT NULL DEFAULT '1',
-  `email_verified` tinyint(1) NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL,
+  `id_pracovnika` int(11) NOT NULL,
+  `login_email` varchar(190) NOT NULL,
+  `password_hash` varchar(255) NOT NULL,
+  `login_qr_token` varchar(100) NOT NULL,
+  `login_qr_enabled` tinyint(1) NOT NULL DEFAULT 1,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1,
+  `email_verified` tinyint(1) NOT NULL DEFAULT 0,
   `email_verified_at` datetime DEFAULT NULL,
-  `two_factor_enabled` tinyint(1) NOT NULL DEFAULT '0',
-  `two_factor_secret` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `failed_login_attempts` int NOT NULL DEFAULT '0',
+  `two_factor_enabled` tinyint(1) NOT NULL DEFAULT 0,
+  `two_factor_secret` varchar(255) DEFAULT NULL,
+  `failed_login_attempts` int(11) NOT NULL DEFAULT 0,
   `locked_until` datetime DEFAULT NULL,
   `last_login_at` datetime DEFAULT NULL,
-  `last_login_ip` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `updated_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
+  `last_login_ip` varchar(45) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `updated_at` datetime NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Vypisuji data pro tabulku `alpha_pracovnici_uzivatele`
+--
+
+INSERT INTO `alpha_pracovnici_uzivatele` (`id`, `id_pracovnika`, `login_email`, `password_hash`, `login_qr_token`, `login_qr_enabled`, `is_active`, `email_verified`, `email_verified_at`, `two_factor_enabled`, `two_factor_secret`, `failed_login_attempts`, `locked_until`, `last_login_at`, `last_login_ip`, `created_at`, `updated_at`) VALUES
+(3, 2, 'novyklient@test.cz', '$2y$10$oU7nWuD3LaK61YpP1axri.xkdF629dJ4d/8ZgiEODeXcE7j36ElwG', 'c7e89da571b1ff1bf59028b4e510ba08', 1, 1, 0, NULL, 0, NULL, 0, NULL, '2026-04-14 18:56:53', '::1', '2026-03-14 14:26:14', '2026-04-14 18:56:53'),
+(21, 3, 'petr@gmail.com', '$2y$10$HcDBwqAJ/YOY8C8B.tuaAOaBrEK7KbtzCwV7rrFmUV8Qux5pv4A02', 'cc0a1c3171d0a7744cab7e730d4b6850', 1, 1, 0, NULL, 0, NULL, 0, NULL, '2026-04-13 19:48:42', '::1', '2026-04-13 19:48:35', '2026-04-13 19:48:42');
 
 -- --------------------------------------------------------
 
@@ -311,15 +320,46 @@ CREATE TABLE `alpha_pracovnici_uzivatele` (
 --
 
 CREATE TABLE `alpha_pracovnici_uzivatele_sessions` (
-  `id` int NOT NULL,
-  `user_id` int NOT NULL,
-  `refresh_token_hash` char(64) COLLATE utf8mb4_unicode_ci NOT NULL,
-  `user_agent` varchar(255) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
-  `ip_address` varchar(45) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `user_id` int(11) NOT NULL,
+  `refresh_token_hash` char(64) NOT NULL,
+  `user_agent` varchar(255) DEFAULT NULL,
+  `ip_address` varchar(45) DEFAULT NULL,
   `expires_at` datetime NOT NULL,
   `revoked_at` datetime DEFAULT NULL,
-  `created_at` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Vypisuji data pro tabulku `alpha_pracovnici_uzivatele_sessions`
+--
+
+INSERT INTO `alpha_pracovnici_uzivatele_sessions` (`id`, `user_id`, `refresh_token_hash`, `user_agent`, `ip_address`, `expires_at`, `revoked_at`, `created_at`) VALUES
+(13, 3, '217476074b3c5cc8a333dfd5435c4c050cc35208121bac869da3a4e723fb9168', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-24 18:43:31', NULL, '2026-03-25 18:43:31'),
+(15, 3, 'd283199a07041657fa22c342fa47794fda40b1fa6a1bf23b96ae4384f02f72fe', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-26 14:44:13', NULL, '2026-03-27 14:44:13'),
+(16, 3, '1ac95cc9cdb2a3a46fd49b18cdc6d6486940b6eaa8a251869157ac6bec9ac7a7', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-26 16:31:27', NULL, '2026-03-27 16:31:27'),
+(17, 3, 'e682332926f7bcf820863872f8e24424f43b8905f66558053aef2008edbfb610', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-26 16:31:38', NULL, '2026-03-27 16:31:38'),
+(18, 3, '4416bcff1beb0bc864d3d88c5e6c6ff7efeeaa2992f59fbebc8a2623d84b16de', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-26 16:34:05', NULL, '2026-03-27 16:34:05'),
+(19, 3, '9e29a038517dd912a96be7e67f9088dacfe5b2542623a06cb6a4a75975c70ae4', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-28 20:03:11', NULL, '2026-03-29 20:03:11'),
+(20, 3, 'a9cce7d5e052085b66e833e7ca238713559ed85397548938cc5740eb919250f4', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-28 20:03:41', NULL, '2026-03-29 20:03:41'),
+(24, 3, '3b11aa82d5750b55395715f8fd32721f93673e919d9cc0142977eece7af67dc8', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-30 15:14:47', NULL, '2026-03-31 15:14:47'),
+(25, 3, '0b8bd30e2e80d5fef3dc5e86a071b65df0b15b037b0983f76953bbdbda9bb4bf', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-04 13:37:59', NULL, '2026-04-04 13:37:59'),
+(26, 3, '969ab992585a29723a0c6c938829169480b66110eaf3868850254516a9028cb2', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-10 14:10:42', NULL, '2026-04-10 14:10:42'),
+(27, 3, '84202da6f051a608142517d7ecffb1979f067d06467b074bc42ef319d91cf00c', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-10 18:32:36', NULL, '2026-04-10 18:32:36'),
+(28, 3, '39a4c3fcb8e18cb20247f44263248580450184306ee06891239009b8d1b73fee', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-11 13:00:43', NULL, '2026-04-11 13:00:43'),
+(29, 3, '6538a1b20a452b1f6024121626f950d3e72dad420ad172a6f0e16810b614faa2', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 19:36:25', NULL, '2026-04-13 19:36:25'),
+(30, 21, 'e925051545d6280f40efa387bcd34f711aee4fb80381d458e38c79f0daf80ff0', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 19:48:42', NULL, '2026-04-13 19:48:42'),
+(31, 3, 'df5af5dc1eb91afebfccf145cb5387cd1017394546ead91c617ada7b2a85b461', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 19:49:08', NULL, '2026-04-13 19:49:08'),
+(32, 3, '9242d0f458b26a448cbe7fc003914b93096c7861635dafb34f0c840cbf6f79d5', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 20:26:00', NULL, '2026-04-13 20:26:00'),
+(33, 3, '9b4459fb80cf79da81ac3b65891edc54d20dfe95464bd0149984658bed0beb80', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 20:31:43', NULL, '2026-04-13 20:31:43'),
+(34, 3, '87becda151549e2abc6b4a33916ca9da10573bcca702ccbea79ed1fa3714f1de', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 20:35:18', NULL, '2026-04-13 20:35:18'),
+(35, 3, 'f6ef2ebb899be1b532d489c65eccf26be07584b198767fdf3a44858384d304ca', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 20:38:27', NULL, '2026-04-13 20:38:27'),
+(36, 3, '1f5d97983e1f58b050cff494367f7b57b92e7a09a021b8d7fb98fa1a5c19a2c3', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 21:20:16', NULL, '2026-04-13 21:20:16'),
+(37, 3, '6b26b2545fbc4baa77b7aac74e98092bf867d936562a6bcccbf86a2537c0f532', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-14 18:28:51', NULL, '2026-04-14 18:28:51'),
+(38, 3, '60c0f72dd1bbc869462572a9bc77a9e39b63d8d0982284f59ee743d82efc5709', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-14 18:37:29', NULL, '2026-04-14 18:37:29'),
+(39, 3, 'e226cfbd1b3ee766a5b0000e0761ac05665b3c980f998c346b6ef27217b93b9d', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-14 18:42:04', NULL, '2026-04-14 18:42:04'),
+(40, 3, '8bb4646764f7a13c761052abb470de889934b37b9da44b4defec994e0600b10a', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-14 18:44:26', NULL, '2026-04-14 18:44:26'),
+(41, 3, '669fa2dc8f210e07c57d7368ca0f22d7572bd938c7a030a8b09e92458c395a13', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-14 18:56:53', NULL, '2026-04-14 18:56:53');
 
 -- --------------------------------------------------------
 
@@ -328,10 +368,10 @@ CREATE TABLE `alpha_pracovnici_uzivatele_sessions` (
 --
 
 CREATE TABLE `alpha_uzivatele_mista_prace` (
-  `id` int NOT NULL,
-  `id_partner` int NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL DEFAULT 0,
   `name` varchar(250) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `alpha_uzivatele_mista_prace`
@@ -347,10 +387,10 @@ INSERT INTO `alpha_uzivatele_mista_prace` (`id`, `id_partner`, `name`) VALUES
 --
 
 CREATE TABLE `alpha_uzivatele_pracoviste` (
-  `id` int NOT NULL,
-  `id_partner` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
   `name` varchar(250) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `alpha_uzivatele_pracoviste`
@@ -362,22 +402,40 @@ INSERT INTO `alpha_uzivatele_pracoviste` (`id`, `id_partner`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
+-- Struktura tabulky `alpha_zpravy`
+--
+
+CREATE TABLE `alpha_zpravy` (
+  `id` int(11) NOT NULL,
+  `sender_id` int(11) NOT NULL,
+  `recipient_id` int(11) NOT NULL,
+  `subject` varchar(255) NOT NULL,
+  `content` text NOT NULL,
+  `category` varchar(50) DEFAULT 'Zpráva',
+  `is_deleted` tinyint(1) NOT NULL DEFAULT 0,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `is_read` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+-- --------------------------------------------------------
+
+--
 -- Struktura tabulky `campaign`
 --
 
 CREATE TABLE `campaign` (
-  `id` int NOT NULL,
-  `id_user` int NOT NULL,
-  `date_start` int NOT NULL,
-  `date_end` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `date_start` int(11) NOT NULL,
+  `date_end` int(11) NOT NULL,
   `name` varchar(40) NOT NULL,
   `description` text NOT NULL,
-  `excp_activities` int NOT NULL,
-  `excp_cases` int NOT NULL,
+  `excp_activities` int(11) NOT NULL,
+  `excp_cases` int(11) NOT NULL,
   `excp_profit` double(10,2) NOT NULL,
   `excp_cost` double(10,2) NOT NULL,
-  `state` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `state` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -386,9 +444,9 @@ CREATE TABLE `campaign` (
 --
 
 CREATE TABLE `campaign_docs` (
-  `id_campaign` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_campaign` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -397,25 +455,25 @@ CREATE TABLE `campaign_docs` (
 --
 
 CREATE TABLE `cases` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `code` char(12) NOT NULL,
-  `id_user` int NOT NULL,
-  `id_partner` int NOT NULL,
-  `date_start` int NOT NULL,
-  `date_end` int NOT NULL,
-  `date_close` int NOT NULL,
-  `propability` int NOT NULL,
-  `id_source` int NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
+  `date_start` int(11) NOT NULL,
+  `date_end` int(11) NOT NULL,
+  `date_close` int(11) NOT NULL,
+  `propability` int(11) NOT NULL,
+  `id_source` int(11) NOT NULL,
   `name` varchar(80) NOT NULL,
   `description` text NOT NULL,
   `except_cost` double(10,2) NOT NULL,
   `except_profit` double(10,2) NOT NULL,
   `price` double(10,2) NOT NULL,
   `sale` float(4,2) NOT NULL,
-  `id_currency` int NOT NULL,
-  `state` int NOT NULL,
-  `course` float(5,2) NOT NULL DEFAULT '1.00'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_currency` int(11) NOT NULL,
+  `state` int(11) NOT NULL,
+  `course` float(5,2) NOT NULL DEFAULT 1.00
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `cases`
@@ -431,9 +489,9 @@ INSERT INTO `cases` (`id`, `code`, `id_user`, `id_partner`, `date_start`, `date_
 --
 
 CREATE TABLE `case_docs` (
-  `id_item` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_item` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -442,17 +500,17 @@ CREATE TABLE `case_docs` (
 --
 
 CREATE TABLE `case_product` (
-  `id` int NOT NULL,
-  `id_parent` int NOT NULL,
-  `id_product` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_parent` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
   `name` varchar(250) NOT NULL,
   `price` double(10,2) NOT NULL,
-  `num` int NOT NULL,
+  `num` int(11) NOT NULL,
   `sale` float(5,2) NOT NULL,
   `dph` float(5,2) NOT NULL,
-  `position` int NOT NULL DEFAULT '0',
-  `jednotka` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `position` int(11) NOT NULL DEFAULT 0,
+  `jednotka` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -461,37 +519,37 @@ CREATE TABLE `case_product` (
 --
 
 CREATE TABLE `comunication` (
-  `id` int NOT NULL,
-  `id_parent` int NOT NULL,
-  `id_user` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_parent` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
   `source` char(20) NOT NULL,
-  `id_source` int NOT NULL,
+  `id_source` int(11) NOT NULL,
   `subject` varchar(254) NOT NULL,
   `content` text NOT NULL,
-  `date_save` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `date_save` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `dashboardWidgets`
+-- Struktura tabulky `dashboardwidgets`
 --
 
-CREATE TABLE `dashboardWidgets` (
-  `id` int NOT NULL,
+CREATE TABLE `dashboardwidgets` (
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
   `systemName` varchar(50) NOT NULL DEFAULT '',
-  `width` int NOT NULL DEFAULT '12',
+  `width` int(11) NOT NULL DEFAULT 12,
   `category` varchar(50) NOT NULL DEFAULT '',
   `icon` varchar(20) NOT NULL DEFAULT '',
-  `position` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `position` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Vypisuji data pro tabulku `dashboardWidgets`
+-- Vypisuji data pro tabulku `dashboardwidgets`
 --
 
-INSERT INTO `dashboardWidgets` (`id`, `name`, `systemName`, `width`, `category`, `icon`, `position`) VALUES
+INSERT INTO `dashboardwidgets` (`id`, `name`, `systemName`, `width`, `category`, `icon`, `position`) VALUES
 (1, 'Moje otevřené úkoly', 'widgetMyOpenTasks', 6, 'Úkoly', 'check', 5),
 (2, 'Počet uzavřených obchodních případů', 'widgetSuccessCases', 6, 'Obchod', 'assessment', 1),
 (3, 'Mnou delegované otevřené úkoly', 'widgetMySupervisorTasks', 6, 'Úkoly', 'check', 6),
@@ -515,22 +573,22 @@ INSERT INTO `dashboardWidgets` (`id`, `name`, `systemName`, `width`, `category`,
 --
 
 CREATE TABLE `documents` (
-  `id` int NOT NULL,
-  `id_category` int NOT NULL,
-  `id_parent` int NOT NULL,
-  `id_user` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_category` int(11) NOT NULL,
+  `id_parent` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
   `share` enum('0','1','2') NOT NULL,
-  `version` int NOT NULL,
-  `date_save` int NOT NULL,
+  `version` int(11) NOT NULL,
+  `date_save` int(11) NOT NULL,
   `typ` char(5) NOT NULL,
   `filename` varchar(50) NOT NULL,
   `name` varchar(40) NOT NULL,
   `description` tinytext NOT NULL,
   `tags` varchar(255) NOT NULL,
   `size` float(16,1) NOT NULL,
-  `approved` int NOT NULL DEFAULT '-1',
-  `approved_date` int NOT NULL DEFAULT '-1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `approved` int(11) NOT NULL DEFAULT -1,
+  `approved_date` int(11) NOT NULL DEFAULT -1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `documents`
@@ -546,13 +604,13 @@ INSERT INTO `documents` (`id`, `id_category`, `id_parent`, `id_user`, `share`, `
 --
 
 CREATE TABLE `documents_templates` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `type` varchar(20) DEFAULT NULL,
   `name` varchar(45) DEFAULT NULL,
-  `html` text,
-  `css` text,
-  `main` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='Šablony dokumentů pro tisk';
+  `html` text DEFAULT NULL,
+  `css` text DEFAULT NULL,
+  `main` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='Šablony dokumentů pro tisk';
 
 --
 -- Vypisuji data pro tabulku `documents_templates`
@@ -570,12 +628,178 @@ INSERT INTO `documents_templates` (`id`, `type`, `name`, `html`, `css`, `main`) 
 --
 
 CREATE TABLE `document_category` (
-  `id` int NOT NULL,
-  `id_parent` int NOT NULL,
-  `level` int NOT NULL,
-  `pos` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_parent` int(11) NOT NULL,
+  `level` int(11) NOT NULL,
+  `pos` int(11) NOT NULL,
   `name` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabulky `forms`
+--
+
+CREATE TABLE `forms` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `code` varchar(100) NOT NULL,
+  `title_localized_key` varchar(150) NOT NULL,
+  `description_localized_key` varchar(150) DEFAULT NULL,
+  `color` varchar(50) DEFAULT 'bg-primary',
+  `position` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Vypisuji data pro tabulku `forms`
+--
+
+INSERT INTO `forms` (`id`, `code`, `title_localized_key`, `description_localized_key`, `color`, `position`, `is_active`) VALUES
+(1, 'dovolena', 'form_title_dovolena', 'form_desc_dovolena', 'bg-primary', 1, 1),
+(2, 'zaloha', 'form_title_zaloha', 'form_desc_zaloha', 'bg-success', 2, 1),
+(3, 'bydleni', 'form_title_bydleni', 'form_desc_bydleni', 'bg-warning', 3, 1),
+(4, 'potvrzeni', 'form_title_potvrzeni', 'form_desc_potvrzeni', 'bg-info', 4, 1),
+(5, 'nabidky', 'form_title_nabidky', 'form_desc_nabidky', 'bg-danger', 5, 1),
+(6, 'absence', 'form_title_absence', 'form_desc_absence', 'bg-secondary', 6, 1),
+(7, 'kontakty', 'form_title_kontakty', 'form_desc_kontakty', 'bg-dark', 7, 1),
+(8, 'jiné', 'form_title_jine', 'form_desc_jine', 'bg-info', 8, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabulky `form_fields`
+--
+
+CREATE TABLE `form_fields` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `id_form` int(10) UNSIGNED NOT NULL,
+  `code` varchar(100) NOT NULL,
+  `field_type` enum('text','textarea','email','number','tel','date','datetime','select','radio','checkbox','checkbox_group','file') NOT NULL,
+  `label_localized_key` varchar(150) NOT NULL,
+  `placeholder_localized_key` varchar(150) DEFAULT NULL,
+  `help_localized_key` varchar(150) DEFAULT NULL,
+  `position` int(11) NOT NULL DEFAULT 0,
+  `is_required` tinyint(1) NOT NULL DEFAULT 0,
+  `max_length` int(10) UNSIGNED DEFAULT NULL,
+  `min_length` int(10) UNSIGNED DEFAULT NULL,
+  `min_value` decimal(12,2) DEFAULT NULL,
+  `max_value` decimal(12,2) DEFAULT NULL,
+  `default_value` varchar(500) DEFAULT NULL,
+  `validation_pattern` varchar(255) DEFAULT NULL,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Vypisuji data pro tabulku `form_fields`
+--
+
+INSERT INTO `form_fields` (`id`, `id_form`, `code`, `field_type`, `label_localized_key`, `placeholder_localized_key`, `help_localized_key`, `position`, `is_required`, `max_length`, `min_length`, `min_value`, `max_value`, `default_value`, `validation_pattern`, `is_active`) VALUES
+(37, 1, 'predmet', 'text', 'field_subject_label', 'field_subject_ph', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(38, 1, 'typ_dovolene', 'select', 'field_vacation_type_label', 'field_select_ph', NULL, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(39, 1, 'datum_od', 'date', 'field_date_from_label', '', NULL, 3, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(40, 1, 'datum_do', 'date', 'field_date_to_label', '', NULL, 4, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(41, 1, 'popis', 'textarea', 'field_description_label', 'field_description_ph', NULL, 5, 0, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(42, 2, 'predmet', 'text', 'field_subject_label', 'field_subject_ph', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(43, 2, 'castka', 'number', 'field_amount_label', 'field_amount_ph', NULL, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(44, 2, 'duvod', 'textarea', 'field_description_label', 'field_description_ph', NULL, 3, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(45, 3, 'predmet', 'text', 'field_subject_label', 'field_subject_ph', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(46, 3, 'popis', 'textarea', 'field_description_label', 'field_description_ph', NULL, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(47, 3, 'fotky', 'file', 'field_photos_label', '', NULL, 3, 0, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(48, 4, 'predmet', 'text', 'field_cert_type_label', 'Např. Potvrzení o příjmu', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(49, 4, 'popis', 'textarea', 'field_description_label', 'field_description_ph', NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(50, 4, 'prilohy', 'file', 'field_attachments_label', '', NULL, 3, 0, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(51, 5, 'predmet', 'text', 'field_subject_label', 'field_subject_ph', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(52, 5, 'zprava', 'textarea', 'field_description_label', 'field_description_ph', NULL, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(53, 6, 'predmet', 'text', 'field_absence_reason_label', 'field_subject_ph', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(54, 6, 'datum_absence', 'date', 'field_date_label', '', NULL, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(55, 6, 'zprava', 'textarea', 'field_description_label', 'field_description_ph', NULL, 3, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(56, 7, 'predmet', 'text', 'field_subject_label', 'field_subject_ph', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(57, 7, 'novy_kontakt', 'textarea', 'field_new_contact_label', 'field_description_ph', NULL, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(58, 8, 'predmet', 'text', 'field_subject_label', 'field_subject_ph', NULL, 1, 1, 50, NULL, NULL, NULL, NULL, NULL, 1),
+(59, 8, 'popis', 'textarea', 'field_description_label', 'field_description_ph', NULL, 2, 1, 256, NULL, NULL, NULL, NULL, NULL, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabulky `form_field_options`
+--
+
+CREATE TABLE `form_field_options` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `id_form_field` int(10) UNSIGNED NOT NULL,
+  `option_value` varchar(100) NOT NULL,
+  `label_localized_key` varchar(150) NOT NULL,
+  `position` int(11) NOT NULL DEFAULT 0,
+  `is_active` tinyint(1) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Vypisuji data pro tabulku `form_field_options`
+--
+
+INSERT INTO `form_field_options` (`id`, `id_form_field`, `option_value`, `label_localized_key`, `position`, `is_active`) VALUES
+(7, 38, 'placena', 'Placená dovolená', 1, 1),
+(8, 38, 'neplacena', 'Neplacená dovolená', 2, 1),
+(9, 38, 'nemoc', 'Nemoc (Sick day)', 3, 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabulky `form_submissions`
+--
+
+CREATE TABLE `form_submissions` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `id_form` int(10) UNSIGNED NOT NULL,
+  `id_lang` int(10) UNSIGNED NOT NULL,
+  `id_client` int(10) UNSIGNED NOT NULL,
+  `status` enum('new','processing','done','rejected') NOT NULL DEFAULT 'new',
+  `ip_address` varchar(45) DEFAULT NULL,
+  `user_agent` varchar(500) DEFAULT NULL,
+  `submitted_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `is_read` tinyint(1) DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Vypisuji data pro tabulku `form_submissions`
+--
+
+INSERT INTO `form_submissions` (`id`, `id_form`, `id_lang`, `id_client`, `status`, `ip_address`, `user_agent`, `submitted_at`, `is_read`) VALUES
+(1, 4, 1, 3, 'done', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '2026-04-13 18:56:54', 1),
+(2, 4, 1, 3, 'new', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '2026-04-13 19:35:17', 1);
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabulky `form_submission_values`
+--
+
+CREATE TABLE `form_submission_values` (
+  `id` bigint(20) UNSIGNED NOT NULL,
+  `id_submission` bigint(20) UNSIGNED NOT NULL,
+  `id_form_field` int(10) UNSIGNED NOT NULL,
+  `value_text` text DEFAULT NULL,
+  `value_string` varchar(500) DEFAULT NULL,
+  `value_int` bigint(20) DEFAULT NULL,
+  `value_decimal` decimal(12,2) DEFAULT NULL,
+  `value_date` date DEFAULT NULL,
+  `value_datetime` datetime DEFAULT NULL,
+  `value_bool` tinyint(1) DEFAULT NULL,
+  `created_at` datetime NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Vypisuji data pro tabulku `form_submission_values`
+--
+
+INSERT INTO `form_submission_values` (`id`, `id_submission`, `id_form_field`, `value_text`, `value_string`, `value_int`, `value_decimal`, `value_date`, `value_datetime`, `value_bool`, `created_at`) VALUES
+(1, 1, 48, NULL, 'Test', NULL, NULL, NULL, NULL, NULL, '2026-04-13 18:56:54'),
+(2, 1, 49, NULL, 'Test ! @ #', NULL, NULL, NULL, NULL, NULL, '2026-04-13 18:56:54'),
+(3, 1, 50, NULL, '1776099414_user3_0.mp3', NULL, NULL, NULL, NULL, NULL, '2026-04-13 18:56:54'),
+(4, 2, 48, NULL, 'ABC', NULL, NULL, NULL, NULL, NULL, '2026-04-13 19:35:17'),
+(5, 2, 49, NULL, 'AHOJ, 1 2 3', NULL, NULL, NULL, NULL, NULL, '2026-04-13 19:35:17'),
+(6, 2, 50, NULL, '1776101717_user3_0.jpg', NULL, NULL, NULL, NULL, NULL, '2026-04-13 19:35:17');
 
 -- --------------------------------------------------------
 
@@ -584,9 +808,9 @@ CREATE TABLE `document_category` (
 --
 
 CREATE TABLE `free_invoice_code` (
-  `id_line` int NOT NULL,
+  `id_line` int(11) NOT NULL,
   `code` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -595,44 +819,44 @@ CREATE TABLE `free_invoice_code` (
 --
 
 CREATE TABLE `income_invoices` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `code` varchar(40) NOT NULL,
   `partner_code` varchar(40) DEFAULT NULL,
   `source` varchar(20) DEFAULT NULL,
-  `id_source` int NOT NULL DEFAULT '0',
-  `id_category` int NOT NULL,
-  `id_user` int NOT NULL,
-  `id_partner` int NOT NULL,
-  `id_line` int NOT NULL,
-  `id_payment` int NOT NULL,
-  `type` int NOT NULL,
-  `date_save` int NOT NULL,
-  `date_tax` int NOT NULL,
-  `date_pay` int NOT NULL,
-  `date_payed` int NOT NULL,
+  `id_source` int(11) NOT NULL DEFAULT 0,
+  `id_category` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
+  `id_line` int(11) NOT NULL,
+  `id_payment` int(11) NOT NULL,
+  `type` int(11) NOT NULL,
+  `date_save` int(11) NOT NULL,
+  `date_tax` int(11) NOT NULL,
+  `date_pay` int(11) NOT NULL,
+  `date_payed` int(11) NOT NULL,
   `num_order` varchar(20) NOT NULL,
   `num_deal` varchar(20) NOT NULL,
   `name` varchar(120) NOT NULL,
   `ic` varchar(8) NOT NULL,
   `dic` varchar(12) NOT NULL,
   `ean` varchar(40) NOT NULL,
-  `country` int NOT NULL,
+  `country` int(11) NOT NULL,
   `city` varchar(80) NOT NULL,
   `street` varchar(120) NOT NULL,
   `post_code` varchar(10) NOT NULL,
   `description` text NOT NULL,
   `var_symbol` char(20) NOT NULL,
-  `id_bankaccount` int NOT NULL,
+  `id_bankaccount` int(11) NOT NULL,
   `sale` float(7,2) NOT NULL,
   `sum_price` double(10,2) NOT NULL,
   `sum_left` double(10,2) NOT NULL,
   `sum_base` double(10,2) NOT NULL,
   `sum_tax` double(10,2) NOT NULL,
-  `state` int NOT NULL,
+  `state` int(11) NOT NULL,
   `state_acc` enum('n','z','s') NOT NULL COMMENT 'n-nic, z-zauctovano,s-storno',
-  `id_currency` int NOT NULL,
+  `id_currency` int(11) NOT NULL,
   `course` float(7,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `income_invoices`
@@ -648,9 +872,9 @@ INSERT INTO `income_invoices` (`id`, `code`, `partner_code`, `source`, `id_sourc
 --
 
 CREATE TABLE `income_invoice_docs` (
-  `id_item` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_item` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -659,17 +883,17 @@ CREATE TABLE `income_invoice_docs` (
 --
 
 CREATE TABLE `income_invoice_product` (
-  `id` int NOT NULL,
-  `id_parent` int NOT NULL,
-  `id_product` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_parent` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
   `name` varchar(80) NOT NULL,
   `price` double(10,2) NOT NULL,
-  `num` int NOT NULL,
+  `num` int(11) NOT NULL,
   `sale` float(5,2) NOT NULL,
   `dph` float(5,2) NOT NULL,
-  `position` int NOT NULL DEFAULT '0',
-  `jednotka` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `position` int(11) NOT NULL DEFAULT 0,
+  `jednotka` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `income_invoice_product`
@@ -685,45 +909,45 @@ INSERT INTO `income_invoice_product` (`id`, `id_parent`, `id_product`, `name`, `
 --
 
 CREATE TABLE `invoices` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `code` varchar(40) NOT NULL,
-  `id_parent` int NOT NULL DEFAULT '0',
-  `id_source` int NOT NULL,
-  `id_user` int NOT NULL,
-  `id_partner` int NOT NULL,
-  `id_line` int NOT NULL,
-  `id_payment` int NOT NULL,
-  `type` int NOT NULL,
-  `date_save` int NOT NULL,
-  `date_tax` int NOT NULL,
-  `date_pay` int NOT NULL,
-  `date_payed` int NOT NULL,
+  `id_parent` int(11) NOT NULL DEFAULT 0,
+  `id_source` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
+  `id_line` int(11) NOT NULL,
+  `id_payment` int(11) NOT NULL,
+  `type` int(11) NOT NULL,
+  `date_save` int(11) NOT NULL,
+  `date_tax` int(11) NOT NULL,
+  `date_pay` int(11) NOT NULL,
+  `date_payed` int(11) NOT NULL,
   `num_order` varchar(20) NOT NULL,
   `num_deal` varchar(20) NOT NULL,
   `name` varchar(120) NOT NULL,
   `ic` varchar(8) NOT NULL,
   `dic` varchar(12) NOT NULL,
   `ean` varchar(40) NOT NULL,
-  `country` int NOT NULL,
+  `country` int(11) NOT NULL,
   `city` varchar(80) NOT NULL,
   `street` varchar(120) NOT NULL,
   `post_code` varchar(10) NOT NULL,
   `description` text NOT NULL,
   `var_symbol` char(20) NOT NULL,
-  `id_bankaccount` int NOT NULL,
+  `id_bankaccount` int(11) NOT NULL,
   `sale` float(7,2) NOT NULL,
   `sum_price` double(10,2) NOT NULL,
   `sum_left` double(10,2) NOT NULL,
   `sum_base` double(10,2) NOT NULL,
   `sum_tax` double(10,2) NOT NULL,
-  `state` int NOT NULL,
+  `state` int(11) NOT NULL,
   `state_acc` enum('n','z','s') NOT NULL COMMENT 'n-nic, z-zauctovano,s-storno',
-  `id_currency` int NOT NULL,
-  `course` float(7,2) NOT NULL DEFAULT '1.00',
-  `reverseCharge` int NOT NULL DEFAULT '0',
+  `id_currency` int(11) NOT NULL,
+  `course` float(7,2) NOT NULL DEFAULT 1.00,
+  `reverseCharge` int(11) NOT NULL DEFAULT 0,
   `prefix` text NOT NULL,
   `postfix` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -732,9 +956,9 @@ CREATE TABLE `invoices` (
 --
 
 CREATE TABLE `invoice_docs` (
-  `id_item` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_item` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -743,36 +967,36 @@ CREATE TABLE `invoice_docs` (
 --
 
 CREATE TABLE `invoice_product` (
-  `id` int NOT NULL,
-  `id_parent` int NOT NULL,
-  `id_product` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_parent` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
   `name` varchar(80) NOT NULL,
   `price` double(10,2) NOT NULL,
-  `num` int NOT NULL,
+  `num` int(11) NOT NULL,
   `sale` float(5,2) NOT NULL,
   `dph` float(5,2) NOT NULL,
-  `position` int NOT NULL DEFAULT '0',
-  `jednotka` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `position` int(11) NOT NULL DEFAULT 0,
+  `jednotka` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `itemTemplates`
+-- Struktura tabulky `itemtemplates`
 --
 
-CREATE TABLE `itemTemplates` (
-  `id` int NOT NULL,
+CREATE TABLE `itemtemplates` (
+  `id` int(11) NOT NULL,
   `type` varchar(20) NOT NULL DEFAULT 'undefined',
-  `id_item` int NOT NULL DEFAULT '0',
+  `id_item` int(11) NOT NULL DEFAULT 0,
   `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Vypisuji data pro tabulku `itemTemplates`
+-- Vypisuji data pro tabulku `itemtemplates`
 --
 
-INSERT INTO `itemTemplates` (`id`, `type`, `id_item`, `name`) VALUES
+INSERT INTO `itemtemplates` (`id`, `type`, `id_item`, `name`) VALUES
 (1, 'project', 4, 'Montáž FVE'),
 (2, 'project', 4, 'FVE 24'),
 (3, 'project', 2, 'Testovací vzor'),
@@ -805,12 +1029,12 @@ INSERT INTO `itemTemplates` (`id`, `type`, `id_item`, `name`) VALUES
 --
 
 CREATE TABLE `langs` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(30) NOT NULL,
   `shortcut` char(5) NOT NULL,
   `icon` varchar(40) NOT NULL DEFAULT 'picture_empty.png',
-  `statut` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `statut` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `langs`
@@ -828,13 +1052,13 @@ INSERT INTO `langs` (`id`, `name`, `shortcut`, `icon`, `statut`) VALUES
 --
 
 CREATE TABLE `localized` (
-  `id` int NOT NULL,
-  `id_lang` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_lang` int(11) NOT NULL,
   `typ` varchar(5) NOT NULL,
   `page` varchar(30) NOT NULL DEFAULT 'all',
   `name` varchar(30) NOT NULL,
   `content` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `localized`
@@ -1766,7 +1990,275 @@ INSERT INTO `localized` (`id`, `id_lang`, `typ`, `page`, `name`, `content`) VALU
 (1823, 1, 'admin', 'all', 'zaklad', 'Základ'),
 (1824, 1, 'admin', 'all', 'osobni_hodnoceni', 'Osobní ohodnocení'),
 (1825, 1, 'admin', 'all', 'premie', 'Prémie'),
-(1826, 1, 'admin', 'all', 'provozni_priplatek', 'Provozní příplatek');
+(1826, 1, 'admin', 'all', 'provozni_priplatek', 'Provozní příplatek'),
+(1827, 3, 'front', 'all', 'mess_loggin_title', 'Login to Application'),
+(1829, 3, 'front', 'all', 'btn_loggin', 'Login'),
+(1830, 3, 'front', 'all', 'loggin_pass', 'Password'),
+(1831, 1, 'front', 'all', 'mess_loggin_title', 'Přihlášení do Aplikace'),
+(1832, 1, 'front', 'all', 'loggin_pass', 'Heslo'),
+(1833, 1, 'front', 'all', 'btn_loggin', 'Přihlášení'),
+(1834, 1, 'front', 'all', 'dashboard', 'Nástěnka'),
+(1835, 1, 'front', 'all', 'messages_menu', 'Zprávy'),
+(1836, 1, 'front', 'all', 'requests_menu', 'Požadavky'),
+(1837, 1, 'front', 'all', 'welcome_user', 'Vítej'),
+(1838, 1, 'front', 'all', 'select_module_desc', 'Vyberte formulář, který chcete vyplnit'),
+(1839, 1, 'front', 'all', 'module_label', 'Modul'),
+(1840, 1, 'front', 'all', 'back_btn', 'Zpět na přehled'),
+(1841, 1, 'front', 'all', 'loading', 'Načítání...'),
+(1842, 1, 'front', 'all', 'form_title', 'Formulář'),
+(1843, 1, 'front', 'all', 'mod_activities', 'Aktivity'),
+(1844, 1, 'front', 'all', 'mod_notes', 'Osobní poznámky'),
+(1845, 1, 'front', 'all', 'mod_users', 'Správa uživatelů'),
+(1846, 3, 'front', 'all', 'mod_activities', 'Activities'),
+(1847, 3, 'front', 'all', 'mod_notes', 'Personal Notes'),
+(1848, 3, 'front', 'all', 'mod_users', 'User Management'),
+(1849, 3, 'front', 'all', 'dashboard', 'Dashboard'),
+(1850, 3, 'front', 'all', 'messages_menu', 'Messages'),
+(1852, 3, 'front', 'all', 'welcome_user', 'Welcome'),
+(1853, 3, 'front', 'all', 'select_module_desc', 'Select a module you want to work with.'),
+(1854, 3, 'front', 'all', 'module_label', 'Module'),
+(1855, 3, 'front', 'all', 'back_btn', 'Back to overview'),
+(1856, 3, 'front', 'all', 'loading', 'Loading...'),
+(1857, 3, 'front', 'all', 'form_title', 'Form'),
+(1908, 1, 'front', 'all', 'mod_personal_notes', 'Osobní poznámky'),
+(1909, 1, 'front', 'all', 'mod_users_settings', 'Nastavení profilu'),
+(1910, 1, 'front', 'all', 'mod_users_log', 'Záznamy (Logy)'),
+(1911, 1, 'front', 'all', 'mod_user_groups', 'Uživatelské skupiny'),
+(1912, 1, 'front', 'all', 'mod_tasks', 'Úkoly a projekty'),
+(1913, 1, 'front', 'all', 'mod_calendar', 'Kalendář'),
+(1914, 1, 'front', 'all', 'mod_messages', 'Zprávy'),
+(1915, 1, 'front', 'all', 'mod_invoices', 'Faktury a platby'),
+(1916, 1, 'front', 'all', 'mod_reports', 'Reporty a analýzy'),
+(1917, 1, 'front', 'all', 'mod_statistics', 'Statistiky'),
+(1918, 1, 'front', 'all', 'mod_media', 'Média a soubory'),
+(1919, 1, 'front', 'all', 'mod_api_settings', 'API Propojení'),
+(1920, 1, 'front', 'all', 'mod_backups', 'Zálohy systému'),
+(1921, 1, 'front', 'all', 'mod_notifications', 'Oznámení'),
+(1922, 1, 'front', 'all', 'mod_support', 'Podpora a helpdesk'),
+(1923, 1, 'front', 'all', 'mod_audit_log', 'Historie změn'),
+(1924, 1, 'front', 'all', 'mod_roles', 'Správa oprávnění'),
+(1925, 1, 'front', 'all', 'mod_departments', 'Organizační struktura'),
+(1926, 1, 'front', 'all', 'mod_contracts', 'Smlouvy a dokumenty'),
+(1927, 1, 'front', 'all', 'mod_attendance', 'Docházka'),
+(1928, 1, 'front', 'all', 'mod_expenses', 'Výdaje a rozpočty'),
+(1929, 1, 'front', 'all', 'mod_marketing', 'Marketingové kampaně'),
+(1930, 1, 'front', 'all', 'mod_knowledge_base', 'Znalostní báze'),
+(1933, 3, 'front', 'all', 'mod_personal_notes', 'Personal Notes'),
+(1934, 3, 'front', 'all', 'mod_users_settings', 'Profile Settings'),
+(1935, 3, 'front', 'all', 'mod_users_log', 'Logs'),
+(1936, 3, 'front', 'all', 'mod_user_groups', 'User Groups'),
+(1937, 3, 'front', 'all', 'mod_tasks', 'Tasks & Projects'),
+(1938, 3, 'front', 'all', 'mod_calendar', 'Calendar'),
+(1939, 3, 'front', 'all', 'mod_messages', 'Messages'),
+(1940, 3, 'front', 'all', 'mod_invoices', 'Invoices & Payments'),
+(1941, 3, 'front', 'all', 'mod_reports', 'Reports & Analytics'),
+(1942, 3, 'front', 'all', 'mod_statistics', 'Statistics'),
+(1943, 3, 'front', 'all', 'mod_media', 'Media & Files'),
+(1944, 3, 'front', 'all', 'mod_api_settings', 'API Connections'),
+(1945, 3, 'front', 'all', 'mod_backups', 'System Backups'),
+(1946, 3, 'front', 'all', 'mod_notifications', 'Notifications'),
+(1947, 3, 'front', 'all', 'mod_support', 'Support & Helpdesk'),
+(1948, 3, 'front', 'all', 'mod_audit_log', 'Audit Log'),
+(1949, 3, 'front', 'all', 'mod_roles', 'Role Management'),
+(1950, 3, 'front', 'all', 'mod_departments', 'Departments'),
+(1951, 3, 'front', 'all', 'mod_contracts', 'Contracts & Documents'),
+(1952, 3, 'front', 'all', 'mod_attendance', 'Attendance'),
+(1953, 3, 'front', 'all', 'mod_expenses', 'Expenses & Budgets'),
+(1954, 3, 'front', 'all', 'mod_marketing', 'Marketing Campaigns'),
+(1955, 3, 'front', 'all', 'mod_knowledge_base', 'Knowledge Base'),
+(1966, 1, 'front', 'all', 'read_btn', 'Číst'),
+(1991, 1, 'front', 'all', 'err_old_password', 'Aktuální heslo není správné.'),
+(1992, 1, 'front', 'all', 'err_password_match', 'Nová hesla se neshodují.'),
+(1993, 1, 'front', 'all', 'err_password_length', 'Nové heslo musí mít alespoň 6 znaků.'),
+(1994, 1, 'front', 'all', 'succ_password_changed', 'Heslo bylo úspěšně změněno.'),
+(1995, 1, 'front', 'all', 'err_password_same', 'Nové heslo nesmí být úplně stejné jako to aktuální.'),
+(1996, 1, 'front', 'all', 'err_password_similar', 'Nové heslo je příliš podobné tomu starému (změňte více znaků)'),
+(1997, 1, 'Front', 'All', 'form_vacation_title', 'Žádost o dovolenou'),
+(1998, 1, 'Front', 'All', 'form_vacation_desc', 'Vyplňte prosím termín a důvod vaší dovolené.'),
+(1999, 1, 'Front', 'All', 'form_advance_title', 'Žádost o zálohu'),
+(2000, 1, 'Front', 'All', 'form_advance_desc', 'Požádejte o finanční zálohu.'),
+(2001, 1, 'Front', 'All', 'form_housing_title', 'Bydlení'),
+(2002, 1, 'Front', 'All', 'form_housing_desc', 'Hlášení závad nebo požadavky ohledně ubytování.'),
+(2003, 1, 'Front', 'All', 'form_cert_title', 'Potvrzení'),
+(2004, 1, 'Front', 'All', 'form_cert_desc', 'Žádost o vydání potvrzení (např. o příjmu, o zaměstnání).'),
+(2005, 1, 'Front', 'All', 'form_jobs_title', 'Pracovní nabídky'),
+(2006, 1, 'Front', 'All', 'form_jobs_desc', 'Zájem o jiné pozice nebo doporučení nového zaměstnance.'),
+(2007, 1, 'Front', 'All', 'form_absence_title', 'Absence'),
+(2008, 1, 'Front', 'All', 'form_absence_desc', 'Hlášení neočekávané absence (nemoc, zpoždění).'),
+(2009, 1, 'Front', 'All', 'form_contacts_title', 'Kontakty'),
+(2010, 1, 'Front', 'All', 'form_contacts_desc', 'Žádost o aktualizaci vašich kontaktních údajů.'),
+(2013, 1, 'Front', 'All', 'field_other_subject_ph', 'Např. Jiný dotaz nebo požadavek...'),
+(2014, 1, 'Front', 'All', 'field_other_desc_ph', 'Napište detailní popis vaší žádosti...'),
+(2029, 1, 'Front', 'All', 'requests_title', 'Moje požadavky'),
+(2030, 1, 'Front', 'All', 'requests_heading', 'Moje požadavky'),
+(2031, 1, 'Front', 'All', 'requests_summary', 'Přehled a stav všech vašich odeslaných formulářů.'),
+(2032, 1, 'Front', 'All', 'field_request_name', 'Název požadavku'),
+(2033, 1, 'Front', 'All', 'field_request_type', 'Typ formuláře'),
+(2034, 1, 'Front', 'All', 'field_request_status', 'Status'),
+(2035, 1, 'Front', 'All', 'field_request_date', 'Datum odeslání'),
+(2036, 1, 'Front', 'All', 'status_new', 'Nový'),
+(2037, 1, 'Front', 'All', 'status_processing', 'Zpracovává se'),
+(2038, 1, 'Front', 'All', 'status_done', 'Dokončeno'),
+(2039, 1, 'Front', 'All', 'status_rejected', 'Zamítnuto'),
+(2040, 1, 'Front', 'All', 'no_requests_found', 'Zatím jste neodeslali žádné požadavky.'),
+(2043, 3, 'Front', 'All', 'requests_menu', 'Requests'),
+(2044, 3, 'Front', 'All', 'requests_title', 'My Requests'),
+(2045, 3, 'Front', 'All', 'requests_heading', 'My Requests'),
+(2046, 3, 'Front', 'All', 'requests_summary', 'Overview and status of all your submitted forms.'),
+(2047, 3, 'Front', 'All', 'field_request_name', 'Request Name'),
+(2048, 3, 'Front', 'All', 'field_request_type', 'Form Type'),
+(2049, 3, 'Front', 'All', 'field_request_status', 'Status'),
+(2050, 3, 'Front', 'All', 'field_request_date', 'Submitted At'),
+(2051, 3, 'Front', 'All', 'status_new', 'New'),
+(2052, 3, 'Front', 'All', 'status_processing', 'Processing'),
+(2053, 3, 'Front', 'All', 'status_done', 'Completed'),
+(2054, 3, 'Front', 'All', 'status_rejected', 'Rejected'),
+(2055, 3, 'Front', 'All', 'read_btn', 'Details'),
+(2056, 3, 'Front', 'All', 'no_requests_found', 'You have not submitted any requests yet.'),
+(2059, 3, 'Front', 'All', 'field_other_subject_ph', 'e.g. Other inquiry or request...'),
+(2060, 3, 'Front', 'All', 'field_other_desc_ph', 'Write a detailed description of your request...'),
+(2061, 1, 'Front', 'All', 'field_subject_label', 'Předmět'),
+(2062, 1, 'Front', 'All', 'field_vacation_type_label', 'Typ dovolené'),
+(2063, 1, 'Front', 'All', 'field_date_from_label', 'Datum od'),
+(2064, 1, 'Front', 'All', 'field_date_to_label', 'Datum do'),
+(2065, 1, 'Front', 'All', 'field_description_label', 'Popis / Poznámka'),
+(2066, 1, 'Front', 'All', 'field_amount_label', 'Částka (Kč)'),
+(2067, 1, 'Front', 'All', 'field_photos_label', 'Fotky / Dokumenty'),
+(2068, 1, 'Front', 'All', 'field_cert_type_label', 'Typ potvrzení'),
+(2069, 1, 'Front', 'All', 'field_attachments_label', 'Přílohy'),
+(2070, 1, 'Front', 'All', 'field_absence_reason_label', 'Důvod absence'),
+(2071, 1, 'Front', 'All', 'field_date_label', 'Datum'),
+(2072, 1, 'Front', 'All', 'field_new_contact_label', 'Nové kontaktní údaje'),
+(2073, 1, 'Front', 'All', 'field_subject_ph', 'Např. Dovolená, Rozbité okno...'),
+(2074, 1, 'Front', 'All', 'field_description_ph', 'Napište detailní informace...'),
+(2075, 1, 'Front', 'All', 'field_select_ph', 'Vyberte z možností...'),
+(2076, 1, 'Front', 'All', 'field_amount_ph', 'Zadejte částku...'),
+(2077, 3, 'Front', 'All', 'field_subject_label', 'Subject'),
+(2078, 3, 'Front', 'All', 'field_vacation_type_label', 'Vacation Type'),
+(2079, 3, 'Front', 'All', 'field_date_from_label', 'Date From'),
+(2080, 3, 'Front', 'All', 'field_date_to_label', 'Date To'),
+(2081, 3, 'Front', 'All', 'field_description_label', 'Description / Note'),
+(2082, 3, 'Front', 'All', 'field_amount_label', 'Amount (CZK)'),
+(2083, 3, 'Front', 'All', 'field_photos_label', 'Photos / Documents'),
+(2084, 3, 'Front', 'All', 'field_cert_type_label', 'Certificate Type'),
+(2085, 3, 'Front', 'All', 'field_attachments_label', 'Attachments'),
+(2086, 3, 'Front', 'All', 'field_absence_reason_label', 'Absence Reason'),
+(2087, 3, 'Front', 'All', 'field_date_label', 'Date'),
+(2088, 3, 'Front', 'All', 'field_new_contact_label', 'New Contact Details'),
+(2089, 3, 'Front', 'All', 'field_subject_ph', 'e.g. Vacation, Broken window...'),
+(2090, 3, 'Front', 'All', 'field_description_ph', 'Write detailed information...'),
+(2091, 3, 'Front', 'All', 'field_select_ph', 'Select an option...'),
+(2092, 3, 'Front', 'All', 'field_amount_ph', 'Enter amount...'),
+(2093, 1, 'Front', 'All', 'form_title_dovolena', 'Žádost o dovolenou'),
+(2094, 1, 'Front', 'All', 'form_desc_dovolena', 'Vyplňte prosím termín a důvod vaší dovolené.'),
+(2095, 1, 'Front', 'All', 'form_title_zaloha', 'Žádost o zálohu'),
+(2096, 1, 'Front', 'All', 'form_desc_zaloha', 'Požádejte o finanční zálohu.'),
+(2097, 1, 'Front', 'All', 'form_title_bydleni', 'Bydlení'),
+(2098, 1, 'Front', 'All', 'form_desc_bydleni', 'Hlášení závad nebo požadavky ohledně ubytování.'),
+(2099, 1, 'Front', 'All', 'form_title_potvrzeni', 'Potvrzení'),
+(2100, 1, 'Front', 'All', 'form_desc_potvrzeni', 'Žádost o vydání potvrzení (např. o příjmu, o zaměstnání).'),
+(2101, 1, 'Front', 'All', 'form_title_nabidky', 'Pracovní nabídky'),
+(2102, 1, 'Front', 'All', 'form_desc_nabidky', 'Zájem o jiné pozice nebo doporučení nového zaměstnance.'),
+(2103, 1, 'Front', 'All', 'form_title_absence', 'Absence'),
+(2104, 1, 'Front', 'All', 'form_desc_absence', 'Hlášení neočekávané absence (nemoc, zpoždění).'),
+(2105, 1, 'Front', 'All', 'form_title_kontakty', 'Kontakty'),
+(2106, 1, 'Front', 'All', 'form_desc_kontakty', 'Žádost o aktualizaci vašich kontaktních údajů.'),
+(2107, 1, 'Front', 'All', 'form_title_jine', 'Jiné'),
+(2108, 1, 'Front', 'All', 'form_desc_jine', 'V případě jiného požadavku'),
+(2109, 3, 'Front', 'All', 'form_title_dovolena', 'Leave Request'),
+(2110, 3, 'Front', 'All', 'form_desc_dovolena', 'Please fill in the dates and reason for your leave.'),
+(2111, 3, 'Front', 'All', 'form_title_zaloha', 'Advance Payment Request'),
+(2112, 3, 'Front', 'All', 'form_desc_zaloha', 'Request a financial advance.'),
+(2113, 3, 'Front', 'All', 'form_title_bydleni', 'Housing'),
+(2114, 3, 'Front', 'All', 'form_desc_bydleni', 'Reporting defects or requests regarding accommodation.'),
+(2115, 3, 'Front', 'All', 'form_title_potvrzeni', 'Confirmation'),
+(2116, 3, 'Front', 'All', 'form_desc_potvrzeni', 'Request for a certificate (e.g., income, employment).'),
+(2117, 3, 'Front', 'All', 'form_title_nabidky', 'Job Offers'),
+(2118, 3, 'Front', 'All', 'form_desc_nabidky', 'Interest in other positions or recommendation of a new employee.'),
+(2119, 3, 'Front', 'All', 'form_title_absence', 'Absence'),
+(2120, 3, 'Front', 'All', 'form_desc_absence', 'Reporting unexpected absence (illness, delay).'),
+(2121, 3, 'Front', 'All', 'form_title_kontakty', 'Contacts'),
+(2122, 3, 'Front', 'All', 'form_desc_kontakty', 'Request to update your contact details.'),
+(2123, 3, 'Front', 'All', 'form_title_jine', 'Other'),
+(2124, 3, 'Front', 'All', 'form_desc_jine', 'In case of another request'),
+(2125, 1, 'Front', 'All', 'profile_title', 'Můj Profil'),
+(2126, 1, 'Front', 'All', 'personal_details', 'Osobní údaje'),
+(2127, 1, 'Front', 'All', 'full_name', 'Celé jméno'),
+(2128, 1, 'Front', 'All', 'email_address', 'Login E-mail'),
+(2129, 1, 'Front', 'All', 'address_label', 'Adresa'),
+(2130, 1, 'Front', 'All', 'change_password', 'Změna hesla'),
+(2131, 1, 'Front', 'All', 'old_password', 'Aktuální heslo'),
+(2132, 1, 'Front', 'All', 'new_password', 'Nové heslo'),
+(2133, 1, 'Front', 'All', 'confirm_password', 'Potvrdit nové heslo'),
+(2134, 1, 'Front', 'All', 'save_password', 'Uložit nové heslo'),
+(2135, 1, 'Front', 'All', 'contact_type_phone', 'Telefon'),
+(2136, 1, 'Front', 'All', 'contact_type_mobile', 'Mobil'),
+(2137, 3, 'Front', 'All', 'profile_title', 'My Profile'),
+(2138, 3, 'Front', 'All', 'personal_details', 'Personal Details'),
+(2139, 3, 'Front', 'All', 'full_name', 'Full Name'),
+(2140, 3, 'Front', 'All', 'email_address', 'Login E-mail'),
+(2141, 3, 'Front', 'All', 'address_label', 'Address'),
+(2142, 3, 'Front', 'All', 'change_password', 'Change Password'),
+(2143, 3, 'Front', 'All', 'old_password', 'Current Password'),
+(2144, 3, 'Front', 'All', 'new_password', 'New Password'),
+(2145, 3, 'Front', 'All', 'confirm_password', 'Confirm New Password'),
+(2146, 3, 'Front', 'All', 'save_password', 'Save New Password'),
+(2147, 3, 'Front', 'All', 'contact_type_phone', 'Phone'),
+(2148, 3, 'Front', 'All', 'contact_type_mobile', 'Mobile'),
+(2149, 1, 'Front', 'All', 'contact_type_email', 'E-mail'),
+(2150, 1, 'Front', 'All', 'contact_type_banka', 'Bankovní spojení'),
+(2151, 1, 'Front', 'All', 'contact_type_telefon', 'Telefon'),
+(2152, 3, 'Front', 'All', 'contact_type_email', 'Email Address'),
+(2153, 3, 'Front', 'All', 'contact_type_banka', 'Bank Account'),
+(2154, 3, 'Front', 'All', 'contact_type_telefon', 'Phone Number'),
+(2155, 1, 'Front', 'All', 'messages_title', 'Zprávy'),
+(2156, 1, 'Front', 'All', 'messages_heading', 'Zprávy'),
+(2157, 1, 'Front', 'All', 'messages_summary', 'Přehled vašich zpráv'),
+(2158, 1, 'Front', 'All', 'write_message', 'Napsat zprávu'),
+(2159, 1, 'Front', 'All', 'active_messages', 'Aktivní zprávy'),
+(2160, 1, 'Front', 'All', 'trash', 'Koš'),
+(2161, 1, 'Front', 'All', 'no_active_messages', 'Žádné aktivní zprávy.'),
+(2162, 1, 'Front', 'All', 'system_sender', 'Systém'),
+(2163, 1, 'Front', 'All', 'move_to_trash', 'Do koše'),
+(2164, 1, 'Front', 'All', 'trash_empty', 'Koš je prázdný.'),
+(2165, 1, 'Front', 'All', 'restore_btn', 'Obnovit'),
+(2166, 1, 'Front', 'All', 'delete_permanently', 'Trvale smazat'),
+(2167, 1, 'Front', 'All', 'back_to_messages', 'Zpět na zprávy'),
+(2168, 1, 'Front', 'All', 'from_label', 'Od:'),
+(2169, 1, 'Front', 'All', 'new_message_title', 'Nová zpráva'),
+(2170, 1, 'Front', 'All', 'recipient_email_label', 'E-mail příjemce'),
+(2171, 1, 'Front', 'All', 'recipient_email_placeholder', 'např. kolega@firma.cz'),
+(2172, 1, 'Front', 'All', 'subject_label', 'Předmět'),
+(2173, 1, 'Front', 'All', 'message_text_label', 'Text zprávy'),
+(2174, 1, 'Front', 'All', 'cancel_btn', 'Zrušit'),
+(2175, 1, 'Front', 'All', 'send_btn', 'Odeslat'),
+(2176, 1, 'Front', 'All', 'sending_btn', 'Odesílám...'),
+(2177, 1, 'Front', 'All', 'close_btn', 'Zavřít'),
+(2178, 3, 'Front', 'All', 'messages_title', 'Messages'),
+(2179, 3, 'Front', 'All', 'messages_heading', 'Messages'),
+(2180, 3, 'Front', 'All', 'messages_summary', 'Overview of your messages'),
+(2181, 3, 'Front', 'All', 'write_message', 'Write Message'),
+(2182, 3, 'Front', 'All', 'active_messages', 'Active Messages'),
+(2183, 3, 'Front', 'All', 'trash', 'Trash'),
+(2184, 3, 'Front', 'All', 'no_active_messages', 'No active messages.'),
+(2185, 3, 'Front', 'All', 'system_sender', 'System'),
+(2186, 3, 'Front', 'All', 'move_to_trash', 'Move to trash'),
+(2187, 3, 'Front', 'All', 'trash_empty', 'Trash is empty.'),
+(2188, 3, 'Front', 'All', 'restore_btn', 'Restore'),
+(2189, 3, 'Front', 'All', 'delete_permanently', 'Delete permanently'),
+(2190, 3, 'Front', 'All', 'back_to_messages', 'Back to messages'),
+(2191, 3, 'Front', 'All', 'from_label', 'From:'),
+(2192, 3, 'Front', 'All', 'new_message_title', 'New Message'),
+(2193, 3, 'Front', 'All', 'recipient_email_label', 'Recipient Email'),
+(2194, 3, 'Front', 'All', 'recipient_email_placeholder', 'e.g. colleague@company.com'),
+(2195, 3, 'Front', 'All', 'subject_label', 'Subject'),
+(2196, 3, 'Front', 'All', 'message_text_label', 'Message Text'),
+(2197, 3, 'Front', 'All', 'cancel_btn', 'Cancel'),
+(2198, 3, 'Front', 'All', 'send_btn', 'Send'),
+(2199, 3, 'Front', 'All', 'sending_btn', 'Sending...'),
+(2200, 3, 'Front', 'All', 'close_btn', 'Close'),
+(2201, 1, 'Front', 'All', 'submit_request_btn', 'Odeslat žádost'),
+(2202, 3, 'Front', 'All', 'submit_request_btn', 'Submit Request');
 
 -- --------------------------------------------------------
 
@@ -1775,13 +2267,13 @@ INSERT INTO `localized` (`id`, `id_lang`, `typ`, `page`, `name`, `content`) VALU
 --
 
 CREATE TABLE `log` (
-  `id` int NOT NULL,
-  `id_user` int NOT NULL,
-  `time` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
   `source` char(20) NOT NULL,
-  `source_id` int NOT NULL,
-  `event` varchar(100) CHARACTER SET utf8mb3 COLLATE utf8mb3_general_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `source_id` int(11) NOT NULL,
+  `event` varchar(100) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `log`
@@ -1860,10 +2352,10 @@ INSERT INTO `log` (`id`, `id_user`, `time`, `source`, `source_id`, `event`) VALU
 --
 
 CREATE TABLE `loggin_ban` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `ip` varchar(60) NOT NULL,
-  `time` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `time` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `loggin_ban`
@@ -1879,9 +2371,9 @@ INSERT INTO `loggin_ban` (`id`, `ip`, `time`) VALUES
 --
 
 CREATE TABLE `mail_list` (
-  `id_newsletter` int NOT NULL,
+  `id_newsletter` int(11) NOT NULL,
   `mail` varchar(60) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1890,15 +2382,15 @@ CREATE TABLE `mail_list` (
 --
 
 CREATE TABLE `mail_operator` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `to` enum('user','partner','partner_person') NOT NULL,
-  `id_to` int NOT NULL,
-  `date_save` int NOT NULL,
+  `id_to` int(11) NOT NULL,
+  `date_save` int(11) NOT NULL,
   `from_addr` varchar(255) NOT NULL,
   `to_addr` varchar(180) NOT NULL,
   `subject` varchar(255) NOT NULL,
   `text` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -1907,11 +2399,11 @@ CREATE TABLE `mail_operator` (
 --
 
 CREATE TABLE `milestone_checklist` (
-  `id` int NOT NULL,
-  `id_milestone` int NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL,
+  `id_milestone` int(11) NOT NULL DEFAULT 0,
   `name` varchar(255) NOT NULL DEFAULT '',
-  `state` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `state` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `milestone_checklist`
@@ -1968,15 +2460,15 @@ INSERT INTO `milestone_checklist` (`id`, `id_milestone`, `name`, `state`) VALUES
 --
 
 CREATE TABLE `modules` (
-  `id` int NOT NULL,
-  `menu` int NOT NULL DEFAULT '0',
-  `id_parent` int NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL,
+  `menu` int(11) NOT NULL DEFAULT 0,
+  `id_parent` int(11) NOT NULL DEFAULT 0,
   `default_url` varchar(60) DEFAULT NULL,
   `alt_url` varchar(60) DEFAULT NULL,
   `ico` varchar(20) NOT NULL,
   `state` enum('0','1') NOT NULL,
-  `pos` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `pos` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `modules`
@@ -2044,9 +2536,9 @@ INSERT INTO `modules` (`id`, `menu`, `id_parent`, `default_url`, `alt_url`, `ico
 --
 
 CREATE TABLE `modules_rules` (
-  `id_module` int NOT NULL,
-  `id_group` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_module` int(11) NOT NULL,
+  `id_group` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2055,13 +2547,13 @@ CREATE TABLE `modules_rules` (
 --
 
 CREATE TABLE `modules_sites` (
-  `id` int NOT NULL,
-  `id_parent` int NOT NULL,
-  `id_module` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_parent` int(11) NOT NULL,
+  `id_module` int(11) NOT NULL,
   `name` varchar(30) NOT NULL,
   `ico` varchar(40) NOT NULL,
-  `pos` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `pos` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `modules_sites`
@@ -2118,7 +2610,7 @@ INSERT INTO `modules_sites` (`id`, `id_parent`, `id_module`, `name`, `ico`, `pos
 CREATE TABLE `module_setting` (
   `module` varchar(30) NOT NULL,
   `state` tinyint(1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `module_setting`
@@ -2135,18 +2627,18 @@ INSERT INTO `module_setting` (`module`, `state`) VALUES
 --
 
 CREATE TABLE `newsletter` (
-  `id` int NOT NULL,
-  `id_user` int NOT NULL,
-  `date_start` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `date_start` int(11) NOT NULL,
   `name` varchar(60) NOT NULL,
   `subject` varchar(250) NOT NULL,
   `body` blob NOT NULL,
   `html` enum('0','1') NOT NULL DEFAULT '1',
   `img` varchar(40) NOT NULL,
-  `state` int NOT NULL DEFAULT '0',
+  `state` int(11) NOT NULL DEFAULT 0,
   `to_send` enum('0','1') NOT NULL DEFAULT '0',
-  `send` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `send` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2155,14 +2647,14 @@ CREATE TABLE `newsletter` (
 --
 
 CREATE TABLE `newsletter_mails` (
-  `id` int NOT NULL,
-  `id_newsletter` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_newsletter` int(11) NOT NULL,
   `source` enum('partner','person') NOT NULL,
-  `id_source` int NOT NULL,
+  `id_source` int(11) NOT NULL,
   `mail` varchar(140) NOT NULL,
   `send` enum('0','1') NOT NULL,
-  `opened` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `opened` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2171,10 +2663,10 @@ CREATE TABLE `newsletter_mails` (
 --
 
 CREATE TABLE `newsletter_own_array` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(40) NOT NULL,
   `content` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2183,12 +2675,12 @@ CREATE TABLE `newsletter_own_array` (
 --
 
 CREATE TABLE `notes` (
-  `id` int NOT NULL,
-  `id_user` int NOT NULL,
-  `date_save` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `date_save` int(11) NOT NULL,
   `name` varchar(120) NOT NULL,
   `text` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2197,16 +2689,16 @@ CREATE TABLE `notes` (
 --
 
 CREATE TABLE `notificate` (
-  `id` int NOT NULL,
-  `id_saver` int NOT NULL,
-  `id_user` int NOT NULL,
-  `time_save` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_saver` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `time_save` int(11) NOT NULL,
   `source` varchar(30) DEFAULT NULL,
-  `source_id` int NOT NULL,
+  `source_id` int(11) NOT NULL,
   `message` varchar(255) NOT NULL,
   `accept` enum('0','1') NOT NULL,
   `send` enum('0','1') NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2215,23 +2707,23 @@ CREATE TABLE `notificate` (
 --
 
 CREATE TABLE `offers` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `code` char(12) NOT NULL,
-  `id_case` int NOT NULL,
-  `id_partner` int NOT NULL,
-  `id_user` int NOT NULL,
-  `date_save` int NOT NULL,
-  `date_end` int NOT NULL,
+  `id_case` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `date_save` int(11) NOT NULL,
+  `date_end` int(11) NOT NULL,
   `version` varchar(12) NOT NULL,
   `name` varchar(120) NOT NULL,
   `description` text NOT NULL,
   `price` double(10,2) NOT NULL,
   `sale` float(5,2) NOT NULL,
-  `id_currency` int NOT NULL,
-  `state` int NOT NULL,
+  `id_currency` int(11) NOT NULL,
+  `state` int(11) NOT NULL,
   `prefix` longtext NOT NULL,
   `postfix` longtext NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2240,9 +2732,9 @@ CREATE TABLE `offers` (
 --
 
 CREATE TABLE `offer_docs` (
-  `id_item` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_item` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2251,17 +2743,17 @@ CREATE TABLE `offer_docs` (
 --
 
 CREATE TABLE `offer_product` (
-  `id` int NOT NULL,
-  `id_parent` int NOT NULL,
-  `id_product` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_parent` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
   `name` varchar(80) NOT NULL,
   `price` double(10,2) NOT NULL,
-  `num` int NOT NULL,
+  `num` int(11) NOT NULL,
   `sale` float(5,2) NOT NULL,
   `dph` float(5,2) NOT NULL,
-  `position` int NOT NULL DEFAULT '0',
-  `jednotka` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `position` int(11) NOT NULL DEFAULT 0,
+  `jednotka` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2270,14 +2762,14 @@ CREATE TABLE `offer_product` (
 --
 
 CREATE TABLE `orders` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `code` char(12) NOT NULL,
-  `id_case` int NOT NULL,
-  `id_offer` int NOT NULL,
-  `id_user` int NOT NULL,
-  `id_partner` int NOT NULL,
-  `date_save` int NOT NULL,
-  `date_end` int NOT NULL,
+  `id_case` int(11) NOT NULL,
+  `id_offer` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
+  `date_save` int(11) NOT NULL,
+  `date_end` int(11) NOT NULL,
   `bill_addr_state` varchar(40) NOT NULL,
   `bill_addr_city` varchar(40) NOT NULL,
   `bill_addr_street` varchar(80) NOT NULL,
@@ -2288,11 +2780,11 @@ CREATE TABLE `orders` (
   `shipp_addr_code` varchar(7) NOT NULL,
   `name` varchar(120) NOT NULL,
   `description` text NOT NULL,
-  `state` int NOT NULL,
+  `state` int(11) NOT NULL,
   `price` double(10,2) NOT NULL,
-  `id_currency` int NOT NULL,
+  `id_currency` int(11) NOT NULL,
   `sale` float(5,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2301,18 +2793,18 @@ CREATE TABLE `orders` (
 --
 
 CREATE TABLE `orders_out` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `code` char(12) DEFAULT NULL,
-  `id_user` int NOT NULL,
-  `id_project` int NOT NULL,
-  `id_partner` int NOT NULL,
-  `date_save` int NOT NULL,
-  `date_delivery` int NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_project` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
+  `date_save` int(11) NOT NULL,
+  `date_delivery` int(11) NOT NULL,
   `name` varchar(250) NOT NULL,
   `shipping` text NOT NULL,
   `content` text NOT NULL,
-  `state` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `state` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2321,9 +2813,9 @@ CREATE TABLE `orders_out` (
 --
 
 CREATE TABLE `order_docs` (
-  `id_item` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_item` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2332,9 +2824,9 @@ CREATE TABLE `order_docs` (
 --
 
 CREATE TABLE `order_out_docs` (
-  `id_item` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_item` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2343,17 +2835,17 @@ CREATE TABLE `order_out_docs` (
 --
 
 CREATE TABLE `order_out_product` (
-  `id` int NOT NULL,
-  `id_parent` int NOT NULL,
-  `id_product` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_parent` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
   `name` varchar(80) NOT NULL,
   `price` double(10,2) NOT NULL,
-  `num` int NOT NULL,
+  `num` int(11) NOT NULL,
   `sale` double(5,2) NOT NULL,
   `dph` double(5,2) NOT NULL,
-  `position` int NOT NULL DEFAULT '0',
-  `jednotka` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `position` int(11) NOT NULL DEFAULT 0,
+  `jednotka` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2362,11 +2854,11 @@ CREATE TABLE `order_out_product` (
 --
 
 CREATE TABLE `order_out_text` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `typ` enum('shipping','content') NOT NULL,
   `name` varchar(240) NOT NULL,
   `content` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2375,17 +2867,17 @@ CREATE TABLE `order_out_text` (
 --
 
 CREATE TABLE `order_product` (
-  `id` int NOT NULL,
-  `id_parent` int NOT NULL,
-  `id_product` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_parent` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
   `name` varchar(80) NOT NULL,
   `price` double(10,2) NOT NULL,
-  `num` int NOT NULL,
+  `num` int(11) NOT NULL,
   `sale` double(5,2) NOT NULL,
   `dph` double(5,2) NOT NULL,
-  `position` int NOT NULL DEFAULT '0',
-  `jednotka` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `position` int(11) NOT NULL DEFAULT 0,
+  `jednotka` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2394,10 +2886,10 @@ CREATE TABLE `order_product` (
 --
 
 CREATE TABLE `param_names` (
-  `id_template` int NOT NULL,
+  `id_template` int(11) NOT NULL,
   `name` varchar(120) NOT NULL,
-  `pos` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `pos` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2406,9 +2898,9 @@ CREATE TABLE `param_names` (
 --
 
 CREATE TABLE `param_templates` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(120) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2417,39 +2909,39 @@ CREATE TABLE `param_templates` (
 --
 
 CREATE TABLE `partners` (
-  `id` int NOT NULL,
-  `id_parent` int DEFAULT '0',
-  `id_user` int DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `id_parent` int(11) DEFAULT 0,
+  `id_user` int(11) DEFAULT NULL,
   `code` char(12) NOT NULL,
   `name` varchar(120) NOT NULL,
   `ic` varchar(14) NOT NULL,
   `dic` varchar(14) NOT NULL,
-  `relationship` int NOT NULL,
+  `relationship` int(11) NOT NULL,
   `type` enum('b2b','b2c','b2m') NOT NULL,
-  `revenue` int NOT NULL,
+  `revenue` int(11) NOT NULL,
   `sale` float(7,2) NOT NULL,
   `rating` enum('1','2','3','4','5') NOT NULL,
-  `employes` int NOT NULL,
+  `employes` int(11) NOT NULL,
   `source` enum('campaign','activity','other') NOT NULL,
-  `source_id` int NOT NULL,
-  `territory` int NOT NULL,
-  `bill_addr_state` int NOT NULL,
+  `source_id` int(11) NOT NULL,
+  `territory` int(11) NOT NULL,
+  `bill_addr_state` int(11) NOT NULL,
   `bill_addr_city` varchar(40) NOT NULL,
   `bill_addr_street` varchar(80) NOT NULL,
   `bill_addr_code` varchar(7) NOT NULL,
-  `ship_addr_state` int NOT NULL,
+  `ship_addr_state` int(11) NOT NULL,
   `ship_addr_city` varchar(40) NOT NULL,
   `ship_addr_street` varchar(80) NOT NULL,
   `ship_addr_code` varchar(7) NOT NULL,
   `account` varchar(45) NOT NULL,
-  `state` int NOT NULL,
+  `state` int(11) NOT NULL,
   `delete` enum('0','1') NOT NULL,
   `logo_img` varchar(40) NOT NULL,
-  `industry` int NOT NULL,
+  `industry` int(11) NOT NULL,
   `description` text NOT NULL,
-  `date_save` int DEFAULT NULL,
+  `date_save` int(11) DEFAULT NULL,
   `tags` varchar(255) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `partners`
@@ -2466,13 +2958,13 @@ INSERT INTO `partners` (`id`, `id_parent`, `id_user`, `code`, `name`, `ic`, `dic
 --
 
 CREATE TABLE `partner_contacts` (
-  `id` int NOT NULL,
-  `id_partner` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
   `typ` enum('tel','fax','mobil','email','www','fb','skype','other') NOT NULL,
   `contact` varchar(160) NOT NULL,
   `primary` enum('0','1') NOT NULL,
-  `newsletter` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `newsletter` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `partner_contacts`
@@ -2489,12 +2981,12 @@ INSERT INTO `partner_contacts` (`id`, `id_partner`, `typ`, `contact`, `primary`,
 --
 
 CREATE TABLE `partner_description` (
-  `id` int NOT NULL,
-  `id_partner` int NOT NULL,
-  `id_user` int NOT NULL,
-  `date_save` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `date_save` int(11) NOT NULL,
   `description` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2503,9 +2995,9 @@ CREATE TABLE `partner_description` (
 --
 
 CREATE TABLE `partner_docs` (
-  `id_item` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_item` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2514,9 +3006,9 @@ CREATE TABLE `partner_docs` (
 --
 
 CREATE TABLE `partner_industry` (
-  `id_partner` int NOT NULL,
-  `id_industry` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_partner` int(11) NOT NULL,
+  `id_industry` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2525,11 +3017,11 @@ CREATE TABLE `partner_industry` (
 --
 
 CREATE TABLE `partner_other_info` (
-  `id` int NOT NULL,
-  `id_partner` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
   `name` char(20) NOT NULL,
   `value` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2538,9 +3030,9 @@ CREATE TABLE `partner_other_info` (
 --
 
 CREATE TABLE `partner_owner` (
-  `id_partner` int NOT NULL,
-  `id_user` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_partner` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2549,13 +3041,13 @@ CREATE TABLE `partner_owner` (
 --
 
 CREATE TABLE `partner_person` (
-  `id` int NOT NULL,
-  `id_partner` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
   `f_name` varchar(40) NOT NULL,
   `l_name` varchar(40) NOT NULL,
   `title` varchar(20) NOT NULL DEFAULT '',
   `email_name` enum('mr','ms') NOT NULL DEFAULT 'mr',
-  `function` int NOT NULL DEFAULT '0',
+  `function` int(11) NOT NULL DEFAULT 0,
   `phone` varchar(20) NOT NULL DEFAULT '',
   `mobil` varchar(20) NOT NULL DEFAULT '',
   `fax` varchar(20) NOT NULL DEFAULT '',
@@ -2565,9 +3057,9 @@ CREATE TABLE `partner_person` (
   `rating` enum('0','1','2','3','4','5') NOT NULL DEFAULT '1',
   `description` text NOT NULL,
   `face_img` varchar(40) NOT NULL DEFAULT '',
-  `newsletter` int NOT NULL DEFAULT '0',
+  `newsletter` int(11) NOT NULL DEFAULT 0,
   `call_name` varchar(80) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `partner_person`
@@ -2581,49 +3073,70 @@ INSERT INTO `partner_person` (`id`, `id_partner`, `f_name`, `l_name`, `title`, `
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `pozastavky`
+-- Struktura tabulky `password_resets`
 --
 
-CREATE TABLE `pozastavky` (
-  `id` int NOT NULL,
-  `id_project` int NOT NULL,
-  `typ` varchar(20) NOT NULL,
-  `procenta` float(7,2) NOT NULL,
-  `date_uvolneni` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+CREATE TABLE `password_resets` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `token` varchar(255) NOT NULL,
+  `expires_at` datetime NOT NULL,
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Vypisuji data pro tabulku `password_resets`
+--
+
+INSERT INTO `password_resets` (`id`, `email`, `token`, `expires_at`, `created_at`) VALUES
+(3, 'novyklient@test.cz', '34c00854a0c65d4d2b69a6b220148bf5782058a9ea581d5f188de8603ae9bf76', '2026-04-11 14:00:20', '2026-04-11 11:00:20');
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `predavaciProtokoly`
+-- Struktura tabulky `pozastavky`
 --
 
-CREATE TABLE `predavaciProtokoly` (
-  `id` int NOT NULL,
+CREATE TABLE `pozastavky` (
+  `id` int(11) NOT NULL,
+  `id_project` int(11) NOT NULL,
+  `typ` varchar(20) NOT NULL,
+  `procenta` float(7,2) NOT NULL,
+  `date_uvolneni` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
+
+-- --------------------------------------------------------
+
+--
+-- Struktura tabulky `predavaciprotokoly`
+--
+
+CREATE TABLE `predavaciprotokoly` (
+  `id` int(11) NOT NULL,
   `code` varchar(16) NOT NULL,
-  `id_project` int NOT NULL,
-  `id_user` int NOT NULL,
-  `date_save` int NOT NULL,
+  `id_project` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `date_save` int(11) NOT NULL,
   `stavbyvedouci` varchar(160) NOT NULL,
   `dokumenty` text NOT NULL,
   `popisPredavky` text NOT NULL,
   `price` double(10,2) NOT NULL,
   `dph` float(5,2) NOT NULL,
-  `state` int NOT NULL,
+  `state` int(11) NOT NULL,
   `podpis` text NOT NULL,
-  `date_sign` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `date_sign` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `predavaciProtokol_docs`
+-- Struktura tabulky `predavaciprotokol_docs`
 --
 
-CREATE TABLE `predavaciProtokol_docs` (
-  `id_item` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+CREATE TABLE `predavaciprotokol_docs` (
+  `id_item` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2632,15 +3145,15 @@ CREATE TABLE `predavaciProtokol_docs` (
 --
 
 CREATE TABLE `price_list` (
-  `id` int NOT NULL,
-  `id_user` int NOT NULL,
-  `date_start` int NOT NULL,
-  `date_end` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `date_start` int(11) NOT NULL,
+  `date_end` int(11) NOT NULL,
   `pn` varchar(20) NOT NULL,
   `name` varchar(255) NOT NULL,
   `sale` float(3,2) NOT NULL,
-  `id_currency` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_currency` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2649,23 +3162,23 @@ CREATE TABLE `price_list` (
 --
 
 CREATE TABLE `products` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `code` char(12) NOT NULL,
-  `id_cat` int NOT NULL,
-  `date_enter` int NOT NULL,
-  `date_start` int NOT NULL,
-  `date_end` int NOT NULL,
+  `id_cat` int(11) NOT NULL,
+  `date_enter` int(11) NOT NULL,
+  `date_start` int(11) NOT NULL,
+  `date_end` int(11) NOT NULL,
   `pn` varchar(40) NOT NULL,
   `ean` varchar(160) NOT NULL,
-  `producer` int NOT NULL,
+  `producer` int(11) NOT NULL,
   `name` varchar(80) NOT NULL,
   `description` text NOT NULL,
   `brutto_price` double(10,2) NOT NULL,
-  `tax` int NOT NULL,
-  `jednotka` int NOT NULL DEFAULT '1',
-  `slevnitelny` int NOT NULL DEFAULT '1',
+  `tax` int(11) NOT NULL,
+  `jednotka` int(11) NOT NULL DEFAULT 1,
+  `slevnitelny` int(11) NOT NULL DEFAULT 1,
   `image` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `products`
@@ -2681,11 +3194,11 @@ INSERT INTO `products` (`id`, `code`, `id_cat`, `date_enter`, `date_start`, `dat
 --
 
 CREATE TABLE `product_categories` (
-  `id` int NOT NULL,
-  `id_parent` int NOT NULL,
-  `level` tinyint NOT NULL DEFAULT '1',
+  `id` int(11) NOT NULL,
+  `id_parent` int(11) NOT NULL,
+  `level` tinyint(4) NOT NULL DEFAULT 1,
   `name` varchar(100) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2694,9 +3207,9 @@ CREATE TABLE `product_categories` (
 --
 
 CREATE TABLE `product_category` (
-  `id_product` int NOT NULL,
-  `id_category` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_product` int(11) NOT NULL,
+  `id_category` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2705,9 +3218,9 @@ CREATE TABLE `product_category` (
 --
 
 CREATE TABLE `product_docs` (
-  `id_item` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_item` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2716,10 +3229,10 @@ CREATE TABLE `product_docs` (
 --
 
 CREATE TABLE `product_image` (
-  `id_product` int NOT NULL,
-  `id_image` int NOT NULL,
+  `id_product` int(11) NOT NULL,
+  `id_image` int(11) NOT NULL,
   `main` enum('0','1') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2728,11 +3241,11 @@ CREATE TABLE `product_image` (
 --
 
 CREATE TABLE `product_images` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(160) NOT NULL,
   `filename` varchar(160) NOT NULL,
   `size` float(16,1) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2741,12 +3254,12 @@ CREATE TABLE `product_images` (
 --
 
 CREATE TABLE `product_in_price_list` (
-  `id` int NOT NULL,
-  `id_pricelist` int NOT NULL,
-  `id_product` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_pricelist` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
   `price` double(10,2) NOT NULL,
   `state` enum('a','h') NOT NULL COMMENT 'actual - history'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2755,9 +3268,9 @@ CREATE TABLE `product_in_price_list` (
 --
 
 CREATE TABLE `product_join_list` (
-  `id_product_m` int NOT NULL,
-  `id_product_s` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_product_m` int(11) NOT NULL,
+  `id_product_s` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2766,10 +3279,10 @@ CREATE TABLE `product_join_list` (
 --
 
 CREATE TABLE `product_params` (
-  `id_product` int NOT NULL,
-  `id_param` int NOT NULL,
+  `id_product` int(11) NOT NULL,
+  `id_param` int(11) NOT NULL,
   `value` varchar(120) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2778,32 +3291,32 @@ CREATE TABLE `product_params` (
 --
 
 CREATE TABLE `projects` (
-  `id` int NOT NULL,
-  `id_case` int NOT NULL,
-  `id_user` int NOT NULL,
-  `id_partner` int NOT NULL,
-  `id_category` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_case` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
+  `id_category` int(11) NOT NULL,
   `code` char(12) NOT NULL,
-  `date_start` int NOT NULL,
-  `date_end` int NOT NULL,
+  `date_start` int(11) NOT NULL,
+  `date_end` int(11) NOT NULL,
   `name` varchar(60) NOT NULL,
   `description` text NOT NULL,
-  `state` int NOT NULL,
+  `state` int(11) NOT NULL,
   `except_cost` double(10,2) NOT NULL,
   `except_profit` double(10,2) NOT NULL,
   `price` double(10,2) NOT NULL,
   `sale` float(4,2) NOT NULL,
-  `id_currency` int NOT NULL,
+  `id_currency` int(11) NOT NULL,
   `stavbyvedouci` varchar(250) NOT NULL,
-  `vystaveno` int NOT NULL,
+  `vystaveno` int(11) NOT NULL,
   `vynos` double(10,2) NOT NULL,
   `naklad` double(10,2) NOT NULL,
   `address` varchar(250) NOT NULL,
-  `progress` int NOT NULL DEFAULT '0',
+  `progress` int(11) NOT NULL DEFAULT 0,
   `color` varchar(20) NOT NULL DEFAULT '',
-  `originDate_start` int NOT NULL DEFAULT '0',
-  `originDate_end` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `originDate_start` int(11) NOT NULL DEFAULT 0,
+  `originDate_end` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `projects`
@@ -2821,11 +3334,11 @@ INSERT INTO `projects` (`id`, `id_case`, `id_user`, `id_partner`, `id_category`,
 --
 
 CREATE TABLE `project_checklist` (
-  `id` int NOT NULL,
-  `id_project` int NOT NULL DEFAULT '0',
+  `id` int(11) NOT NULL,
+  `id_project` int(11) NOT NULL DEFAULT 0,
   `name` varchar(255) NOT NULL DEFAULT '',
-  `state` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `state` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `project_checklist`
@@ -2867,9 +3380,9 @@ INSERT INTO `project_checklist` (`id`, `id_project`, `name`, `state`) VALUES
 --
 
 CREATE TABLE `project_docs` (
-  `id_item` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_item` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2878,23 +3391,23 @@ CREATE TABLE `project_docs` (
 --
 
 CREATE TABLE `project_milestone` (
-  `id` int NOT NULL,
-  `id_user` int NOT NULL,
-  `id_saver` int NOT NULL DEFAULT '0',
-  `id_project` int NOT NULL,
-  `date_start` int NOT NULL,
-  `date_end` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_saver` int(11) NOT NULL DEFAULT 0,
+  `id_project` int(11) NOT NULL,
+  `date_start` int(11) NOT NULL,
+  `date_end` int(11) NOT NULL,
   `name` varchar(250) NOT NULL,
   `description` text NOT NULL,
-  `state` int NOT NULL,
-  `priorita` int NOT NULL DEFAULT '0',
-  `typ` int NOT NULL DEFAULT '0',
+  `state` int(11) NOT NULL,
+  `priorita` int(11) NOT NULL DEFAULT 0,
+  `typ` int(11) NOT NULL DEFAULT 0,
   `chips` varchar(255) NOT NULL,
-  `progress` int NOT NULL DEFAULT '0',
+  `progress` int(11) NOT NULL DEFAULT 0,
   `color` varchar(20) NOT NULL DEFAULT '',
-  `originDate_start` int NOT NULL DEFAULT '0',
-  `originDate_end` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `originDate_start` int(11) NOT NULL DEFAULT 0,
+  `originDate_end` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `project_milestone`
@@ -2938,9 +3451,9 @@ INSERT INTO `project_milestone` (`id`, `id_user`, `id_saver`, `id_project`, `dat
 --
 
 CREATE TABLE `project_milestone_docs` (
-  `id_item` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_item` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2949,16 +3462,16 @@ CREATE TABLE `project_milestone_docs` (
 --
 
 CREATE TABLE `project_outway_items` (
-  `id` int NOT NULL,
-  `id_product` int NOT NULL,
-  `id_project` int NOT NULL,
-  `delivery_date` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
+  `id_project` int(11) NOT NULL,
+  `delivery_date` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `price` double(10,2) NOT NULL,
-  `dph` int NOT NULL,
+  `dph` int(11) NOT NULL,
   `cisloDokladu` varchar(22) NOT NULL,
-  `id_partner` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_partner` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2967,9 +3480,9 @@ CREATE TABLE `project_outway_items` (
 --
 
 CREATE TABLE `project_participient` (
-  `id_project` int NOT NULL,
-  `id_user` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_project` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -2978,18 +3491,18 @@ CREATE TABLE `project_participient` (
 --
 
 CREATE TABLE `project_product` (
-  `id` int NOT NULL,
-  `id_parent` int NOT NULL,
-  `id_product` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_parent` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `price` double(10,2) NOT NULL,
   `num` double(7,2) NOT NULL,
   `sale` float(5,2) NOT NULL,
   `dph` float(5,2) NOT NULL,
-  `invoiced` int NOT NULL,
-  `position` int NOT NULL DEFAULT '0',
-  `jednotka` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `invoiced` int(11) NOT NULL,
+  `position` int(11) NOT NULL DEFAULT 0,
+  `jednotka` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `project_product`
@@ -3005,18 +3518,18 @@ INSERT INTO `project_product` (`id`, `id_parent`, `id_product`, `name`, `price`,
 --
 
 CREATE TABLE `project_work_report` (
-  `id` int NOT NULL,
-  `id_user` int NOT NULL,
-  `id_project` int NOT NULL,
-  `id_partner` int NOT NULL,
-  `work_date` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_project` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
+  `work_date` int(11) NOT NULL,
   `typ` enum('m','h','f') NOT NULL,
   `num` float(7,2) NOT NULL,
   `price` double(10,2) NOT NULL,
   `note` varchar(250) DEFAULT NULL,
   `absence` enum('d','n','p') NOT NULL DEFAULT 'p' COMMENT 'd-ovolena, n-emocenska, p-race nebyla absence',
-  `id_dochazka` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_dochazka` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3025,18 +3538,18 @@ CREATE TABLE `project_work_report` (
 --
 
 CREATE TABLE `protokol_product` (
-  `id` int NOT NULL,
-  `id_parent` int NOT NULL,
-  `id_product` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_parent` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `price` double(10,2) NOT NULL,
   `num` double(7,2) NOT NULL,
   `sale` float(5,2) NOT NULL,
   `dph` float(5,2) NOT NULL,
-  `invoiced` int NOT NULL,
-  `position` int NOT NULL,
-  `jednotka` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `invoiced` int(11) NOT NULL,
+  `position` int(11) NOT NULL,
+  `jednotka` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3045,26 +3558,26 @@ CREATE TABLE `protokol_product` (
 --
 
 CREATE TABLE `reklamace` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `code` char(12) NOT NULL,
-  `id_partner` int NOT NULL,
-  `id_zalozil` int NOT NULL,
-  `id_vyrobil` int NOT NULL,
-  `id_opravar` int NOT NULL,
-  `id_kategorie` int NOT NULL,
-  `id_typ` int NOT NULL,
+  `id_partner` int(11) NOT NULL,
+  `id_zalozil` int(11) NOT NULL,
+  `id_vyrobil` int(11) NOT NULL,
+  `id_opravar` int(11) NOT NULL,
+  `id_kategorie` int(11) NOT NULL,
+  `id_typ` int(11) NOT NULL,
   `vyrobniCislo` char(48) NOT NULL,
-  `prijato` int NOT NULL COMMENT 'datum prijeti reklamace',
-  `lhuta` int NOT NULL COMMENT 'zákonna lhuta',
-  `opraveno` int NOT NULL,
-  `vraceno` int NOT NULL COMMENT 'datum odeslani zpet',
+  `prijato` int(11) NOT NULL COMMENT 'datum prijeti reklamace',
+  `lhuta` int(11) NOT NULL COMMENT 'zákonna lhuta',
+  `opraveno` int(11) NOT NULL,
+  `vraceno` int(11) NOT NULL COMMENT 'datum odeslani zpet',
   `casOpravy` float(7,2) NOT NULL,
   `popisZavady` text NOT NULL,
   `vyjadreniTechnika` text NOT NULL,
   `pouzityMaterial` text NOT NULL,
   `cena` double(7,2) NOT NULL,
-  `stav` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `stav` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3073,9 +3586,9 @@ CREATE TABLE `reklamace` (
 --
 
 CREATE TABLE `reklamace_docs` (
-  `id_item` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_item` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3084,10 +3597,10 @@ CREATE TABLE `reklamace_docs` (
 --
 
 CREATE TABLE `settings` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(30) NOT NULL,
   `value` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `settings`
@@ -3162,12 +3675,12 @@ INSERT INTO `settings` (`id`, `name`, `value`) VALUES
 --
 
 CREATE TABLE `setting_activity` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(60) NOT NULL,
   `color` varchar(24) NOT NULL,
-  `startHour` int NOT NULL,
-  `endHour` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `startHour` int(11) NOT NULL,
+  `endHour` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_activity`
@@ -3190,9 +3703,9 @@ INSERT INTO `setting_activity` (`id`, `name`, `color`, `startHour`, `endHour`) V
 --
 
 CREATE TABLE `setting_alpha_cz_nace` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(300) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3201,9 +3714,9 @@ CREATE TABLE `setting_alpha_cz_nace` (
 --
 
 CREATE TABLE `setting_alpha_kkov` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(300) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3212,9 +3725,9 @@ CREATE TABLE `setting_alpha_kkov` (
 --
 
 CREATE TABLE `setting_alpha_kod_cz_isco` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(300) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3223,9 +3736,9 @@ CREATE TABLE `setting_alpha_kod_cz_isco` (
 --
 
 CREATE TABLE `setting_alpha_koeficient` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(10) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3234,9 +3747,9 @@ CREATE TABLE `setting_alpha_koeficient` (
 --
 
 CREATE TABLE `setting_alpha_obcanstvi` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(60) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_alpha_obcanstvi`
@@ -3254,9 +3767,9 @@ INSERT INTO `setting_alpha_obcanstvi` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_alpha_pobyt` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(250) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_alpha_pobyt`
@@ -3273,9 +3786,9 @@ INSERT INTO `setting_alpha_pobyt` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_alpha_pohlavi` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_alpha_pohlavi`
@@ -3292,9 +3805,9 @@ INSERT INTO `setting_alpha_pohlavi` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_alpha_pracovni_pozice` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(300) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3303,9 +3816,9 @@ CREATE TABLE `setting_alpha_pracovni_pozice` (
 --
 
 CREATE TABLE `setting_alpha_profese_cz_isco` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(300) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3314,9 +3827,9 @@ CREATE TABLE `setting_alpha_profese_cz_isco` (
 --
 
 CREATE TABLE `setting_alpha_smeny` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(300) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3325,9 +3838,9 @@ CREATE TABLE `setting_alpha_smeny` (
 --
 
 CREATE TABLE `setting_alpha_tridy` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(300) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3336,9 +3849,9 @@ CREATE TABLE `setting_alpha_tridy` (
 --
 
 CREATE TABLE `setting_alpha_vzdelani` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(250) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_alpha_vzdelani`
@@ -3356,9 +3869,9 @@ INSERT INTO `setting_alpha_vzdelani` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_alpha_zdroj` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(300) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3367,7 +3880,7 @@ CREATE TABLE `setting_alpha_zdroj` (
 --
 
 CREATE TABLE `setting_bank_account` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(30) NOT NULL,
   `bank_name` varchar(200) NOT NULL,
   `account_number` varchar(50) NOT NULL,
@@ -3376,7 +3889,7 @@ CREATE TABLE `setting_bank_account` (
   `bic` varchar(120) NOT NULL,
   `spec_symbol` varchar(20) DEFAULT NULL,
   `main` enum('0','1') NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_bank_account`
@@ -3392,9 +3905,9 @@ INSERT INTO `setting_bank_account` (`id`, `name`, `bank_name`, `account_number`,
 --
 
 CREATE TABLE `setting_country` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_country`
@@ -3415,12 +3928,12 @@ INSERT INTO `setting_country` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_currency` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `short` varchar(10) NOT NULL,
   `name` varchar(40) NOT NULL,
   `course` float(5,2) NOT NULL,
   `main` enum('0','1') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_currency`
@@ -3437,9 +3950,9 @@ INSERT INTO `setting_currency` (`id`, `short`, `name`, `course`, `main`) VALUES
 --
 
 CREATE TABLE `setting_employes` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` char(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_employes`
@@ -3462,12 +3975,12 @@ INSERT INTO `setting_employes` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_export` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `modul` char(20) NOT NULL,
   `const` varchar(120) NOT NULL,
   `table_element` varchar(80) NOT NULL,
   `def` enum('0','1') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_export`
@@ -3520,9 +4033,9 @@ INSERT INTO `setting_export` (`id`, `modul`, `const`, `table_element`, `def`) VA
 --
 
 CREATE TABLE `setting_industry` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_industry`
@@ -3550,9 +4063,9 @@ INSERT INTO `setting_industry` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_invoice_category` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(120) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_invoice_category`
@@ -3571,10 +4084,10 @@ INSERT INTO `setting_invoice_category` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_invoice_type` (
-  `id` int NOT NULL,
-  `id_line` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_line` int(11) NOT NULL,
   `name` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_invoice_type`
@@ -3592,9 +4105,9 @@ INSERT INTO `setting_invoice_type` (`id`, `id_line`, `name`) VALUES
 --
 
 CREATE TABLE `setting_jednotky` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(30) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_jednotky`
@@ -3614,17 +4127,17 @@ INSERT INTO `setting_jednotky` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_lines` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `type` char(20) NOT NULL,
   `short_name` varchar(40) NOT NULL DEFAULT '',
   `name` varchar(40) NOT NULL DEFAULT '',
   `description` text NOT NULL,
-  `actual_index` int NOT NULL DEFAULT '0',
-  `start_index` int NOT NULL DEFAULT '0',
-  `length` int NOT NULL DEFAULT '5',
+  `actual_index` int(11) NOT NULL DEFAULT 0,
+  `start_index` int(11) NOT NULL DEFAULT 0,
+  `length` int(11) NOT NULL DEFAULT 5,
   `prefix` varchar(16) NOT NULL DEFAULT '',
   `postfix` varchar(10) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_lines`
@@ -3648,9 +4161,9 @@ INSERT INTO `setting_lines` (`id`, `type`, `short_name`, `name`, `description`, 
 --
 
 CREATE TABLE `setting_menu` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(20) DEFAULT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_menu`
@@ -3668,11 +4181,11 @@ INSERT INTO `setting_menu` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_modules_params` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `module` varchar(25) NOT NULL,
   `name` varchar(50) NOT NULL,
   `value` varchar(50) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_modules_params`
@@ -3692,7 +4205,7 @@ INSERT INTO `setting_modules_params` (`id`, `module`, `name`, `value`) VALUES
 CREATE TABLE `setting_newsletter` (
   `name` varchar(7) NOT NULL,
   `value` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_newsletter`
@@ -3704,19 +4217,19 @@ INSERT INTO `setting_newsletter` (`name`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `setting_OLColor`
+-- Struktura tabulky `setting_olcolor`
 --
 
-CREATE TABLE `setting_OLColor` (
-  `id` int NOT NULL,
+CREATE TABLE `setting_olcolor` (
+  `id` int(11) NOT NULL,
   `name` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Vypisuji data pro tabulku `setting_OLColor`
+-- Vypisuji data pro tabulku `setting_olcolor`
 --
 
-INSERT INTO `setting_OLColor` (`id`, `name`) VALUES
+INSERT INTO `setting_olcolor` (`id`, `name`) VALUES
 (1, 'Bílá'),
 (2, 'Černá'),
 (3, 'Modrá');
@@ -3724,19 +4237,19 @@ INSERT INTO `setting_OLColor` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `setting_OLKaroserie`
+-- Struktura tabulky `setting_olkaroserie`
 --
 
-CREATE TABLE `setting_OLKaroserie` (
-  `id` int NOT NULL,
+CREATE TABLE `setting_olkaroserie` (
+  `id` int(11) NOT NULL,
   `name` varchar(60) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Vypisuji data pro tabulku `setting_OLKaroserie`
+-- Vypisuji data pro tabulku `setting_olkaroserie`
 --
 
-INSERT INTO `setting_OLKaroserie` (`id`, `name`) VALUES
+INSERT INTO `setting_olkaroserie` (`id`, `name`) VALUES
 (1, 'Sedan'),
 (2, 'Kombi'),
 (3, 'Hatchback'),
@@ -3745,19 +4258,19 @@ INSERT INTO `setting_OLKaroserie` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `setting_OLObdobi`
+-- Struktura tabulky `setting_olobdobi`
 --
 
-CREATE TABLE `setting_OLObdobi` (
-  `id` int NOT NULL,
-  `name` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+CREATE TABLE `setting_olobdobi` (
+  `id` int(11) NOT NULL,
+  `name` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Vypisuji data pro tabulku `setting_OLObdobi`
+-- Vypisuji data pro tabulku `setting_olobdobi`
 --
 
-INSERT INTO `setting_OLObdobi` (`id`, `name`) VALUES
+INSERT INTO `setting_olobdobi` (`id`, `name`) VALUES
 (1, 12),
 (2, 18),
 (3, 24),
@@ -3773,11 +4286,11 @@ INSERT INTO `setting_OLObdobi` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_page` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `page` char(30) NOT NULL,
   `name` varchar(45) NOT NULL,
   `value` varchar(255) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3 COMMENT='nastaveni pro jednotlivé stránky';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci COMMENT='nastaveni pro jednotlivé stránky';
 
 --
 -- Vypisuji data pro tabulku `setting_page`
@@ -3798,9 +4311,9 @@ INSERT INTO `setting_page` (`id`, `page`, `name`, `value`) VALUES
 --
 
 CREATE TABLE `setting_partner_source` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(60) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_partner_source`
@@ -3818,9 +4331,9 @@ INSERT INTO `setting_partner_source` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_payment_type` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_payment_type`
@@ -3841,9 +4354,9 @@ INSERT INTO `setting_payment_type` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_person_function` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_person_function`
@@ -3894,9 +4407,9 @@ INSERT INTO `setting_person_function` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_places` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(80) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3905,9 +4418,9 @@ CREATE TABLE `setting_places` (
 --
 
 CREATE TABLE `setting_producers` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(200) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -3916,10 +4429,10 @@ CREATE TABLE `setting_producers` (
 --
 
 CREATE TABLE `setting_project` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(30) NOT NULL,
   `value` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_project`
@@ -3933,19 +4446,19 @@ INSERT INTO `setting_project` (`id`, `name`, `value`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `setting_projectCategories`
+-- Struktura tabulky `setting_projectcategories`
 --
 
-CREATE TABLE `setting_projectCategories` (
-  `id` int NOT NULL,
+CREATE TABLE `setting_projectcategories` (
+  `id` int(11) NOT NULL,
   `name` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Vypisuji data pro tabulku `setting_projectCategories`
+-- Vypisuji data pro tabulku `setting_projectcategories`
 --
 
-INSERT INTO `setting_projectCategories` (`id`, `name`) VALUES
+INSERT INTO `setting_projectcategories` (`id`, `name`) VALUES
 (7, 'Montáž FVE'),
 (8, 'Vývoj nových produktů'),
 (9, 'Organizace'),
@@ -3959,11 +4472,11 @@ INSERT INTO `setting_projectCategories` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_psc` (
-  `id` int NOT NULL,
-  `psc` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `psc` int(11) NOT NULL,
   `city_dc` varchar(40) NOT NULL,
   `city` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_psc`
@@ -20798,19 +21311,19 @@ INSERT INTO `setting_psc` (`id`, `psc`, `city_dc`, `city`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `setting_reklamaceKategorie`
+-- Struktura tabulky `setting_reklamacekategorie`
 --
 
-CREATE TABLE `setting_reklamaceKategorie` (
-  `id` int NOT NULL,
+CREATE TABLE `setting_reklamacekategorie` (
+  `id` int(11) NOT NULL,
   `name` varchar(120) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Vypisuji data pro tabulku `setting_reklamaceKategorie`
+-- Vypisuji data pro tabulku `setting_reklamacekategorie`
 --
 
-INSERT INTO `setting_reklamaceKategorie` (`id`, `name`) VALUES
+INSERT INTO `setting_reklamacekategorie` (`id`, `name`) VALUES
 (1, 'Záruční'),
 (2, 'Pozáruční'),
 (3, 'Opakovaná');
@@ -20818,19 +21331,19 @@ INSERT INTO `setting_reklamaceKategorie` (`id`, `name`) VALUES
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `setting_reklamaceTyp`
+-- Struktura tabulky `setting_reklamacetyp`
 --
 
-CREATE TABLE `setting_reklamaceTyp` (
-  `id` int NOT NULL,
+CREATE TABLE `setting_reklamacetyp` (
+  `id` int(11) NOT NULL,
   `name` varchar(120) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Vypisuji data pro tabulku `setting_reklamaceTyp`
+-- Vypisuji data pro tabulku `setting_reklamacetyp`
 --
 
-INSERT INTO `setting_reklamaceTyp` (`id`, `name`) VALUES
+INSERT INTO `setting_reklamacetyp` (`id`, `name`) VALUES
 (1, 'Chyba výstupní kontroly'),
 (2, 'Chyba součástky'),
 (3, 'Chyba zákazníka'),
@@ -20843,9 +21356,9 @@ INSERT INTO `setting_reklamaceTyp` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_relation` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_relation`
@@ -20865,9 +21378,9 @@ INSERT INTO `setting_relation` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_revenue` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` char(45) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_revenue`
@@ -20889,9 +21402,9 @@ INSERT INTO `setting_revenue` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_source` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_source`
@@ -20912,13 +21425,13 @@ INSERT INTO `setting_source` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_state` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `typ` char(20) NOT NULL,
   `name` varchar(20) NOT NULL,
   `color` varchar(80) NOT NULL,
   `main` enum('0','1') NOT NULL,
   `system` enum('0','1') NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_state`
@@ -20998,9 +21511,9 @@ INSERT INTO `setting_state` (`id`, `typ`, `name`, `color`, `main`, `system`) VAL
 --
 
 CREATE TABLE `setting_storeinput` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(60) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_storeinput`
@@ -21020,9 +21533,9 @@ INSERT INTO `setting_storeinput` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_storeoutput` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(60) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_storeoutput`
@@ -21042,9 +21555,9 @@ INSERT INTO `setting_storeoutput` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_tax` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` double(4,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_tax`
@@ -21062,9 +21575,9 @@ INSERT INTO `setting_tax` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `setting_territory` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(40) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `setting_territory`
@@ -21094,15 +21607,15 @@ INSERT INTO `setting_territory` (`id`, `name`) VALUES
 --
 
 CREATE TABLE `smartemailing_person_info` (
-  `id` int NOT NULL,
-  `id_person` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_person` int(11) NOT NULL,
   `guid_smartemailing` varchar(60) NOT NULL COMMENT 'id ze smartemailingu',
   `salution` varchar(250) NOT NULL DEFAULT '' COMMENT 'osloveni jmeno',
   `salutionsurname` varchar(250) NOT NULL DEFAULT '' COMMENT 'osloveni prijmeni',
   `salutiongender` varchar(250) NOT NULL DEFAULT '' COMMENT 'osloveni dle pohlaví',
-  `added` int NOT NULL,
-  `updated` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `added` int(11) NOT NULL,
+  `updated` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -21111,18 +21624,18 @@ CREATE TABLE `smartemailing_person_info` (
 --
 
 CREATE TABLE `store` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `code` varchar(40) NOT NULL,
-  `id_user` int NOT NULL,
-  `id_partner` int NOT NULL,
-  `date_save` int NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
+  `date_save` int(11) NOT NULL,
   `type` enum('in','out') NOT NULL,
   `source_type` enum('order','invoice') NOT NULL,
-  `id_source` int NOT NULL,
+  `id_source` int(11) NOT NULL,
   `internal_source` varchar(50) NOT NULL COMMENT 'oznaceni interniho dokumentu, na zaklade ktereho je prijemka ci vydejka vystavena',
   `description` tinytext NOT NULL,
-  `store_case` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `store_case` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -21131,9 +21644,9 @@ CREATE TABLE `store` (
 --
 
 CREATE TABLE `store_docs` (
-  `id_item` int NOT NULL,
-  `id_doc` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_item` int(11) NOT NULL,
+  `id_doc` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -21142,24 +21655,24 @@ CREATE TABLE `store_docs` (
 --
 
 CREATE TABLE `store_input` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `code` char(14) NOT NULL,
-  `id_user` int NOT NULL,
+  `id_user` int(11) NOT NULL,
   `id_partner` varchar(5) NOT NULL,
-  `date_save` int NOT NULL,
+  `date_save` int(11) NOT NULL,
   `source_type` enum('order','invoice') NOT NULL,
-  `id_source` int NOT NULL,
+  `id_source` int(11) NOT NULL,
   `source_text` char(18) NOT NULL,
   `description` tinytext NOT NULL,
-  `store_case` int NOT NULL,
+  `store_case` int(11) NOT NULL,
   `transport` double(7,2) NOT NULL,
   `sale` double(4,2) NOT NULL,
-  `id_currency` int NOT NULL,
+  `id_currency` int(11) NOT NULL,
   `course` double(5,2) NOT NULL,
   `stored` enum('0','1') NOT NULL,
-  `id_project` int NOT NULL,
+  `id_project` int(11) NOT NULL,
   `dodaciList` varchar(20) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -21168,13 +21681,13 @@ CREATE TABLE `store_input` (
 --
 
 CREATE TABLE `store_in_product` (
-  `id` int NOT NULL,
-  `id_store` int NOT NULL,
-  `id_product` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_store` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
   `price` double(10,2) NOT NULL,
   `cost` double(10,2) NOT NULL,
   `num` float(7,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -21183,13 +21696,13 @@ CREATE TABLE `store_in_product` (
 --
 
 CREATE TABLE `store_log` (
-  `id` int NOT NULL,
-  `id_product` int NOT NULL,
-  `id_store_in` int NOT NULL,
-  `id_store_out` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
+  `id_store_in` int(11) NOT NULL,
+  `id_store_out` int(11) NOT NULL,
   `price` double(10,2) NOT NULL,
-  `sold` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `sold` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -21198,17 +21711,17 @@ CREATE TABLE `store_log` (
 --
 
 CREATE TABLE `store_output` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `code` char(14) NOT NULL,
-  `id_user` int NOT NULL,
-  `id_partner` int NOT NULL,
-  `date_save` int NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_partner` int(11) NOT NULL,
+  `date_save` int(11) NOT NULL,
   `source_type` enum('order','invoice') NOT NULL,
-  `id_source` int NOT NULL,
+  `id_source` int(11) NOT NULL,
   `source_text` char(40) NOT NULL,
   `description` tinytext NOT NULL,
-  `store_case` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `store_case` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -21217,39 +21730,39 @@ CREATE TABLE `store_output` (
 --
 
 CREATE TABLE `store_out_product` (
-  `id` int NOT NULL,
-  `id_store` int NOT NULL,
-  `id_product` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_store` int(11) NOT NULL,
+  `id_product` int(11) NOT NULL,
   `buy_price` double(10,2) NOT NULL,
   `price` double(10,2) NOT NULL,
   `num` float(7,2) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `systemEmail`
+-- Struktura tabulky `systememail`
 --
 
-CREATE TABLE `systemEmail` (
-  `id` int NOT NULL,
-  `time` int NOT NULL,
-  `id_user` int NOT NULL,
-  `id_recipient` int NOT NULL,
+CREATE TABLE `systememail` (
+  `id` int(11) NOT NULL,
+  `time` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `id_recipient` int(11) NOT NULL,
   `typ` char(20) NOT NULL,
-  `id_item` int NOT NULL,
+  `id_item` int(11) NOT NULL,
   `senderEmail` varchar(250) NOT NULL,
   `recipientEmail` varchar(250) NOT NULL,
   `subject` varchar(250) NOT NULL,
   `message` text NOT NULL,
-  `state` int NOT NULL COMMENT '0 - odeslano, 1 - otevreno'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `state` int(11) NOT NULL COMMENT '0 - odeslano, 1 - otevreno'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Vypisuji data pro tabulku `systemEmail`
+-- Vypisuji data pro tabulku `systememail`
 --
 
-INSERT INTO `systemEmail` (`id`, `time`, `id_user`, `id_recipient`, `typ`, `id_item`, `senderEmail`, `recipientEmail`, `subject`, `message`, `state`) VALUES
+INSERT INTO `systememail` (`id`, `time`, `id_user`, `id_recipient`, `typ`, `id_item`, `senderEmail`, `recipientEmail`, `subject`, `message`, `state`) VALUES
 (12, 1705253383, 45, 1, 'partner_person', 1, 'pavelek@sysportal.cz', 'lukas.pavelek@pavelek.cz', 'Informace k systému | Sysportal.cz', '<div class=\"ql-editor\" data-gramm=\"false\" contenteditable=\"true\"><p>Dobrý den , </p><p>na základě telefonické domluvy s našim obchodním zástupcem si Vám dovoluji poslat doplňující informace k naší firmě a nabízenému řešení. </p><p><br></p><p>Od roku 2012 se zabýváme úsporou času, provozních nákladů a zvyšováním ziskovosti firem pomocí implementace systému pro pokročilé sledování a řízení všech firemních procesů. </p><p>Díky dlouholetým zkušenostem máme spoustu případových studíí v různých oborech podnikání. </p><p><br></p><p>Náš hlavní produkt se jmenuje Sysportal a jedná se o ideální systém pro řízení celé firmy a jejich procesů. Díky provázanosti zákazníků, aktivit, obchodních případů, nabídek a zakázek budete mít plnou kontrolu nad všemi procesy ve Vaší společnosti. Součástí aplikace je také mobilní přístup pro rychlé zadávání dokumentů, fotografií, nebo třeba účtenek z mobilního telefonu přímo k dané zakázce. </p><p><br></p><p>V současné náročné době se jedná o ideální řešení pro snížení enormních nákladů na provoz firem. </p><p>Budeme velice rádi pokud si najdete chvíli a podíváte se na naše webové stránky www.sysportal.cz případně na demoverzi aplikace app.sysportal.cz/demo </p><p><br></p><p>Prosím o zpětnou vazbu pro dohodnutí termínu dalšího kontaktu. </p><p><br></p><p>S pozdravem a přáním hezkého dne, </p><p>Lukáš Pavelek</p><p>Jednatel (CEO)</p><p>Tel: +420 608 482 014</p><p>E-mail: pavelek@sysportal.cz</p><p>Web: www.sysportal.cz</p></div><div class=\"ql-clipboard\" contenteditable=\"true\" tabindex=\"-1\"></div><div class=\"ql-tooltip ql-hidden\"><a class=\"ql-preview\" target=\"_blank\" href=\"about:blank\"></a><input type=\"text\" data-formula=\"e=mc^2\" data-link=\"https://quilljs.com\" data-video=\"Embed URL\"><a class=\"ql-action\"></a><a class=\"ql-remove\"></a></div>', 0),
 (13, 1705253510, 45, 1, 'partner_person', 1, 'pavelek@sysportal.cz', 'lukas.pavelek@pavelek.cz', 'Informace k systému | Sysportal.cz', '<div class=\"ql-editor\" data-gramm=\"false\" contenteditable=\"true\"><p>Dobrý den , </p><p> na základě telefonické domluvy s našim obchodním zástupcem si Vám dovoluji poslat doplňující informace k naší firmě a nabízenému řešení. </p><p> Od roku 2012 se zabýváme úsporou času, provozních nákladů a zvyšováním ziskovosti firem pomocí implementace systému pro pokročilé sledování a řízení všech firemních procesů. </p><p> Díky dlouholetým zkušenostem máme spoustu případových studíí v různých oborech podnikání. </p><p> Náš hlavní produkt se jmenuje Sysportal a jedná se o ideální systém pro řízení celé firmy a jejich procesů. Díky provázanosti zákazníků, aktivit, obchodních případů, nabídek a zakázek budete mít plnou kontrolu nad všemi procesy ve Vaší společnosti. Součástí aplikace je také mobilní přístup pro rychlé zadávání dokumentů, fotografií, nebo třeba účtenek z mobilního telefonu přímo k dané zakázce. </p><p> V současné náročné době se jedná o ideální řešení pro snížení enormních nákladů na provoz firem. </p><p> Budeme velice rádi pokud si najdete chvíli a podíváte se na naše webové stránky www.sysportal.cz případně na demoverzi aplikace app.sysportal.cz/demo </p><p> Prosím o zpětnou vazbu pro dohodnutí termínu dalšího kontaktu. </p><p> S pozdravem a přáním hezkého dne, Lukáš Pavelek</p><p> Jednatel (CEO)</p><p> Tel: +420 608 482 014</p><p> E-mail: pavelek@sysportal.cz</p><p> Web: www.sysportal.cz</p></div><div class=\"ql-clipboard\" contenteditable=\"true\" tabindex=\"-1\"></div><div class=\"ql-tooltip ql-hidden\"><a class=\"ql-preview\" target=\"_blank\" href=\"about:blank\"></a><input type=\"text\" data-formula=\"e=mc^2\" data-link=\"https://quilljs.com\" data-video=\"Embed URL\"><a class=\"ql-action\"></a><a class=\"ql-remove\"></a></div>', 0),
 (14, 1705253844, 45, 1, 'partner_person', 1, 'pavelek@sysportal.cz', 'lukas.pavelek@pavelek.cz', 'Informace k systému | Sysportal.cz', '<div class=\"ql-editor\" data-gramm=\"false\" contenteditable=\"true\"><p>Dobrý den ,</p><p>na základě telefonické domluvy s našim obchodním zástupcem si Vám dovoluji poslat doplňující informace k naší firmě a nabízenému řešení.</p><p>Od roku 2012 se zabýváme úsporou času, provozních nákladů a zvyšováním ziskovosti firem pomocí implementace systému pro pokročilé sledování a řízení všech firemních procesů.</p><p>Díky dlouholetým zkušenostem máme spoustu případových studíí v různých oborech podnikání.</p><p>Náš hlavní produkt se jmenuje Sysportal a jedná se o ideální systém pro řízení celé firmy a jejich procesů. Díky provázanosti zákazníků, aktivit, obchodních případů, nabídek a zakázek budete mít plnou kontrolu nad všemi procesy ve Vaší společnosti. Součástí aplikace je také mobilní přístup pro rychlé zadávání dokumentů, fotografií, nebo třeba účtenek z mobilního telefonu přímo k dané zakázce.</p><p><br></p><p>V současné náročné době se jedná o ideální řešení pro snížení enormních nákladů na provoz firem.</p><p>V příloze Vám zasílám prezentaci o aplikaci Sysportal. Budu velice rád pokud si najdete chvíli a prezentaci si prohlédnete.</p><p>Prosím o zpětnou vazbu pro dohodnutí termínu dalšího kontaktu.</p><p>S pozdravem a přáním hezkého dne, </p><p>Lukáš Pavelek</p><p>Jednatel (CEO)</p><p>Tel: +420 608 482 014</p><p>E-mail: pavelek@sysportal.cz</p><p>Web: www.sysportal.cz</p></div><div class=\"ql-clipboard\" contenteditable=\"true\" tabindex=\"-1\"></div><div class=\"ql-tooltip ql-hidden\"><a class=\"ql-preview\" target=\"_blank\" href=\"about:blank\"></a><input type=\"text\" data-formula=\"e=mc^2\" data-link=\"https://quilljs.com\" data-video=\"Embed URL\"><a class=\"ql-action\"></a><a class=\"ql-remove\"></a></div>', 0),
@@ -21261,28 +21774,28 @@ INSERT INTO `systemEmail` (`id`, `time`, `id_user`, `id_recipient`, `typ`, `id_i
 -- --------------------------------------------------------
 
 --
--- Struktura tabulky `systemEmailTemplates`
+-- Struktura tabulky `systememailtemplates`
 --
 
-CREATE TABLE `systemEmailTemplates` (
-  `id` int NOT NULL,
+CREATE TABLE `systememailtemplates` (
+  `id` int(11) NOT NULL,
   `typ` char(20) NOT NULL,
   `sender` varchar(250) NOT NULL,
   `subject` varchar(250) NOT NULL,
   `message` text NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
--- Vypisuji data pro tabulku `systemEmailTemplates`
+-- Vypisuji data pro tabulku `systememailtemplates`
 --
 
-INSERT INTO `systemEmailTemplates` (`id`, `typ`, `sender`, `subject`, `message`) VALUES
+INSERT INTO `systememailtemplates` (`id`, `typ`, `sender`, `subject`, `message`) VALUES
 (1, 'invoice', '_USEREMAIL_', 'BlueCRM | Faktura č. _CODE_', '&lt;p&gt;Dobr&amp;yacute; den,&lt;/p&gt;&lt;p&gt;v př&amp;iacute;loze V&amp;aacute;m zas&amp;iacute;l&amp;aacute;me fakturu za provoz služby BlueCRM.&lt;/p&gt;&lt;p&gt;&lt;strong&gt;Informace o faktuře:&lt;/strong&gt;&lt;br /&gt;Č&amp;iacute;slo faktury: _CODE_&lt;br /&gt;Variabiln&amp;iacute; symbol: _VARSYMBOL_&lt;br /&gt;Datum zdaniteln&amp;eacute;ho plněn&amp;iacute;: _DUZP_&lt;br /&gt;Datum splatnosti: _DPAY_&lt;br /&gt;Celkov&amp;aacute; č&amp;aacute;stka: _SUMPRICE_&lt;/p&gt;&lt;p&gt;Děkujeme, že využ&amp;iacute;v&amp;aacute;te na&amp;scaron;ich služeb&lt;br /&gt;V&amp;aacute;&amp;scaron; t&amp;yacute;m BlueCRM&lt;/p&gt;'),
 (2, 'offer', '_USEREMAIL_', '{NAZEV_SPOLECNOSTI} | Nabídka č. {KOD_NABIDKY}', '\r\n            <h2>Nabídka</h2>\r\n     <br>\r\n            <p>Dobrý den {OSLOVENI},</p><br>\r\n            <p>v příloze emailu posílám nabídku s označením {KOD_NABIDKY}.</p><br><br>\r\n\r\n<p>S pozdravem a přáním hezkého dne,</p><br>\r\n<p>{JMENO_UZIVATELE}</p>        \r\n  '),
 (3, 'order', '', '', '');
-INSERT INTO `systemEmailTemplates` (`id`, `typ`, `sender`, `subject`, `message`) VALUES
+INSERT INTO `systememailtemplates` (`id`, `typ`, `sender`, `subject`, `message`) VALUES
 (4, '_SMLOUVA_', 'test', 'Smlouva ', '<h2>&nbsp;</h2>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<h2 style=\"text-align:center\">Smlouva o poskytov&aacute;n&iacute; služeb operativn&iacute;ho leasingu č. _CODE_&nbsp;</h2>\r\n\r\n<p><strong>ADIV Lease s.r.o.</strong></p>\r\n\r\n<p>746 01 Opava, Tě&scaron;&iacute;nsk&aacute; 3007/91</p>\r\n\r\n<p>IČ: 277 19 197</p>\r\n\r\n<p>DIČ: CZ27719197</p>\r\n\r\n<p>Zastoupena: Bc. Jakubem Schreierem, jednatelem&nbsp;</p>\r\n\r\n<p>společnost zapsan&aacute; v&nbsp;obchodn&iacute;m rejstř&iacute;ku veden&eacute;m Krajsk&yacute;m soudem v&nbsp;Ostravě, odd&iacute;l C, vložce 55521</p>\r\n\r\n<p>(d&aacute;le jako &bdquo;pronaj&iacute;matel&ldquo;)</p>\r\n\r\n<p>a<br />\r\n<br />\r\n_PARTNER_</p>\r\n\r\n<p>(d&aacute;le jako &bdquo;n&aacute;jemce&ldquo;)</p>\r\n\r\n<p style=\"text-align:center\">Uzav&iacute;raj&iacute; n&iacute;že uveden&eacute;ho dne n&aacute;sleduj&iacute;c&iacute; smlouvu o poskytov&aacute;n&iacute; služeb operativn&iacute;ho leasingu a sn&iacute;m souvisej&iacute;c&iacute;ch služeb specifikovan&yacute;ch touto smlouvou.</p>\r\n\r\n<ol style=\"list-style-type:upper-roman\">\r\n	<li style=\"text-align:center\"><strong>Vymezen&iacute; pojmů</strong></li>\r\n</ol>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">a. Pronaj&iacute;matel realizuje svou ekonomickou činnost v&nbsp;oblasti kr&aacute;tkodob&eacute;ho a dlouhodob&eacute;ho pron&aacute;jmu vozidel (d&aacute;le jako &bdquo;vozidlo (a)&ldquo; nebo &bdquo;předmět (y&ldquo;) pron&aacute;jmu) formou &bdquo;operativn&iacute;ho leasingu&ldquo;. Pronaj&iacute;matel z&aacute;roveň prohla&scaron;uje, že je k&nbsp;tomuto plně způsobil&iacute; a využ&iacute;v&aacute; ke sv&eacute; podnikatelsk&eacute; činnosti v&yacute;hradně vozidel, vyz&iacute;skan&yacute;ch z&nbsp;ofici&aacute;ln&iacute;ch zdrojů.</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">b. N&aacute;jemce hodl&aacute; na z&aacute;kladě t&eacute;to smlouvy využ&iacute;t služeb poskytovatele, a to v&nbsp;rozsahu stanoven&eacute;m touto smlouvou.</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<ol start=\"2\" style=\"list-style-type:upper-roman\">\r\n	<li style=\"text-align:center\"><strong>Předmět smlouvy</strong></li>\r\n</ol>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">a. Pronaj&iacute;matel se touto smlouvou zavazuje poskytnout n&aacute;jemci k&nbsp;už&iacute;v&aacute;n&iacute; vozidlo (a) specifikovan&eacute; (&aacute;) v&nbsp;př&iacute;loze č&iacute;slo 1 t&eacute;to smlouvy (d&aacute;le jako &bdquo;předmět smlouvy&ldquo; nebo t&eacute;ž &bdquo;vozidlo&ldquo;)</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">Za ř&aacute;dnou specifikaci vozidla se považuje takov&aacute; specifikace, kter&aacute; jasně definuje tov&aacute;rn&iacute; značku vozidla, konkr&eacute;tn&iacute; model, motorizaci (druh motoru včetně obsahu), barvu karoserie, z&aacute;kladn&iacute; prvky v&yacute;bavy, včetně individu&aacute;lně zvolen&eacute; dodatkov&eacute; v&yacute;bavy.</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">Vzhledem k&nbsp;možnostem pronaj&iacute;matele a jeho smluvn&iacute;ch dodavatelů a platn&eacute; legislativě, se za vadu ve specifikaci vozidla nepovažuje absence VIN k&oacute;du vozidla a absence registračn&iacute; značky vozidla.</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">b. Předmětem smlouvy specifikovan&yacute;m př&iacute;lohou č. 1 t&eacute;to smlouvy mohou b&yacute;t jak zcela nov&aacute;, tak ojet&aacute; vozidla. Konkr&eacute;tn&iacute; specifikace vozidla vždy z&aacute;vis&iacute; na konkr&eacute;tn&iacute;ch požadavc&iacute;ch n&aacute;jemce a aktu&aacute;ln&iacute;ch možnostech pronaj&iacute;matele.</p>\r\n\r\n<p style=\"text-align:justify\">c. Smluvn&iacute; strany se shodly na skutečnosti, že aktu&aacute;ln&iacute; cen&iacute;kov&aacute; cena předmětu smlouvy je <strong>_VSTUPNICENA_</strong>&nbsp;<strong>Kč bez DPH.</strong>&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">d. Společně s&nbsp;pron&aacute;jmem vozidla se pronaj&iacute;matel zavazuje poskytnout n&aacute;jemci n&aacute;sleduj&iacute;c&iacute; služby, spojen&eacute; s&nbsp;provozem vozidla/spr&aacute;vou vozov&eacute;ho parku:* _SLUZBY_</p>\r\n\r\n<p style=\"text-align:justify\">e. Pokud je touto smlouvou sjedn&aacute;n společně s&nbsp;pron&aacute;jmem vozidla tak&eacute; servis, je pronaj&iacute;matel povinen zajistit na předmětn&eacute;m vozidle servisn&iacute; služby v&nbsp;rozsahu &ndash; pravideln&eacute; servisn&iacute; prohl&iacute;dky předepsan&eacute; v&yacute;robcem vozidla a servisn&iacute; opravy z&aacute;vad vznikl&yacute;ch běžn&yacute;m už&iacute;v&aacute;n&iacute;m. N&aacute;klady těchto oprav a prohl&iacute;dek nese pronaj&iacute;matel. N&aacute;klady na spotřebu pohonn&yacute;ch hmot, provozn&iacute;ch kapalin (vyjma olejů a kapalin doplňovan&yacute;ch v&nbsp;r&aacute;mci servisn&iacute;ch prohl&iacute;dek), myt&iacute; a čistěn&iacute; vozidla, nese vždy n&aacute;jemce. Servisn&iacute; služby jsou prov&aacute;děny na servisn&iacute;ch středisc&iacute;ch pronaj&iacute;matele.&nbsp; &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">f. Pokud je touto smlouvou sjedn&aacute;n společně s&nbsp;pron&aacute;jmem vozidla tak&eacute; pneuservis, je pronaj&iacute;matel povinen zajistit na předmětn&eacute;m vozidle služby pneuservisu v&nbsp;rozsahu &ndash; dod&aacute;vky kompletn&iacute;ch sad zimn&iacute;ch i letn&iacute;ch pneumatik adekv&aacute;tn&iacute;ch rozměrů schv&aacute;len&yacute;ch v&yacute;robcem vozidla k&nbsp;užit&iacute; na vozidle. Přičemž se smluvn&iacute; strany shodly na minim&aacute;ln&iacute; životnosti každ&eacute; jedn&eacute; pneumatiky 25&nbsp;000 km. D&aacute;le je pronaj&iacute;matel povinen zajistit pravideln&eacute; v&yacute;měny pneumatik při změně ročn&iacute;ho obdob&iacute;, respektive změně motoristick&eacute; sezony, a to včetně vyv&aacute;žen&iacute; a dal&scaron;&iacute;ch &uacute;konů souvisej&iacute;c&iacute;ch s&nbsp;ř&aacute;dn&yacute;m fungov&aacute;n&iacute;m pneumatik na vozidle. Ve&scaron;ker&eacute; n&aacute;klady zm&iacute;něn&eacute; v&nbsp;tomto odstavci nese pronaj&iacute;matel. Služby pneuservisu jsou prov&aacute;děny na servisn&iacute;ch středisc&iacute;ch pronaj&iacute;matele.&nbsp; &nbsp;<br />\r\n&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">Pronaj&iacute;matel nen&iacute; povinen zajistit n&aacute;jemci vět&scaron;&iacute; počet pneumatik, než je počet adekv&aacute;tně odpov&iacute;daj&iacute;c&iacute; počtu ujet&yacute;ch kilometrů, při kter&yacute;ch byly jednotliv&eacute; pneumatiky použ&iacute;v&aacute;ny.</p>\r\n\r\n<p style=\"text-align:center\"><strong>III. Cena pron&aacute;jmu</strong></p>\r\n\r\n<p style=\"text-align:justify\">a. Měs&iacute;čn&iacute; cena pron&aacute;jmu byla stanovena dohodou obou smluvn&iacute;ch stran na č&aacute;stku <strong>_MESICNISPLATKA_</strong>&nbsp;<strong>Kč </strong>s&nbsp;připočten&iacute;m platn&eacute; sazby<strong> </strong>DPH. &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">b. Celkov&aacute; měs&iacute;čn&iacute; cena pron&aacute;jmu je složena z&nbsp;jednotliv&yacute;ch složek specifikovan&yacute;ch př&iacute;lohou č. 2, t&eacute;to smlouvy.&nbsp;</p>\r\n\r\n<p>c. N&aacute;jemce se zavazuje uhradit pronaj&iacute;mateli mimoř&aacute;dnou jednor&aacute;zovou spl&aacute;tku &ndash; akontaci &ndash; ve v&yacute;&scaron;i <strong>0 Kč</strong> <strong>bez DPH</strong>. Akontaci se pronaj&iacute;matel zavazuje uhradit nejpozději před okamžikem fyzick&eacute;ho před&aacute;n&iacute; vozidla n&aacute;jemci a je na ni pohl&iacute;ženo jako na mimoř&aacute;dnou spl&aacute;tku. &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">d. Pronaj&iacute;matel je povinen předat n&aacute;jemci spolu s&nbsp;vozidlem spl&aacute;tkov&yacute; kalend&aacute;ř n&aacute;jemn&eacute;ho, kter&yacute;&nbsp;slouž&iacute; jako podklad pro &uacute;hrady jednotliv&yacute;ch spl&aacute;tek n&aacute;jemn&eacute;ho. N&aacute;jemn&eacute; je hrazeno vždy na &uacute;čet pronaj&iacute;matele, veden&yacute; u Komerčn&iacute; banky a.s. pod č&iacute;slem <strong>35-8026900257/0100</strong>. Variabiln&iacute; symbol pro platbu jednotliv&yacute;ch spl&aacute;tek n&aacute;jemn&eacute;ho pronaj&iacute;matel vždy uvede ve spl&aacute;tkov&eacute;m kalend&aacute;ři. Pronaj&iacute;matel si vyhrazuje pr&aacute;vo předat n&aacute;jemci spl&aacute;tkov&yacute; kalend&aacute;ř až v&nbsp;okamžiku fyzick&eacute;ho či pl&aacute;novan&eacute;ho před&aacute;n&iacute; vozidla v&nbsp;momentech, kdy nen&iacute; v&nbsp;okamžiku podpisu t&eacute;to smlouvy přesně zn&aacute;mo datum budouc&iacute;ho před&aacute;n&iacute; předmětu pron&aacute;jmu. &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">e. V&nbsp;př&iacute;padě, že se pronaj&iacute;matel rozhodne v&nbsp;době trv&aacute;n&iacute; n&aacute;jemn&iacute;ho vztahu pro změnu bankovn&iacute;ho &uacute;čtu, na kter&yacute; m&aacute; b&yacute;t n&aacute;jemn&eacute; hrazeno, je povinen tuto skutečnost ozn&aacute;mit n&aacute;jemci, bez zbytečn&eacute;ho odkladu, minim&aacute;lně 30 dnů před datem splatnosti prvn&iacute; spl&aacute;tky, kter&aacute; m&aacute; b&yacute;t hrazena na nov&yacute; bankovn&iacute; &uacute;čet. Osobou opr&aacute;vněnou informovat n&aacute;jemce o změně bankovn&iacute;ho &uacute;čtu je vždy pouze statut&aacute;rn&iacute; org&aacute;n pr&aacute;vnick&eacute; osoby - pronaj&iacute;matele.&nbsp;</p>\r\n\r\n<p>f. N&aacute;jemce se zavazuje uhradit pronaj&iacute;mateli jednor&aacute;zovou vratnou kauci ve v&yacute;&scaron;i <strong>0,00 Kč bez DPH</strong>, slouž&iacute;c&iacute; ke kryt&iacute; př&iacute;padn&yacute;ch opr&aacute;vněn&yacute;ch pohled&aacute;vek pronaj&iacute;matele vůči n&aacute;jemci. Kauci je n&aacute;jemce povinen uhradit pronaj&iacute;mateli před pl&aacute;novan&yacute;m před&aacute;n&iacute;m vozidla. Smluvn&iacute; strany se shodly na možnosti započten&iacute; kauce vůči posledn&iacute;m daňov&yacute;m dokladům vystaven&yacute;m pronaj&iacute;matelem n&aacute;jemci v&nbsp;průběhu trv&aacute;n&iacute; n&aacute;jemn&iacute;ho vztahu. &nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<ol start=\"4\" style=\"list-style-type:upper-roman\">\r\n	<li style=\"text-align:center\"><strong>N&aacute;jezd km</strong></li>\r\n</ol>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">a. Smluvn&iacute; strany se shodly na omezen&eacute;m n&aacute;jezdu kilometrů, kter&eacute; n&aacute;jemce opr&aacute;vněn s&nbsp;vozidlem urazit. Limit ujet&yacute;ch kilometrů pro každ&yacute;ch 12 měs&iacute;ců trv&aacute;n&iacute; n&aacute;jemn&iacute;ho vztahu byl stanoven na<strong> _NAJEZD_</strong>&nbsp;<strong>Km.</strong></p>\r\n\r\n<p style=\"text-align:justify\">b. V&nbsp;př&iacute;padech, kdy n&aacute;jemn&iacute; vztah trv&aacute; m&eacute;ně než 12 měs&iacute;ců a z&aacute;roveň v&nbsp;př&iacute;padech, kdy n&aacute;jemn&iacute; vztah nekonč&iacute; po takov&eacute;m počtu měs&iacute;ců, kter&yacute; odpov&iacute;d&aacute; n&aacute;sobku 12-ti, použije se poměrn&aacute; č&aacute;st povolen&eacute;ho ročn&iacute;ho n&aacute;jezdu kilometrů, vždy se zaokrouhlen&iacute;m na cel&eacute; km nahoru. Pokud tedy např. n&aacute;jemn&iacute; vztah skonč&iacute; uplynut&iacute;m 18. měs&iacute;ce, povolen&yacute; n&aacute;jezd kilometrů se stanov&iacute; jako 1,5 n&aacute;sobek povolen&eacute;ho ročn&iacute;ho n&aacute;jezdu km.</p>\r\n\r\n<p style=\"text-align:justify\">c. V&nbsp;př&iacute;padě, že n&aacute;jemce v&nbsp;celkov&eacute;m &uacute;hrnu přečerp&aacute; povolen&yacute; n&aacute;jezd kilometrů je povinen uhradit pronaj&iacute;mateli poplatek ve v&yacute;&scaron;i <strong>_VICEKM_</strong>&nbsp;<strong>Kč</strong> s&nbsp;připočten&iacute;m platn&eacute; sazby DPH za každ&yacute; kilometr ujet&yacute; s&nbsp;vozidlem nad r&aacute;mec smluven&eacute;ho n&aacute;jezdu. S&nbsp;přihl&eacute;dnut&iacute;m k&nbsp;voln&eacute; hranici kilometrů v&nbsp;souladu s&nbsp;čl&aacute;nkem IV., odstavcem d) t&eacute;to smlouvy</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">V&nbsp;př&iacute;padě, že n&aacute;jemce nevyčerp&aacute; v&nbsp;celkov&eacute;m &uacute;hrnu povolen&yacute; n&aacute;jezd kilometrů, je pronaj&iacute;matel povinen navr&aacute;tit n&aacute;jemci č&aacute;st zaplacen&yacute;ch spl&aacute;tek n&aacute;jemn&eacute;ho, a sice ve v&yacute;&scaron;i<strong> _MENEKM_</strong>&nbsp;<strong>Kč</strong> s&nbsp;připočten&iacute;m platn&eacute; sazby DPH za každ&yacute; n&aacute;jemcem nevyčerpan&yacute; kilometr. S&nbsp;přihl&eacute;dnut&iacute;m k&nbsp;voln&eacute; hranici kilometrů v&nbsp;souladu s&nbsp;čl&aacute;nkem IV., odstavcem d) t&eacute;to smlouvy.</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">d. Smluvn&iacute; strany se vz&aacute;jemně shodly na tzv. voln&eacute; hranici kilometrů, kter&aacute; je uplatniteln&aacute; jak kilometry přečerpan&eacute; nad r&aacute;mec smluven&eacute;ho n&aacute;jezdu kilometrů, tak na n&aacute;jemcem nevyčerpan&eacute; kilometry do smluven&eacute;ho n&aacute;jezdu. Voln&aacute; hranice se pro &uacute;čely t&eacute;to smlouvy stanovuje na <strong>5 000 km</strong>.</p>\r\n\r\n<p style=\"text-align:justify\">N&aacute;jemce nen&iacute; povinen uhradit pronaj&iacute;mateli přečerpan&yacute; n&aacute;jezd kilometrů do hodnoty voln&eacute; hranice, stejně tak nen&iacute; pronaj&iacute;matel povinen navr&aacute;tit n&aacute;jemci finančn&iacute; prostředky za př&iacute;padn&eacute; n&aacute;jemcem nevyčerpan&eacute; kilometry do hodnoty voln&eacute; hranice.</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">e. Pro &uacute;čely t&eacute;to smlouvy nen&iacute; pevně stanovena frekvence fakturac&iacute; n&aacute;jemcem přečerpan&yacute;ch či nevyčerpan&yacute;ch kilometrů. Vy&uacute;čtov&aacute;n&iacute; bude provedeno nejpozději ke dni ukončen&iacute; n&aacute;jemn&iacute;ho vztahu. Na z&aacute;kladě požadavku n&aacute;jemce v&scaron;ak lze prov&aacute;dět vy&uacute;čtov&aacute;n&iacute; ujet&yacute;ch kilometrů vždy po uplynut&iacute; 12-ti měs&iacute;ců trv&aacute;n&iacute; n&aacute;jemn&iacute;ho vztahu. Pokud n&aacute;jemce vyzve pronaj&iacute;matele ve lhůtě nejpozději 10-ti dnů, po uplynut&iacute; 12-ti měs&iacute;ců k&nbsp;proveden&iacute; vy&uacute;čtov&aacute;n&iacute; ujet&yacute;ch kilometrů za uplynul&yacute;ch 12 měs&iacute;ců, je pronaj&iacute;matel povinen zajistit n&aacute;jemci součinnost a prov&eacute;st vy&uacute;čtov&aacute;n&iacute;, bez zbytečn&eacute;ho odkladu.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">Pokud se smluvn&iacute; strany nedohodnou jinak, je odečet ujet&yacute;ch kilometrů prov&aacute;děn vždy na provozovn&aacute;ch pronaj&iacute;matele.</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">f. Povinnosti hradit poplatek za v&iacute;ce kilometry, respektive poplatek za m&eacute;ně kilometry jsou obě smluvn&iacute; strany zpro&scaron;těny v&nbsp;př&iacute;padě, že dojde k&nbsp;využit&iacute; předkupn&iacute;ho pr&aacute;va k&nbsp;předmětu pron&aacute;jmu n&aacute;jemcem, nebo j&iacute;m určenou osobou.</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<ol start=\"5\" style=\"list-style-type:upper-roman\">\r\n	<li style=\"text-align:center\"><strong>Poji&scaron;těn&iacute;</strong></li>\r\n</ol>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">a. Pronaj&iacute;matel je povinen zř&iacute;dit k vozidlu poji&scaron;těn&iacute; odpovědnosti z&nbsp;provozu vozidla, v&nbsp;rozsahu sjednan&eacute;m v&nbsp;čl&aacute;nku II., odstavci d), t&eacute;to smlouvy, a to po celou dobu trv&aacute;n&iacute; n&aacute;jemn&iacute;ho vztahu. V&nbsp;př&iacute;padě &scaron;kody na zdrav&iacute; či majetku, převy&scaron;uj&iacute;c&iacute; jednotliv&eacute; limity kryt&iacute; vznikl&yacute;ch &scaron;kod, způsoben&eacute; n&aacute;jemcem při provozu předmětu n&aacute;jmu, nese ve&scaron;ker&eacute; n&aacute;klady převy&scaron;uj&iacute;c&iacute; limity kryt&iacute; pojistn&yacute;ch ud&aacute;lost&iacute; n&aacute;jemce.</p>\r\n\r\n<p style=\"text-align:justify\">b. Pronaj&iacute;matel je povinen zř&iacute;dit k&nbsp;vozidlu havarijn&iacute; poji&scaron;těn&iacute;, v&nbsp;rozsahu sjednan&eacute;m v&nbsp;čl&aacute;nku II., odstavci d), t&eacute;to smlouvy, a to po celou dobu trv&aacute;n&iacute; n&aacute;jemn&iacute;ho vztahu.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">V&nbsp;př&iacute;padě &scaron;kody způsoben&eacute; n&aacute;jemcem na předmětu pron&aacute;jmu, je n&aacute;jemce povinen uhradit pronaj&iacute;mateli spolu&uacute;čast ve v&yacute;&scaron;i sjednan&eacute; spolu&uacute;časti n&aacute;jemce (vyj&aacute;dřen&eacute; v %) na likvidaci &scaron;kodn&eacute; ud&aacute;losti a uveden&iacute; předmětu pron&aacute;jmu do původn&iacute;ho stavu.</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">c. Pronaj&iacute;matel je opr&aacute;vněn zprostit se sv&yacute;ch povinnost&iacute; plynouc&iacute;ch mu z&nbsp;odstavců a) a b), čl&aacute;nku V. t&eacute;to smlouvy pouze v&nbsp;př&iacute;padě, kdy n&aacute;jemce s&aacute;m projev&iacute; z&aacute;jem pojistit předmět pron&aacute;jmu ve vlastn&iacute; režii. V&nbsp;př&iacute;padě, že se tak n&aacute;jemce rozhodne v&nbsp;průběhu trv&aacute;n&iacute; n&aacute;jemn&iacute;ho vztahu, je mu pronaj&iacute;matelem pon&iacute;žena měs&iacute;čn&iacute; spl&aacute;tka o č&aacute;stky odpov&iacute;daj&iacute;c&iacute; č&aacute;stk&aacute;m poji&scaron;těn&iacute;, dle př&iacute;lohy č. 2, t&eacute;to smlouvy. N&aacute;jemce je povinen respektovat skutečnost, že &uacute;činnosti jeho požadavku na převeden&iacute; pojistek do jeho režie, je možn&aacute; nejdř&iacute;ve po uplynut&iacute; tř&iacute; měs&iacute;ců od doručen&iacute; jeho ž&aacute;dosti na převeden&iacute; pojistek pronaj&iacute;mateli.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">d. V&nbsp;př&iacute;padě, kdy n&aacute;jemce využije sv&eacute;ho pr&aacute;va pojistit předmět pron&aacute;jmu ve vlastn&iacute; režii, je povinen tzv. vinkulovat pojistku ve prospěch pronaj&iacute;matele neboli zastavit př&iacute;padn&aacute; pojistn&aacute; plněn&iacute; ve prospěch pronaj&iacute;matele. Z&aacute;roveň je n&aacute;jemce povinen doložit pronaj&iacute;mateli existenci poji&scaron;těn&iacute; k&nbsp;vozidlu.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">V&nbsp;př&iacute;padě, kdy vozidlo opatř&iacute; poji&scaron;těn&iacute;m odpovědnosti z&nbsp;provozu vozidla, respektive havarijn&iacute;m poji&scaron;těn&iacute;m n&aacute;jemce, použij&iacute; se přiměřeně ta ustanoven&iacute; odstavců a) a b) čl&aacute;nku V.&nbsp;t&eacute;to smlouvy, t&yacute;kaj&iacute;c&iacute; se odpovědnosti n&aacute;jemce za vznikl&eacute; &scaron;kody převy&scaron;uj&iacute;c&iacute; nastaven&eacute; limity kryt&iacute; a ustanoven&iacute; t&yacute;kaj&iacute;c&iacute; se povinnosti n&aacute;jemce hradit spolu&uacute;čast havarijn&iacute;ho poji&scaron;těn&iacute; v&nbsp;př&iacute;padech &scaron;koda na vozidle způsoben&yacute;ch n&aacute;jemcem.&nbsp;</p>\r\n\r\n<ol start=\"6\" style=\"list-style-type:upper-roman\">\r\n	<li style=\"text-align:center\"><strong>Doba trv&aacute;n&iacute; smlouvy</strong></li>\r\n</ol>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">a. Tato smlouva se uzav&iacute;r&aacute; na dobu <strong>_OBDOBI_</strong>&nbsp;<strong>měs&iacute;ců.&nbsp;</strong></p>\r\n\r\n<p style=\"text-align:justify\">b. Doba trv&aacute;n&iacute; smlouvy poč&iacute;n&aacute; běžet okamžikem fyzick&eacute;ho před&aacute;n&iacute; předmětu smlouvy pronaj&iacute;matelem n&aacute;jemci.</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<ol start=\"7\" style=\"list-style-type:upper-roman\">\r\n	<li style=\"text-align:center\"><strong>V&yacute;pověď smlouvy</strong></li>\r\n</ol>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">a. N&aacute;jemce je opr&aacute;vněn vypovědět tuto smlouvu i před uplynut&iacute;m doby, pro kterou byla sjedn&aacute;na, a to i bez ud&aacute;n&iacute; důvodů.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">V&yacute;povědn&iacute; lhůta se v&nbsp;takov&eacute;m př&iacute;padě stanovuje na <strong>dobu 3 měs&iacute;ců</strong> a poč&iacute;n&aacute; běžet prvn&iacute;m dnem kalend&aacute;řn&iacute;ho měs&iacute;ce bezprostředně n&aacute;sleduj&iacute;c&iacute;ho po měs&iacute;ce, ve kter&eacute;m byla v&yacute;pověď pod&aacute;na.</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">b. Podm&iacute;nkou ř&aacute;dn&eacute;ho ukončen&iacute; n&aacute;jemn&iacute;ho vztahu, pokud je ukončov&aacute;n před uplynut&iacute;m doby, pro kterou byl sjedn&aacute;n, je v&scaron;ak splněn&iacute; povinnosti n&aacute;jemce spoč&iacute;vaj&iacute;c&iacute; v&nbsp;nutnosti &uacute;hrady takov&eacute;ho množstv&iacute; spl&aacute;tek, kter&eacute; odpov&iacute;d&aacute; skutečn&eacute; době trv&aacute;n&iacute; n&aacute;jemn&iacute;ho vztahu.</p>\r\n\r\n<p style=\"text-align:justify\">c. Pronaj&iacute;matel je opr&aacute;vněn vypovědět tuto smlouvu před uplynut&iacute;m doby, pro kterou byla sjedn&aacute;na pouze v&nbsp;př&iacute;padě, kdy n&aacute;jemce opakovaně hrubě poru&scaron;&iacute; povinnosti plynouc&iacute; mu z&nbsp;t&eacute;to smlouvy. Za zvl&aacute;&scaron;ť hrub&eacute; poru&scaron;en&iacute; povinnost&iacute; n&aacute;jemce se považuje zejm&eacute;na nepovolen&aacute; manipulace či zach&aacute;zen&iacute; s&nbsp;vozidlem a opakovan&eacute; prodlen&iacute; s&nbsp;&uacute;hradou sv&yacute;ch z&aacute;vazků vůči pronaj&iacute;mateli, del&scaron;&iacute; než 14 dnů po lhůtě jejich splatnosti.</p>\r\n\r\n<p style=\"text-align:justify\">Pro př&iacute;pad v&yacute;povědi ze strany pronaj&iacute;matele se stanovuje v&yacute;povědn&iacute; lhůta v&nbsp;d&eacute;lce trv&aacute;n&iacute; <strong>7 dnů</strong>, poč&iacute;naj&iacute;c&iacute; běžet dnem doručen&iacute; v&yacute;povědi druh&eacute; smluvn&iacute; straně.</p>\r\n\r\n<p style=\"text-align:justify\">d. V&nbsp;př&iacute;padě, že dojde k&nbsp;ukončen&iacute; smlouvy před ř&aacute;dn&yacute;m uplynut&iacute;m doby, pro kterou byla tato sjedn&aacute;na, je n&aacute;jemce povinen kompenzovat pronaj&iacute;mateli ztr&aacute;tu vzniklou rozd&iacute;lem skutečn&eacute; tržn&iacute; hodnoty (d&aacute;le jen &bdquo;tržn&iacute; hodnota&ldquo;) vozidla v&nbsp;okamžiku ukončen&iacute; a &uacute;hrnem skutečně zaplacen&yacute;ch spl&aacute;tek za vozidlo vůči pořizovac&iacute; ceně vozidla, přičemž spl&aacute;tkou za vozidlo je my&scaron;lena finančn&iacute; č&aacute;stka uveden&aacute; v&nbsp;př&iacute;loze č. 2 t&eacute;to smlouvy v&nbsp;kolonce <strong>&bdquo;měs&iacute;čn&iacute; spl&aacute;tka za vozidlo&ldquo; </strong>a za skutečně zaplacenou se považuje pouze ta spl&aacute;tka, kter&aacute; byla nejpozději ke dni ukončen&iacute; ř&aacute;dně přips&aacute;na na &uacute;čet pronaj&iacute;matele.<strong>&nbsp;</strong></p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">Tržn&iacute; hodnota vozidla se ke dni ukončen&iacute; stanov&iacute; jako o <strong>10 %</strong> sn&iacute;žen&aacute; hodnota vozidla určen&aacute; programem pro oceňov&aacute;n&iacute; ojet&yacute;ch vozidel &ndash; <strong>TAXexpert</strong><span style=\"font-size:11px\"><strong> &reg;</strong>, </span>provozovan&eacute;m společnost&iacute; IBS automotive s.r.o., př&iacute;padně n&aacute;sledn&yacute;mi. V&nbsp;př&iacute;padě, že by z&nbsp;důvodu na straně poskytovatele programu TAXexpert<span style=\"font-size:11px\"> &reg;,</span> nebylo možno tento použ&iacute;t, použij&iacute; smluvn&iacute; jin&yacute; dostupn&yacute; program pro oceňov&aacute;n&iacute; vozidel. &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">Pro v&yacute;počet finančn&iacute; kompenzace n&aacute;jemce vůči pronaj&iacute;mateli se tedy užije vzorce:</p>\r\n\r\n<p style=\"text-align:justify\">V&yacute;&scaron;e finančn&iacute; kompenzace = cen&iacute;kov&aacute; cena vozidla - tržn&iacute; hodnota - &uacute;hrn skutečně uhrazen&yacute;ch spl&aacute;tek za vozidlo</p>\r\n\r\n<p style=\"text-align:justify\">Pořizovac&iacute; cenou vozidla je vždy komunikov&aacute;na n&aacute;jemci při před&aacute;n&iacute; vozidla</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">V&nbsp;př&iacute;padě, že n&aacute;jemce poskytl pronaj&iacute;mateli akontaci v&nbsp;podobě jednor&aacute;zov&eacute; zv&yacute;&scaron;en&eacute; prvn&iacute; spl&aacute;tky předem v&nbsp;souladu s&nbsp;odstavcem c), bodu III. t&eacute;to smlouvy, je pronaj&iacute;matel povinen tuto n&aacute;jemci navr&aacute;tit nejpozději ve lhůtě 14-ti dnů, ode dne předčasn&eacute;ho ukončen&iacute; smlouvy.&nbsp; Pronaj&iacute;matel si v&scaron;ak vyhrazuje pr&aacute;vo započ&iacute;st vůči t&eacute;to akontaci ve&scaron;ker&eacute; sv&eacute; opr&aacute;vněn&eacute; pohled&aacute;vky za n&aacute;jemcem včetně finančn&iacute; kompenzace za předčasn&eacute; ukončen&iacute; uveden&eacute; v&yacute;&scaron;e a podobně, a to bez ohledu na lhůty jejich splatnosti.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">e. Smluvn&iacute; strany se shodly na skutečnosti, že ve sporn&yacute;ch př&iacute;padech se ve&scaron;ker&aacute; jejich vz&aacute;jemn&aacute; korespondence&nbsp; považuje za doručenou uplynut&iacute;m třet&iacute;ho dne, bezprostředně n&aacute;sleduj&iacute;c&iacute;ho po dni jej&iacute;ho odesl&aacute;n&iacute; prostřednictv&iacute;m Česk&eacute; po&scaron;ty s.p., bez ohledu na to, zda druh&aacute; smluvn&iacute; strana tuto převzala či nikoli a bez ohledu na to, zda lhůta připad&aacute; na den pracovn&iacute;ho klidu nebo st&aacute;tem uznan&yacute; sv&aacute;tek či nikoli. Neuvedou-li smluvn&iacute; strany jinak, považuje se za adresu pro doručov&aacute;n&iacute; p&iacute;semnost&iacute; vždy adresa s&iacute;dla pr&aacute;vnick&eacute; osoby, respektive adresa bydli&scaron;tě fyzick&eacute; osoby, nebo jak&aacute;koli korespondenčn&iacute; adresa, kter&aacute; byla ř&aacute;dně a prokazatelně 0nahl&aacute;&scaron;ena druh&eacute; smluvn&iacute; straně. &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<ol start=\"8\" style=\"list-style-type:upper-roman\">\r\n	<li style=\"text-align:center\"><strong>Předkupn&iacute; pr&aacute;vo</strong></li>\r\n</ol>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">a. N&aacute;jemci n&aacute;lež&iacute; předkupn&iacute; pr&aacute;vo k&nbsp;vozidlu, kter&eacute; je předmětem t&eacute;to smlouvy. Respektive se t&iacute;mto pronaj&iacute;matel zavazuje nezcizit vozidlo v&nbsp;př&iacute;padě, že n&aacute;jemce projev&iacute; z&aacute;jem jej po ukončen&iacute; n&aacute;jemn&iacute;ho vztahu odkoupit za zůstatkovou jeho hodnotu.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">b. Zůstatkovou hodnotu vozidla sděl&iacute; pronaj&iacute;matel n&aacute;jemci vždy před uzavřen&iacute;m n&aacute;jemn&iacute; smlouvy.&nbsp;</p>\r\n\r\n<p>c. Aktu&aacute;ln&iacute; v&yacute;&scaron;e zůstatkov&eacute; hodnoty vozidla, respektive kupn&iacute; ceny, za kterou je n&aacute;jemce opr&aacute;vněn při využit&iacute; předkupn&iacute;ho pr&aacute;va vozidlo po ukončen&iacute; n&aacute;jemn&iacute;ho vztahu odkoupit je <strong>_ZUSTATKOVAHODNOTA_</strong>&nbsp;<strong>Kč bez DPH</strong>.<strong> </strong>Tato zůstatkov&aacute; hodnota je v&scaron;ak pro pronaj&iacute;matele z&aacute;vazn&aacute; pouze v&nbsp;př&iacute;padě, že dojde k&nbsp;ukončen&iacute; n&aacute;jemn&iacute;ho vztahu uplynut&iacute;m cel&eacute; doby, pro kterou byl sjedn&aacute;n touto smlouvou.</p>\r\n\r\n<p style=\"text-align:justify\">d. N&aacute;jemce je opr&aacute;vněn využ&iacute;t možnosti odkoupit vozidlo i v&nbsp;momentě, kdy dojde k&nbsp;ukončen&iacute; smlouvy z&nbsp;jeho strany, dř&iacute;ve než před uplynut&iacute;m doby, pro kterou je smlouva sjedn&aacute;na, a to za zůstatkovou hodnotu sdělenou mu pronaj&iacute;matelem, nejpozději ke dni ukončen&iacute; n&aacute;jemn&iacute;ho vztahu.</p>\r\n\r\n<p style=\"text-align:justify\">e. N&aacute;jemce je opr&aacute;vněn vzd&aacute;t se sv&eacute;ho pr&aacute;va na odkoupen&iacute; vozidla ve prospěch, kter&eacute;koliv j&iacute;m určen&eacute; třet&iacute; osoby, dle sv&eacute;ho vlastn&iacute;ho uv&aacute;žen&iacute;. Pronaj&iacute;matel je v&nbsp;takov&eacute;m př&iacute;padě povinen garantovat n&aacute;jemcem určen&eacute; třet&iacute; osobě stejnou prodejn&iacute; cenu vozidla, kterou nab&iacute;dl n&aacute;jemci. &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">f. S&nbsp;ohledem na z&aacute;vazky pronaj&iacute;matele k&nbsp;v&yacute;robci/dodavateli/v&yacute;hradn&iacute;mu distributorovi vozidla, nevznik&aacute; n&aacute;jemci ani j&iacute;m určen&eacute; třet&iacute; osobě pr&aacute;vo na odkoupen&iacute; vozidla dř&iacute;ve než po uplynut&iacute; 12-ti měs&iacute;ců n&aacute;jemn&iacute;ho vztahu.</p>\r\n\r\n<p style=\"text-align:justify\">g. V&nbsp;př&iacute;padě, že se n&aacute;jemce rozhodne využ&iacute;t sv&eacute;ho pr&aacute;va na odkup předmětn&eacute;ho vozidla, je povinen tuto skutečnost pronaj&iacute;mateli ozn&aacute;mit nejpozději ke dni ukončen&iacute; n&aacute;jemn&iacute; smlouvy. V&nbsp;př&iacute;padě, že tak v&nbsp;ř&aacute;dn&eacute; lhůtě neučin&iacute;, jeho předkupn&iacute; pr&aacute;vo t&iacute;mto automaticky zanik&aacute;.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">h. Předkupn&iacute; pr&aacute;vo n&aacute;jemce rovněž zanik&aacute; v&nbsp;momentě, kdy dojde k&nbsp;v&yacute;povědi t&eacute;to smlouvy ze strany pronaj&iacute;matele dle odstavce c), čl&aacute;nku VII. t&eacute;to smlouvy.</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<ol start=\"9\" style=\"list-style-type:upper-roman\">\r\n	<li style=\"text-align:center\"><strong>Pr&aacute;va a povinnosti</strong></li>\r\n</ol>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">a. Pronaj&iacute;matel je povinen zajistit n&aacute;jemci neru&scaron;en&yacute; v&yacute;kon jeho pr&aacute;v plynouc&iacute;ch mu z&nbsp;t&eacute;to smlouvy, po celou dobu trv&aacute;n&iacute; n&aacute;jemn&iacute;ho vztahu.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">b. Pronaj&iacute;matel je povinen zajisti n&aacute;jemci, respektive j&iacute;m určen&eacute;mu uživateli vozidla, pro&scaron;kolen&iacute; o z&aacute;kladn&iacute;ch funkc&iacute;ch, manipulaci a pravideln&eacute; &uacute;držbě vozidla, a to nejpozději k&nbsp;okamžiku před&aacute;n&iacute; vozidla n&aacute;jemci do už&iacute;v&aacute;n&iacute;.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">c. Pronaj&iacute;matel je povinen opatřit vozidlo prvky povinn&eacute; v&yacute;bavy vozidla, v&nbsp;souladu s&nbsp;vyhl&aacute;&scaron;kou Ministerstva dopravy č. 283/2009 Sb. v&nbsp;platn&eacute;m zněn&iacute;.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">d. Pronaj&iacute;matel je povinen předat n&aacute;jemci spolu s&nbsp;vozidlem v&yacute;robcem vozidla vyd&aacute;van&eacute; manu&aacute;ly souvisej&iacute;c&iacute; s&nbsp;jeho provozem a &uacute;držbou. Stejně tak je pronaj&iacute;matel povinen předat n&aacute;jemci mal&yacute; technick&yacute; průkaz k&nbsp;vozidlu, tzv. zelenou kartu, osvědčuj&iacute;c&iacute; existenci a platnost poji&scaron;těn&iacute; odpovědnosti z&nbsp;provozu vozidla, pokud je sjedn&aacute;no touto smlouvou, že n&aacute;klady takov&eacute;ho poji&scaron;těn&iacute; nese pronaj&iacute;matel, u vozidel star&scaron;&iacute;ch čtyř let, je tak&eacute; pronaj&iacute;matel povinen předat n&aacute;jemci osvědčen&iacute; o proveden&eacute;m měřen&iacute; emis&iacute; produkovan&yacute;ch vozidlem. V&nbsp;př&iacute;padě, že je sjedn&aacute;no touto smlouvou, že pronaj&iacute;matel nese n&aacute;klady na d&aacute;lničn&iacute; zn&aacute;mky, př&iacute;padně jin&eacute; d&aacute;lničn&iacute; poplatky na &uacute;zem&iacute; ČR, je pronaj&iacute;matel povinen předat n&aacute;jemci rovněž kontroln&iacute; &uacute;střižek k&nbsp;vylepen&eacute; d&aacute;lničn&iacute; zn&aacute;mce. V&nbsp;př&iacute;padě, že v&nbsp;průběhu n&aacute;jemn&iacute;ho vztahu pozbyde někter&yacute; z&nbsp;v&yacute;&scaron;e specifikovan&yacute;ch dokumentů spojen&yacute;ch s&nbsp;vozidlem platnosti, je pronaj&iacute;matel povinen zaslat n&aacute;jemci, s&nbsp;dostatečn&yacute;m předstihem nov&yacute; či n&aacute;hradn&iacute; dokument s&nbsp;potřebnou platnost&iacute;. &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">e. Pronaj&iacute;matel je povinen předat n&aacute;jemci spolu s&nbsp;vozidlem servisn&iacute; knihu k&nbsp;vozidlu. Toto neplat&iacute; v&nbsp;př&iacute;padě vozidel, u nichž je servisn&iacute; kniha veden&aacute; na pokyn v&yacute;robce pouze v&nbsp;elektronick&eacute; formě.</p>\r\n\r\n<p style=\"text-align:justify\">f. Pronaj&iacute;matel vždy nese n&aacute;klady rozhlasov&yacute;ch poplatku, je-li vozidlo vybaveno autor&aacute;diem, stejně tak n&aacute;klady na &uacute;hradu silničn&iacute; daně. Odpovědnost pronaj&iacute;matele za registraci a &uacute;hradu rozhlasov&yacute;ch poplatků zanik&aacute; pouze v&nbsp;momentě, kdy n&aacute;jemce vybav&iacute; vozidlo autor&aacute;diem po okamžiku převzet&iacute; vozidla z&nbsp;rukou pronaj&iacute;matele. &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">g. V&nbsp;př&iacute;padě, že se vozidlo stane nepoj&iacute;zdn&yacute;m či nezpůsobil&yacute;m k&nbsp;provozu na pozemn&iacute;ch komunikac&iacute;ch na &uacute;zem&iacute; ČR, z&nbsp;důvodů zanedban&iacute; povinnost&iacute; pronaj&iacute;matele, plynouc&iacute;ch mu z&nbsp;t&eacute;to smlouvy, je pronaj&iacute;matel povinen zajistit n&aacute;jemci po dobu, po kterou je vozidlo nepoj&iacute;zdn&eacute; či nezpůsobil&eacute;, vozidlo n&aacute;hradn&iacute; ve stejn&eacute; či obdobn&eacute; konfiguraci jako vozidlo, kter&eacute; je předmětem pron&aacute;jmu.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">h. Pronaj&iacute;matel je opr&aacute;vněn nechat se zastoupit jim určenou třet&iacute; osobou, při v&yacute;konu kter&yacute;chkoliv sv&yacute;ch povinnost&iacute; či pr&aacute;v plynouc&iacute;ch z&nbsp;t&eacute;to smlouvy.</p>\r\n\r\n<p style=\"text-align:justify\">i. N&aacute;jemce je povinen poč&iacute;nat si po celou dobu trv&aacute;n&iacute; n&aacute;jemn&iacute;ho vztahu k&nbsp;vozidlu s&nbsp;p&eacute;č&iacute; ř&aacute;dn&eacute;ho hospod&aacute;ře.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">j. N&aacute;jemce je povinen strpět omezen&iacute; sv&yacute;ch pr&aacute;va v&nbsp;okamžic&iacute;ch pravideln&yacute;ch servisn&iacute;ch prohl&iacute;dek vozidla, nezbytn&eacute; &uacute;držby vozidla a po dobu nezbytně nutnou pro uveden&iacute; vozidla do původn&iacute;ho stavu po &scaron;kodě způsoben&eacute; n&aacute;jemcem či třet&iacute; osobou. &nbsp; &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">k. N&aacute;jemce je povinen po celou dobu n&aacute;jemn&iacute;ho vztahu dodržovat pravideln&eacute; intervaly servisn&iacute;ch prohl&iacute;dek stanoven&eacute; v&yacute;robcem vozidla tak, aby nebyla dotčena funkčnost vozidla a z&aacute;roveň nebyla zneplatněna kter&aacute;koliv d&iacute;lč&iacute; č&aacute;st z&aacute;ruky poskytovan&eacute; k&nbsp;vozidlu v&yacute;robcem.&nbsp; V&nbsp;př&iacute;padě, že n&aacute;jemce nebude dodržovat či akceptovat tuto povinnost, nese n&aacute;klady na odstraněn&iacute; ve&scaron;ker&yacute;ch &scaron;kod způsoben&yacute;ch pronaj&iacute;mateli nedodržov&aacute;n&iacute;m t&eacute;to povinnosti.&nbsp; &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">l. V&nbsp;př&iacute;padech, kdy n&aacute;jemce prov&aacute;d&iacute; na vozidle jak&eacute;koliv opravy či pravidelnou &uacute;držbu, je povinen toto zabezpečit pouze prostřednictv&iacute;m k&nbsp;tomu pro&scaron;kolen&yacute;ch osob, plně způsobil&yacute;ch k&nbsp;proveden&iacute; každ&eacute;ho jednoho &uacute;konu prov&aacute;děn&eacute;ho na vozidle. Přičemž za plně způsobilou se považuje pouze ta osoba, kterou za plně způsobilou uzn&aacute;v&aacute; v&yacute;robce vozidla.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">m. N&aacute;jemce je povinen v&eacute;st po celou dobu n&aacute;jemn&iacute;ho vztahu ř&aacute;dně knihu j&iacute;zd a servisn&iacute; knihu k&nbsp;vozidlu, zejm&eacute;na zabezpečit ř&aacute;dn&eacute; zaznamen&aacute;v&aacute;n&iacute; servisn&iacute;ch &uacute;konů a oprav na vozidle.</p>\r\n\r\n<p style=\"text-align:justify\">n. N&aacute;jemce nen&iacute; bez předchoz&iacute;ho p&iacute;semn&eacute;ho souhlasu pronaj&iacute;matele opr&aacute;vněn zasahovat do podstavy vozidla, opatřovat vozidlo jak&yacute;mikoliv prvky tunningu či měnit jednotliv&eacute; souč&aacute;st&iacute; vozidla, mimo př&iacute;pady, kdy je toto nezbytn&eacute; pro uveden&iacute; vozidla do původn&iacute;ho stavu.</p>\r\n\r\n<p style=\"text-align:justify\">o. N&aacute;jemce nen&iacute; opr&aacute;vněn využ&iacute;vat vozidlo ke sportovn&iacute; činnosti spoč&iacute;vaj&iacute;c&iacute; např&iacute;klad v&nbsp;automobilov&yacute;ch z&aacute;vodech a obdobně.</p>\r\n\r\n<p style=\"text-align:justify\">p. N&aacute;jemce je povinen hl&aacute;sit pronaj&iacute;mateli ve&scaron;ker&eacute; &scaron;kody na vozidle, a to do 3 pracovn&iacute;ch dnů ode dne jejich zji&scaron;těn&iacute;.</p>\r\n\r\n<p style=\"text-align:justify\">q. N&aacute;jemce je povinen poč&iacute;nat si po celou dobu n&aacute;jemn&iacute;ho vztahu, tak aby předch&aacute;zel př&iacute;padn&yacute;m &scaron;kod&aacute;m na vozidle, odcizen&iacute; či zničen&iacute; vozidla. Po celou dobu trv&aacute;n&iacute; n&aacute;jemn&iacute;ho vztahu zodpov&iacute;d&aacute; za ztr&aacute;tu, zcizen&iacute; či zničen&iacute; vozidla n&aacute;jemce. &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">r. N&aacute;jemce zodpov&iacute;d&aacute; za př&iacute;padn&eacute; přestupky či trestn&eacute; činy způsoben&eacute; při provozu vozidla, po celou dobu trv&aacute;n&iacute; n&aacute;jemn&iacute;ho vztahu.</p>\r\n\r\n<p style=\"text-align:justify\">s. N&aacute;jemce je opr&aacute;vněn už&iacute;vat předmětn&eacute; vozidlo v&nbsp;rozsahu stanoven&eacute;m touto smlouvou po celou dobu trv&aacute;n&iacute; n&aacute;jemn&iacute;ho vztahu.</p>\r\n\r\n<p style=\"text-align:justify\">t. N&aacute;jemce je rovněž opr&aacute;vněn už&iacute;vat vozidlo k&nbsp;v&yacute;konu sv&eacute; podnikatelsk&eacute; činnosti. V&nbsp;př&iacute;padě, že m&aacute; b&yacute;t vozidlo n&aacute;jemcem už&iacute;v&aacute;no k&nbsp;podnikatelsk&eacute; činnosti spoč&iacute;vaj&iacute;c&iacute; k&nbsp;přepravě n&aacute;kladů či dopravě osob, je n&aacute;jemce povinen tuto skutečnost sdělit pronaj&iacute;mateli, před okamžikem uzavřen&iacute; t&eacute;to smlouvy.</p>\r\n\r\n<p style=\"text-align:justify\">u. Obě smluvn&iacute; strany jsou povinny zabezpečit vz&aacute;jemně součinnosti při ře&scaron;en&iacute; pojistn&yacute;ch ud&aacute;lost&iacute;, vznikl&yacute;ch při provozu vozidla či likvidaci &scaron;kod na vozidle po celou dobu trv&aacute;n&iacute; n&aacute;jemn&iacute;ho vztahu.</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<ol start=\"10\" style=\"list-style-type:upper-roman\">\r\n	<li style=\"text-align:center\"><strong>Před&aacute;n&iacute; vozidla</strong></li>\r\n</ol>\r\n\r\n<p style=\"text-align:justify\">a. Pronaj&iacute;matel se t&iacute;mto zavazuje objednat předmětn&eacute; vozidlo u jeho v&yacute;robce/import&eacute;ra/v&yacute;hradn&iacute;ho distributora/ofici&aacute;ln&iacute;ho distributora nejpozději do <strong>tř&iacute; dnů</strong> od uzavřen&iacute; t&eacute;to smlouvy. Z&aacute;roveň se zavazuje vyzvat n&aacute;jemce k&nbsp;převzet&iacute; vozidla, bez zbytečn&eacute;ho odkladu, po zji&scaron;těn&iacute; z&aacute;vazn&eacute;ho term&iacute;nu dod&aacute;n&iacute; ze strany dodavatele, nejpozději 14 dnů před pl&aacute;novan&yacute;m dod&aacute;n&iacute;m vozidla, nen&iacute;-li dohodnuto jinak.</p>\r\n\r\n<p style=\"text-align:justify\">b.&nbsp;N&aacute;jemce se zavazuje převz&iacute;t vozidlo od pronaj&iacute;matele ve lhůtě nejpozději <strong>30 dnů</strong> po pronaj&iacute;matelem ozn&aacute;men&eacute;m dod&aacute;n&iacute; vozidla.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">c. V&nbsp;př&iacute;padě, že pronaj&iacute;matel nebude schopen předat n&aacute;jemci vozidlo v&nbsp;j&iacute;m potvrzen&eacute;m term&iacute;nu, n&aacute;lež&iacute; n&aacute;jemci pr&aacute;vo &uacute;čtovat smluvn&iacute; pokutu ve v&yacute;&scaron;i 1 denn&iacute; sazby za pron&aacute;jem vozidla, za každ&yacute; započat&yacute; den prodlen&iacute; pronaj&iacute;matele. Přičemž denn&iacute; sazba za pron&aacute;jem se urč&iacute; jako 1/30 měs&iacute;čn&iacute; sazby n&aacute;jemn&eacute;ho.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">d. V&nbsp;př&iacute;padě, že n&aacute;jemce nepřevezme vozidlo ve lhůtě stanoven&eacute; v&nbsp;odstavci b), čl&aacute;nku X. t&eacute;to smlouvy, tato smlouva zanik&aacute;. V&nbsp;takov&eacute;m př&iacute;padě n&aacute;lež&iacute; pronaj&iacute;mateli smluvn&iacute; pokuta ve v&yacute;&scaron;i tř&iacute; měs&iacute;čn&iacute;ch spl&aacute;tek n&aacute;jemn&eacute;ho stanoven&yacute;ch v&nbsp;odstavci a), čl&aacute;nku III. t&eacute;to smlouvy.</p>\r\n\r\n<p style=\"text-align:justify\">e. O před&aacute;n&iacute; vozidla pronaj&iacute;matelem n&aacute;jemci sep&iacute;&scaron;&iacute; smluvn&iacute; strany před&aacute;vac&iacute; protokol. Za n&aacute;jemce je způsobil&aacute; převz&iacute;t vozidlo každ&aacute; osoba, kterou n&aacute;jemce sděl&iacute; pronaj&iacute;mateli jako osobu způsobilou převz&iacute;t vozidlo.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<ol start=\"11\" style=\"list-style-type:upper-roman\">\r\n	<li style=\"text-align:center\"><strong>Zpětvzet&iacute; vozidla</strong></li>\r\n</ol>\r\n\r\n<p style=\"text-align:justify\">a. N&aacute;jemce je povinen předat ke dni ukončen&iacute; n&aacute;jemn&iacute;ho vztahu vozidlo zpět pronaj&iacute;mateli, a to ve stavu, v&nbsp;jak&eacute;m jej od pronaj&iacute;matele přeb&iacute;ral, s&nbsp;přihl&eacute;dnut&iacute;m k&nbsp;obvykl&eacute;mu opotřeben&iacute;. Za obvykl&eacute; opotřeben&iacute; se pro &uacute;čely t&eacute;to smlouvy považuj&iacute; tak&eacute; drobn&eacute; &scaron;kr&aacute;bance ve svrchn&iacute;m laku vozidla (o d&eacute;lce maxim&aacute;lně 5 cm) a drobn&eacute; &scaron;kr&aacute;bance a odřeniny na&nbsp;př&iacute;strojov&eacute; desce vozidla a dal&scaron;&iacute;ch plastov&yacute;ch č&aacute;stech interi&eacute;ru vozidla, způsoben&eacute; obvykl&yacute;m už&iacute;v&aacute;n&iacute;m na pozemn&iacute;ch komunikac&iacute;ch. Stejně tak se za obvykl&eacute; opotřeben&iacute; považuj&iacute; drobn&eacute; nedostatky v&nbsp;čalouněn&iacute; vozidla, nikoli v&scaron;ak trhliny či d&iacute;ry způsoben&eacute; prop&aacute;len&iacute;m a podobně.</p>\r\n\r\n<p style=\"text-align:justify\">Za obvykl&eacute; opotřeben&iacute; se zejm&eacute;na nepovažuj&iacute; &scaron;kr&aacute;bance v&nbsp;laku vozidla o d&eacute;lce vět&scaron;&iacute; než 5 cm a &scaron;&iacute;řce vět&scaron;&iacute; než 0,05 cm, jak&eacute;koliv &scaron;kr&aacute;bance v&nbsp;z&aacute;kladn&iacute;m laku vozidla, &scaron;kr&aacute;bance a odřeniny v&nbsp;př&iacute;strojov&eacute; desce a dal&scaron;&iacute;ch plastov&yacute;ch č&aacute;stech vozidla o d&eacute;lce vět&scaron;&iacute; než 2 cm a &scaron;&iacute;řce vět&scaron;&iacute; než 0,05 cm, d&aacute;le se za obvykl&eacute; opotřeben&iacute; nepovažuj&iacute; ulomen&eacute;, ztracen&eacute; či rozbit&eacute; č&aacute;sti vozidla a vyměněn&eacute; souč&aacute;st&iacute; vozidla neodpov&iacute;daj&iacute;c&iacute; č&aacute;stem původn&iacute;m.</p>\r\n\r\n<p style=\"text-align:justify\">b. Nen&iacute;-li dohodnuto jinak, je n&aacute;jemce povinen odstranit z&nbsp;vozidla tak&eacute; ve&scaron;ker&eacute; &uacute;pravy a doplňky proveden&eacute; na vozidle v&nbsp;souladu s&nbsp;odstavcem o), čl&aacute;nku IX. t&eacute;to smlouvy.</p>\r\n\r\n<p style=\"text-align:justify\">c. Nen&iacute;-li dohodnuto jinak, je n&aacute;jemce povinen navr&aacute;tit pronaj&iacute;mateli zpět vozidlo opatřen&eacute; stejn&yacute;m, nebo rozměrově a kvalitativně totožn&yacute;m druhem pneumatik, kter&yacute;m bylo vozidlo opatřeno v&nbsp;okamžiku před&aacute;n&iacute; n&aacute;jemci.&nbsp; Přičemž plat&iacute;, že každ&aacute; jedna pneumatika mus&iacute; splňovat minim&aacute;ln&iacute; hloubku dez&eacute;nu <strong>1,6 mm</strong> pro letn&iacute; pneumatiky, respektive <strong>4,0 mm</strong> v&nbsp;př&iacute;padě zimn&iacute;ch pneumatiky, pl&aacute;&scaron;ť pneumatik nesm&iacute; b&yacute;t po&scaron;kozen a jednotliv&eacute; pneumatiky nesměj&iacute; b&yacute;t nesouměrně sjet&eacute; v&nbsp;důsledku nespr&aacute;vn&eacute; neodborn&eacute; mont&aacute;že či nespr&aacute;vn&eacute;ho zach&aacute;zen&iacute;. &nbsp; &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">d. N&aacute;klady na uveden&iacute; vozidla do původn&iacute;ho stavu nese n&aacute;jemce. Povinnosti uv&eacute;st vozidlo do původn&iacute;ho stavu je n&aacute;jemce zpro&scaron;těn pouze v&nbsp;př&iacute;padě, že využije sv&eacute;ho předkupn&iacute;ho pr&aacute;va a vozidlo ihned po skončen&iacute; n&aacute;jemn&iacute; vztahu od pronaj&iacute;matele odkoup&iacute;.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">e. V&nbsp;př&iacute;padě, že smluvn&iacute; strany nejsou schopny doj&iacute;t shody o skutečnosti, zda vozidlo odpov&iacute;d&aacute; původn&iacute;mu stavu s&nbsp;přihl&eacute;dnut&iacute;m k&nbsp;obvykl&eacute;mu opotřeben&iacute; či nikoli, jsou povinny přizvat k&nbsp;ře&scaron;en&iacute; sporu kter&eacute;hokoliv soudn&iacute;ho znalce v&nbsp;oboru motorov&yacute;ch vozidel, veden&eacute;ho v&nbsp;seznamu soudn&iacute;ch znalců Krajsk&eacute;ho soudu v&nbsp;Ostravě. N&aacute;klady na vyhotoven&iacute; znaleck&eacute;ho posudku nese ta strana, kterou lze ve sporu označit za ne&uacute;spě&scaron;nou, respektive ta strana, jej&iacute;ž tvrzen&iacute; bylo posudkem soudn&iacute;ho znalce vyvr&aacute;ceno.&nbsp; V&nbsp;př&iacute;padech, kdy nelze objektivně určit stranu, kter&aacute; byla ve sporu ne&uacute;spě&scaron;n&aacute;, nesou n&aacute;klady na vyhotoven&iacute; znaleck&eacute;ho posudku obě smluvn&iacute; strany rovn&yacute;m d&iacute;lem.</p>\r\n\r\n<p>f. V&nbsp;př&iacute;padě, že n&aacute;jemci vznikne povinnost uv&eacute;st předmět smlouvy do stavu původn&iacute;ho s&nbsp;přihl&eacute;dnut&iacute;m k&nbsp;obvykl&eacute;mu opotřeben&iacute; a n&aacute;jemce se t&eacute;to povinnosti nezhost&iacute; ani po p&iacute;semn&eacute; v&yacute;zvě ze strany pronaj&iacute;matele, je pronaj&iacute;matel opr&aacute;vněn uv&eacute;st předmět smlouvy do odpov&iacute;daj&iacute;c&iacute;ho stavu, a to i bez vědom&iacute; n&aacute;jemce a n&aacute;sledně požadovat po n&aacute;jemci &uacute;hradu ve&scaron;ker&yacute;ch opr&aacute;vněn&yacute;ch n&aacute;kladů vznikl&yacute;ch pronaj&iacute;mateli a souvisej&iacute;c&iacute;ch s&nbsp;uveden&iacute;m předmětu smlouvy do odpov&iacute;daj&iacute;c&iacute;ho stavu. &nbsp; &nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<ol start=\"12\" style=\"list-style-type:upper-roman\">\r\n	<li style=\"text-align:center\"><strong>Konečn&eacute; vy&uacute;čtov&aacute;n&iacute;</strong></li>\r\n</ol>\r\n\r\n<p>a.&nbsp;Po ukončen&iacute; n&aacute;jemn&iacute;ho vztahu je pronaj&iacute;matel povinen zaslat n&aacute;jemci, bez zbytečn&eacute;ho odkladu, konečn&eacute; vy&uacute;čtov&aacute;n&iacute;. Ve vy&uacute;čtov&aacute;n&iacute; provede zejm&eacute;na rekapitulaci předepsan&yacute;ch a skutečně přijat&yacute;ch plateb od n&aacute;jemce, d&aacute;le uvede počet n&aacute;jemce ujet&yacute;ch km s&nbsp;vozidlem, respektive vyč&iacute;sl&iacute; doplatek či přeplatek za v&iacute;ce, respektive m&eacute;ně kilometry v&nbsp;souladu s&nbsp;odstavci a), b), c) a d), čl&aacute;nku IV. t&eacute;to smlouvy, d&aacute;le pronaj&iacute;matel vyč&iacute;sl&iacute; př&iacute;padn&eacute; opr&aacute;vněn&eacute; sankce, pokuty a &scaron;kody, kter&eacute; hodl&aacute; uplatňovat po n&aacute;jemci.</p>\r\n\r\n<p style=\"text-align:justify\">b. Na z&aacute;kladě vy&uacute;čtov&aacute;n&iacute; za&scaron;le pronaj&iacute;matel n&aacute;jemci daňov&yacute; doklad na př&iacute;padn&eacute; doplatky či přeplatky, přičemž se smluvn&iacute; strany shodly na splatnosti tohoto dokladu v&nbsp;d&eacute;lce trv&aacute;n&iacute; <strong>14 dnů</strong>.</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp; &nbsp;</p>\r\n\r\n<ol start=\"13\" style=\"list-style-type:upper-roman\">\r\n	<li style=\"text-align:center\"><strong>Informačn&iacute; povinnost</strong></li>\r\n</ol>\r\n\r\n<p>a.&nbsp;Obě smluvn&iacute; strany se t&iacute;mto zavazuj&iacute; informovat druhou smluvn&iacute; stranu o podstatn&yacute;ch skutečnostech maj&iacute;c&iacute;ch z&aacute;sadn&iacute; vliv na jejich ekonomickou činnosti, respektive na ř&aacute;dn&yacute; v&yacute;kon jejich pr&aacute;va a povinnosti plynouc&iacute;ch jim z&nbsp;t&eacute;to smlouvy. Za takovouto skutečnost se považuje např. změna s&iacute;dla/bydli&scaron;tě, ztr&aacute;ta opr&aacute;vněn&iacute; k&nbsp;provozov&aacute;n&iacute; ekonomick&eacute; činnosti, v&nbsp;př&iacute;padě n&aacute;jemce tak&eacute; ztr&aacute;ta opr&aacute;vněn&iacute; k&nbsp;provozov&aacute;n&iacute; t&eacute; ekonomick&eacute; činnosti, ke kter&eacute; využ&iacute;v&aacute; předmět smlouvy, v&yacute;razn&eacute; zhor&scaron;en&iacute; ekonomick&eacute; situace vedouc&iacute; k&nbsp;neschopnosti hradit včas sv&eacute; z&aacute;vazky a podobně.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">b. V&nbsp;př&iacute;padě, že někter&aacute; ze smluvn&iacute;ch stran nedodrž&iacute; informačn&iacute; povinnost vůči druh&eacute; smluvn&iacute; straně, nese tato smluvn&iacute; strana ve&scaron;ker&eacute; n&aacute;klady na odstraněn&iacute; &scaron;kod způsoben&yacute;ch druh&eacute; smluvn&iacute; straně t&iacute;m, že nebyla včas informov&aacute;na.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<ol start=\"14\" style=\"list-style-type:upper-roman\">\r\n	<li style=\"text-align:center\"><strong>Sankce a pokuty</strong></li>\r\n</ol>\r\n\r\n<p style=\"text-align:justify\">a. Smluvn&iacute; strany se shodly na vz&aacute;jemn&eacute;m &uacute;roku z&nbsp;př&iacute;padn&eacute;ho prodlen&iacute; plateb ve v&yacute;&scaron;i <strong>0,05 %</strong> za každ&yacute; započat&yacute; den prodlen&iacute; platby až do dne &uacute;pln&eacute;ho zaplacen&iacute; dlužn&eacute; č&aacute;stky. Za den zaplacen&iacute; dlužn&eacute; č&aacute;stky se považuje den přips&aacute;n&iacute; finančn&iacute;ch prostředků na &uacute;čet věřitele. Vystaven&iacute;m smluvn&iacute;ho &uacute;roku z&nbsp;prodlen&iacute; nejsou dotčena ostatn&iacute; ustanoven&iacute; t&eacute;to smlouvy.</p>\r\n\r\n<p style=\"text-align:justify\">b. V&nbsp;př&iacute;padě, že se n&aacute;jemce ocitne v&nbsp;prodlen&iacute; s&nbsp;&uacute;hradou plateb vůči pronaj&iacute;mateli v&iacute;ce než <strong>14</strong> kalend&aacute;řn&iacute;ch dnů, je pronaj&iacute;matel opr&aacute;vněn zaslat n&aacute;jemci p&iacute;semnou upom&iacute;nku a n&aacute;sledně požadovat po n&aacute;jemci &uacute;hradu n&aacute;kladů spojen&yacute;ch s&nbsp;p&iacute;semn&yacute;m upom&iacute;n&aacute;m, a to v&nbsp;pau&scaron;&aacute;ln&iacute; v&yacute;&scaron;i <strong>200 Kč</strong> s&nbsp;připočten&iacute;m platn&eacute; sazby DPH, za každou jednu zaslanou p&iacute;semnou upom&iacute;nku. Smluvn&iacute; strany se v&scaron;ak shodly na skutečnosti, že frekvence zas&iacute;l&aacute;n&iacute; p&iacute;semn&yacute;ch upom&iacute;nek ze strany pronaj&iacute;matele nesm&iacute; b&yacute;t vy&scaron;&scaron;&iacute; než 1 x za kalend&aacute;řn&iacute; t&yacute;den. Nen&iacute;-li stanoveno jinak, považuje se za doručovac&iacute; adresu pro zas&iacute;l&aacute;n&iacute;m p&iacute;semn&yacute;ch upom&iacute;nek adresa s&iacute;dla n&aacute;jemce v&nbsp;př&iacute;padě pr&aacute;vnick&yacute;ch osob, či adresa bydli&scaron;tě n&aacute;jemce v&nbsp;př&iacute;padě fyzick&yacute;ch osob.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">c. V&nbsp;př&iacute;padě, že n&aacute;jemce neodevzd&aacute; pronaj&iacute;mateli zpět vozidlo v&nbsp;momentě ukončen&iacute; n&aacute;jemn&iacute;ho vztahu, nebo jin&eacute;m n&aacute;hradn&iacute;m term&iacute;nům sjednan&eacute;m mezi pronaj&iacute;matelem a n&aacute;jemcem, je pronaj&iacute;matel opr&aacute;vněn využ&iacute;t k&nbsp;zpětn&eacute;mu z&iacute;sk&aacute;n&iacute; vozidla v&scaron;ech dostupn&yacute;ch z&aacute;konn&yacute;ch prostředků, včetně zabaven&iacute; vozidla, a to i bez vědom&iacute; n&aacute;jemce. Ve&scaron;ker&eacute; pronaj&iacute;matelem objektivně vynaložen&eacute; n&aacute;klady na zpětn&eacute; z&iacute;sk&aacute;n&iacute; vozidla, je pronaj&iacute;matel opr&aacute;vněn požadovat v&nbsp;pln&eacute; v&yacute;&scaron;i po n&aacute;jemci.&nbsp; Z&aacute;roveň je pronaj&iacute;matel opr&aacute;vněn &uacute;čtovat n&aacute;jemci smluvn&iacute; pokutu ve v&yacute;&scaron;i <strong>10&nbsp;000 Kč</strong> bez DPH za každ&yacute; den prodlen&iacute; n&aacute;jemce s&nbsp;navr&aacute;cen&iacute;m předmětu n&aacute;jmu pronaj&iacute;mateli.</p>\r\n\r\n<p>d. V&nbsp;př&iacute;padě, že n&aacute;jemce vypov&iacute; tuto smlouvu v&nbsp;souladu s&nbsp;odstavcem b), čl&aacute;nku VII. t&eacute;to smlouvy dř&iacute;ve než před fyzick&yacute;m před&aacute;n&iacute;m vozidla pronaj&iacute;matelem n&aacute;jemci, n&aacute;lež&iacute; pronaj&iacute;mateli smluvn&iacute; pokuta ve v&yacute;&scaron;i trojn&aacute;sobku ř&aacute;dn&eacute; měs&iacute;čn&iacute; spl&aacute;tky operativn&iacute;ho leasingu, definovan&eacute; odstavcem a), čl&aacute;nku III. t&eacute;to smlouvy.&nbsp;</p>\r\n\r\n<p>&nbsp;</p>\r\n\r\n<ol start=\"15\" style=\"list-style-type:upper-roman\">\r\n	<li style=\"text-align:center\"><strong>Ostatn&iacute;</strong></li>\r\n</ol>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">a. Tato smlouva nab&yacute;v&aacute; platnosti dnem jej&iacute;ho podpisu oběma smluvn&iacute;mi stranami.</p>\r\n\r\n<p style=\"text-align:justify\">b. Tato smlouva nab&yacute;v&aacute; &uacute;činnosti dnem jej&iacute;ho podpisu oběma smluvn&iacute;mi stranami. V&nbsp;př&iacute;padě, že nedojde k&nbsp;fyzick&eacute;mu před&aacute;n&iacute; vozidla n&aacute;jemci, nab&yacute;vaj&iacute; &uacute;činnosti pouze odstavce b) a c), čl&aacute;nku X. t&eacute;to smlouvy.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">c. Tato smlouva může b&yacute;t měněna, upravov&aacute;na pouze p&iacute;semn&yacute;mi dodatky potvrzen&yacute;mi opr&aacute;vněn&yacute;mi osobami obou smluvn&iacute;ch stran.</p>\r\n\r\n<p style=\"text-align:justify\">d. N&aacute;jemce t&iacute;mto akceptuje skutečnost, že v&yacute;robce předmětn&eacute;ho vozidla, stejně jako pronaj&iacute;matel jsou v&nbsp;r&aacute;mci distribuce vozidla k&nbsp;n&aacute;jemci opr&aacute;vněni s&nbsp;každ&yacute;m vozidlem před jeho před&aacute;n&iacute;m n&aacute;jemci urazit v&nbsp;součtu až 500 km.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">e. Smluvn&iacute; strany se t&iacute;mto zavazuj&iacute; ře&scaron;it př&iacute;padn&eacute; spory vznikl&eacute; z&nbsp;t&eacute;to smlouvy prioritně cestou sm&iacute;ru.</p>\r\n\r\n<p style=\"text-align:justify\">f. Smluvn&iacute; strany se shodly, že ve&scaron;ker&eacute; př&iacute;padn&eacute; spory, vznikl&eacute; z&nbsp;titulu t&eacute;to smlouvy, kter&eacute; nebudou objektivně schopny vyře&scaron;it cestou sm&iacute;ru, budou ře&scaron;eny dle platn&eacute; legislativy Česk&eacute; republiky, přičemž m&iacute;stně př&iacute;slu&scaron;n&yacute;m soudem v&nbsp;prvn&iacute; instanci se stanovuje Okresn&iacute; soud v&nbsp;Ostravě, respektive v&nbsp;druh&eacute; instanci Krajsk&yacute; soud v&nbsp;Ostravě.&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">g. V&nbsp;př&iacute;padě, že se kter&aacute;koliv ze smluvn&iacute;ch stran nech&aacute; při v&yacute;konu sv&yacute;ch pr&aacute;v či povinnost&iacute; plynouc&iacute;ch jim z&nbsp;t&eacute;to smlouvy zastoupit třet&iacute; osobou, je tato osoba povinna se prok&aacute;zat druh&eacute; smluvn&iacute; straně pr&aacute;vně ověřenou plnou moc&iacute;. Vyjma př&iacute;padů, kdy je osoba zastupitele předem druh&eacute; smluvn&iacute; jasně a nezaměnitelně definov&aacute;na.</p>\r\n\r\n<p style=\"text-align:justify\">h. Smluvn&iacute; strany se shodly na skutečnosti, že za doručovac&iacute; adresu se považuje ta adresa s&iacute;dla/bydli&scaron;tě, kter&aacute; je uvedena v&nbsp;hlavičce t&eacute;to smlouvy. V&nbsp;př&iacute;padě, že dojde ke změně doručovac&iacute; adresy smluvn&iacute; strany, je druh&aacute; smluvn&iacute; stran povinna doručovat na změněnou doručovac&iacute; adresu pouze v&nbsp;př&iacute;padě, že ji tato skutečnost byla prokazatelně ozn&aacute;mena.</p>\r\n\r\n<p style=\"text-align:justify\">i. Obě smluvn&iacute; strany shodně prohla&scaron;uj&iacute;, že t&eacute;to smlouvě plně rozuměj&iacute; a podepisuj&iacute; ji ze sv&eacute; svobodn&eacute; vůle a na z&aacute;kladě vlastn&iacute;ho svobodn&eacute;ho rozhodnut&iacute;, na důkaz čehož připojuj&iacute; sv&eacute; podpisy.</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p>V&nbsp;Opavě, dne &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; V &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;.., dne &hellip;&hellip;&hellip;&hellip;&hellip;&hellip;..</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;&hellip;</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;Pronaj&iacute;matel &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; N&aacute;jemce&nbsp;&nbsp; &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;&nbsp; &nbsp;</p>\r\n\r\n<p>&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">&nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">Seznam př&iacute;loh:&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp; &nbsp;&nbsp;&nbsp; &nbsp;</p>\r\n\r\n<p style=\"text-align:justify\">Př&iacute;loha č. 1 = Specifikace předmětu pron&aacute;jmu</p>\r\n\r\n<p style=\"text-align:justify\">Př&iacute;loha č. 2 = Rozpis měs&iacute;čn&iacute;ch spl&aacute;tek&nbsp;</p>\r\n\r\n<div>&nbsp;</div>\r\n');
-INSERT INTO `systemEmailTemplates` (`id`, `typ`, `sender`, `subject`, `message`) VALUES
+INSERT INTO `systememailtemplates` (`id`, `typ`, `sender`, `subject`, `message`) VALUES
 (5, 'partner_person', '{EMAIL_UZIVATELE}', '', ''),
 (6, 'notificate', 'notifikace@sysportal.cz', 'Notifikace | Sysportal', '<!DOCTYPE html>\r\n<html lang=\"cs\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <title>Sysportal | Notifikace</title>\r\n    <style>\r\n        body {\r\n            font-family: \'Muli\', Arial, sans-serif;\r\n            background-color: #f5f5f5;\r\n            margin: 0;\r\n            padding: 20px;\r\n            color: #333;\r\n        }\r\n        .email-container {\r\n            background-color: #ffffff;\r\n            border-radius: 8px;\r\n            padding: 20px;\r\n            max-width: 600px;\r\n            margin: 0 auto;\r\n            box-shadow: 0 2px 4px rgba(0,0,0,0.1);\r\n        }\r\n        .header {\r\n            background: linear-gradient(45deg, #303f9f, #1976d2);\r\n            color: white;\r\n            padding: 15px;\r\n            text-align: center;\r\n            border-radius: 8px 8px 0 0;\r\n        }\r\n        .content {\r\n            margin-top: 20px;\r\n            font-size: 14px;\r\n            line-height: 1.6;\r\n        }\r\n        .footer {\r\n            margin-top: 20px;\r\n            font-size: 12px;\r\n            color: #888;\r\n            text-align: center;\r\n        }\r\n        .btn {\r\n            display: inline-block;\r\n            padding: 10px 15px;\r\n            background-color: #1976d2;\r\n            color: white;\r\n            text-decoration: none;\r\n            border-radius: 5px;\r\n            margin-top: 10px;\r\n        }\r\n        .btn:hover {\r\n            background-color: #1565c0;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class=\"email-container\">\r\n        <div class=\"header\">\r\n            <h2>Sysportal | Notifikace</h2>\r\n        </div>\r\n        <div class=\"content\">\r\n            <p>Dobrý den,</p>\r\n            <p>tímto Vás informujeme o nové události ve Vašem účtu:</p>\r\n            <p><strong>{{notification_title}}</strong></p>\r\n            <p>{{notification_message}}</p>\r\n            <p>Pro více informací klikněte na následující tlačítko:</p>\r\n            <p>\r\n                <a href=\"{{notification_link}}\" class=\"btn\">Přihlásit do aplikace</a>\r\n            </p>\r\n        </div>\r\n        <div class=\"footer\">\r\n            Tento e-mail byl vygenerován automaticky ze systému Sysportal. Prosím, neodpovídejte na něj.\r\n        </div>\r\n    </div>\r\n</body>\r\n</html>'),
 (7, 'planner', 'notifikace@sysportal.cz', 'Souhrn | Sysportal', '<!DOCTYPE html>\r\n<html lang=\"cs\">\r\n<head>\r\n    <meta charset=\"UTF-8\">\r\n    <title>Sysportal | Raní souhrn</title>\r\n    <style>\r\n        body {\r\n            font-family: \'Muli\', Arial, sans-serif;\r\n            background-color: #f5f5f5;\r\n            margin: 0;\r\n            padding: 20px;\r\n            color: #333;\r\n        }\r\n        .email-container {\r\n            background-color: #ffffff;\r\n            border-radius: 8px;\r\n            padding: 20px;\r\n            max-width: 600px;\r\n            margin: 0 auto;\r\n            box-shadow: 0 2px 4px rgba(0,0,0,0.1);\r\n        }\r\n        .header {\r\n            background: linear-gradient(45deg, #303f9f, #1976d2);\r\n            color: white;\r\n            padding: 15px;\r\n            text-align: center;\r\n            border-radius: 8px 8px 0 0;\r\n        }\r\n        .content {\r\n            margin-top: 20px;\r\n            font-size: 14px;\r\n            line-height: 1.6;\r\n        }\r\n        .task {\r\n            background-color: #f8f9fa;\r\n            padding: 10px;\r\n            border-radius: 5px;\r\n            margin-bottom: 10px;\r\n        }\r\n        .task-title {\r\n            font-weight: bold;\r\n            color: #303f9f;\r\n        }\r\n        .task-deadline {\r\n            font-size: 12px;\r\n            color: #e53935;\r\n        }\r\n        .footer {\r\n            margin-top: 20px;\r\n            font-size: 12px;\r\n            color: #888;\r\n            text-align: center;\r\n        }\r\n    </style>\r\n</head>\r\n<body>\r\n    <div class=\"email-container\">\r\n        <div class=\"header\">\r\n            <h2>Sysportal | Ranní souhrn</h2>\r\n        </div>\r\n        <div class=\"content\">\r\n            <p>Dobrý den,</p>\r\n            <p>dnes máte naplánované následující aktivity a úkoly:</p>\r\n            <!-- Seznam aktivit -->\r\n            {{tasks}}\r\n            <p>Hodně štěstí při plnění úkolů!</p>\r\n\r\n<p>Pro více informací klikněte na následující tlačítko:</p>\r\n            <p>\r\n                <a href=\"{{notification_link}}\" class=\"btn\">Přihlásit do aplikace</a>\r\n            </p>\r\n        </div>\r\n        <div class=\"footer\">\r\n            Tento e-mail byl vygenerován automaticky ze systému Sysportal. Prosím, neodpovídejte na něj.\r\n        </div>\r\n    </div>\r\n</body>\r\n</html>');
@@ -21294,8 +21807,8 @@ INSERT INTO `systemEmailTemplates` (`id`, `typ`, `sender`, `subject`, `message`)
 --
 
 CREATE TABLE `users` (
-  `id` int NOT NULL,
-  `id_group` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_group` int(11) NOT NULL,
   `f_name` varchar(20) NOT NULL,
   `l_name` varchar(20) NOT NULL,
   `title` varchar(10) NOT NULL DEFAULT ' ',
@@ -21307,13 +21820,13 @@ CREATE TABLE `users` (
   `face_img` varchar(80) NOT NULL DEFAULT '',
   `loggin_name` varchar(25) NOT NULL,
   `loggin_pass` varchar(255) NOT NULL,
-  `state` int NOT NULL,
+  `state` int(11) NOT NULL,
   `token` text NOT NULL,
   `refresh_token` varchar(2000) DEFAULT NULL,
-  `last_synced` int NOT NULL,
-  `notificate_tomail` int NOT NULL DEFAULT '0',
-  `activity_tomail` int NOT NULL DEFAULT '0'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `last_synced` int(11) NOT NULL,
+  `notificate_tomail` int(11) NOT NULL DEFAULT 0,
+  `activity_tomail` int(11) NOT NULL DEFAULT 0
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `users`
@@ -21330,10 +21843,10 @@ INSERT INTO `users` (`id`, `id_group`, `f_name`, `l_name`, `title`, `function`, 
 --
 
 CREATE TABLE `users_log` (
-  `id` int NOT NULL,
-  `id_user` int NOT NULL,
-  `time` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
+  `time` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `users_log`
@@ -21387,9 +21900,9 @@ INSERT INTO `users_log` (`id`, `id_user`, `time`) VALUES
 --
 
 CREATE TABLE `users_restriction` (
-  `id_user` int NOT NULL,
-  `id_module` int NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `id_user` int(11) NOT NULL,
+  `id_module` int(11) NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -21398,11 +21911,11 @@ CREATE TABLE `users_restriction` (
 --
 
 CREATE TABLE `users_settings` (
-  `id` int NOT NULL,
-  `id_user` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
   `name` varchar(30) NOT NULL,
   `value` varchar(255) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `users_settings`
@@ -21435,15 +21948,15 @@ INSERT INTO `users_settings` (`id`, `id_user`, `name`, `value`) VALUES
 --
 
 CREATE TABLE `users_smtp_info` (
-  `id` int NOT NULL,
-  `id_user` int NOT NULL,
+  `id` int(11) NOT NULL,
+  `id_user` int(11) NOT NULL,
   `smtp_host` varchar(120) NOT NULL DEFAULT '',
-  `smtp_port` int NOT NULL DEFAULT '0',
+  `smtp_port` int(11) NOT NULL DEFAULT 0,
   `smtp_username` varchar(160) NOT NULL DEFAULT '',
   `smtp_password` varchar(64) NOT NULL DEFAULT '',
   `smtp_secure` varchar(12) NOT NULL DEFAULT '',
   `smtp_from_email` varchar(160) NOT NULL DEFAULT ''
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 -- --------------------------------------------------------
 
@@ -21452,11 +21965,11 @@ CREATE TABLE `users_smtp_info` (
 --
 
 CREATE TABLE `user_groups` (
-  `id` int NOT NULL,
+  `id` int(11) NOT NULL,
   `name` varchar(20) NOT NULL,
-  `rules` int NOT NULL,
-  `showEconomyData` int NOT NULL DEFAULT '1'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+  `rules` int(11) NOT NULL,
+  `showEconomyData` int(11) NOT NULL DEFAULT 1
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `user_groups`
@@ -21475,10 +21988,10 @@ INSERT INTO `user_groups` (`id`, `name`, `rules`, `showEconomyData`) VALUES
 --
 
 CREATE TABLE `user_groups_rules` (
-  `id_group` int NOT NULL,
-  `id_modul` int NOT NULL,
+  `id_group` int(11) NOT NULL,
+  `id_modul` int(11) NOT NULL,
   `rules` varchar(5) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_general_ci;
 
 --
 -- Vypisuji data pro tabulku `user_groups_rules`
@@ -21666,6 +22179,8 @@ ALTER TABLE `alpha_pracovnici_uzivatele`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `uq_login_email` (`login_email`),
   ADD UNIQUE KEY `uq_login_qr_token` (`login_qr_token`),
+  ADD UNIQUE KEY `login_email` (`login_email`),
+  ADD UNIQUE KEY `id_pracovnika` (`id_pracovnika`),
   ADD KEY `idx_id_pracovnika` (`id_pracovnika`),
   ADD KEY `idx_is_active` (`is_active`);
 
@@ -21689,6 +22204,13 @@ ALTER TABLE `alpha_uzivatele_mista_prace`
 --
 ALTER TABLE `alpha_uzivatele_pracoviste`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexy pro tabulku `alpha_zpravy`
+--
+ALTER TABLE `alpha_zpravy`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `user_id` (`recipient_id`);
 
 --
 -- Indexy pro tabulku `campaign`
@@ -21728,9 +22250,9 @@ ALTER TABLE `comunication`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexy pro tabulku `dashboardWidgets`
+-- Indexy pro tabulku `dashboardwidgets`
 --
-ALTER TABLE `dashboardWidgets`
+ALTER TABLE `dashboardwidgets`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -21750,6 +22272,44 @@ ALTER TABLE `documents_templates`
 --
 ALTER TABLE `document_category`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Indexy pro tabulku `forms`
+--
+ALTER TABLE `forms`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `code` (`code`);
+
+--
+-- Indexy pro tabulku `form_fields`
+--
+ALTER TABLE `form_fields`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `uq_form_field_code` (`id_form`,`code`),
+  ADD KEY `idx_form_fields_form_position` (`id_form`,`position`);
+
+--
+-- Indexy pro tabulku `form_field_options`
+--
+ALTER TABLE `form_field_options`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_field_options_field_position` (`id_form_field`,`position`);
+
+--
+-- Indexy pro tabulku `form_submissions`
+--
+ALTER TABLE `form_submissions`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_form_submissions_form` (`id_form`),
+  ADD KEY `idx_form_submissions_lang` (`id_lang`),
+  ADD KEY `idx_form_submissions_client` (`id_client`);
+
+--
+-- Indexy pro tabulku `form_submission_values`
+--
+ALTER TABLE `form_submission_values`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `fk_submission_values_submission` (`id_submission`);
 
 --
 -- Indexy pro tabulku `income_invoices`
@@ -21788,9 +22348,9 @@ ALTER TABLE `invoice_product`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexy pro tabulku `itemTemplates`
+-- Indexy pro tabulku `itemtemplates`
 --
-ALTER TABLE `itemTemplates`
+ALTER TABLE `itemtemplates`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -22014,22 +22574,29 @@ ALTER TABLE `partner_person`
   ADD KEY `f_name` (`f_name`,`l_name`);
 
 --
+-- Indexy pro tabulku `password_resets`
+--
+ALTER TABLE `password_resets`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `idx_password_resets_email` (`email`);
+
+--
 -- Indexy pro tabulku `pozastavky`
 --
 ALTER TABLE `pozastavky`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexy pro tabulku `predavaciProtokoly`
+-- Indexy pro tabulku `predavaciprotokoly`
 --
-ALTER TABLE `predavaciProtokoly`
+ALTER TABLE `predavaciprotokoly`
   ADD PRIMARY KEY (`id`),
   ADD UNIQUE KEY `id` (`id`);
 
 --
--- Indexy pro tabulku `predavaciProtokol_docs`
+-- Indexy pro tabulku `predavaciprotokol_docs`
 --
-ALTER TABLE `predavaciProtokol_docs`
+ALTER TABLE `predavaciprotokol_docs`
   ADD KEY `id_item` (`id_item`,`id_doc`);
 
 --
@@ -22341,21 +22908,21 @@ ALTER TABLE `setting_newsletter`
   ADD UNIQUE KEY `name` (`name`);
 
 --
--- Indexy pro tabulku `setting_OLColor`
+-- Indexy pro tabulku `setting_olcolor`
 --
-ALTER TABLE `setting_OLColor`
+ALTER TABLE `setting_olcolor`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexy pro tabulku `setting_OLKaroserie`
+-- Indexy pro tabulku `setting_olkaroserie`
 --
-ALTER TABLE `setting_OLKaroserie`
+ALTER TABLE `setting_olkaroserie`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexy pro tabulku `setting_OLObdobi`
+-- Indexy pro tabulku `setting_olobdobi`
 --
-ALTER TABLE `setting_OLObdobi`
+ALTER TABLE `setting_olobdobi`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -22401,9 +22968,9 @@ ALTER TABLE `setting_project`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexy pro tabulku `setting_projectCategories`
+-- Indexy pro tabulku `setting_projectcategories`
 --
-ALTER TABLE `setting_projectCategories`
+ALTER TABLE `setting_projectcategories`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -22414,15 +22981,15 @@ ALTER TABLE `setting_psc`
   ADD KEY `psc` (`psc`,`city_dc`,`city`);
 
 --
--- Indexy pro tabulku `setting_reklamaceKategorie`
+-- Indexy pro tabulku `setting_reklamacekategorie`
 --
-ALTER TABLE `setting_reklamaceKategorie`
+ALTER TABLE `setting_reklamacekategorie`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexy pro tabulku `setting_reklamaceTyp`
+-- Indexy pro tabulku `setting_reklamacetyp`
 --
-ALTER TABLE `setting_reklamaceTyp`
+ALTER TABLE `setting_reklamacetyp`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -22517,15 +23084,15 @@ ALTER TABLE `store_out_product`
   ADD KEY `id_store` (`id_store`,`id_product`,`buy_price`,`price`,`num`);
 
 --
--- Indexy pro tabulku `systemEmail`
+-- Indexy pro tabulku `systememail`
 --
-ALTER TABLE `systemEmail`
+ALTER TABLE `systememail`
   ADD PRIMARY KEY (`id`);
 
 --
--- Indexy pro tabulku `systemEmailTemplates`
+-- Indexy pro tabulku `systememailtemplates`
 --
-ALTER TABLE `systemEmailTemplates`
+ALTER TABLE `systememailtemplates`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -22578,751 +23145,793 @@ ALTER TABLE `user_groups_rules`
 -- AUTO_INCREMENT pro tabulku `activities`
 --
 ALTER TABLE `activities`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pro tabulku `ai_planner_params`
 --
 ALTER TABLE `ai_planner_params`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- AUTO_INCREMENT pro tabulku `alpha_pracovnici`
 --
 ALTER TABLE `alpha_pracovnici`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pro tabulku `alpha_pracovnici_adresy`
 --
 ALTER TABLE `alpha_pracovnici_adresy`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pro tabulku `alpha_pracovnici_doklady`
 --
 ALTER TABLE `alpha_pracovnici_doklady`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pro tabulku `alpha_pracovnici_kontakty`
 --
 ALTER TABLE `alpha_pracovnici_kontakty`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pro tabulku `alpha_pracovnici_pracovni_pozice`
 --
 ALTER TABLE `alpha_pracovnici_pracovni_pozice`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pro tabulku `alpha_pracovnici_uzivatele`
 --
 ALTER TABLE `alpha_pracovnici_uzivatele`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 
 --
 -- AUTO_INCREMENT pro tabulku `alpha_pracovnici_uzivatele_sessions`
 --
 ALTER TABLE `alpha_pracovnici_uzivatele_sessions`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- AUTO_INCREMENT pro tabulku `alpha_uzivatele_mista_prace`
 --
 ALTER TABLE `alpha_uzivatele_mista_prace`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pro tabulku `alpha_uzivatele_pracoviste`
 --
 ALTER TABLE `alpha_uzivatele_pracoviste`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+
+--
+-- AUTO_INCREMENT pro tabulku `alpha_zpravy`
+--
+ALTER TABLE `alpha_zpravy`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pro tabulku `campaign`
 --
 ALTER TABLE `campaign`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `cases`
 --
 ALTER TABLE `cases`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pro tabulku `case_product`
 --
 ALTER TABLE `case_product`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `comunication`
 --
 ALTER TABLE `comunication`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pro tabulku `dashboardWidgets`
+-- AUTO_INCREMENT pro tabulku `dashboardwidgets`
 --
-ALTER TABLE `dashboardWidgets`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
+ALTER TABLE `dashboardwidgets`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT pro tabulku `documents`
 --
 ALTER TABLE `documents`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pro tabulku `documents_templates`
 --
 ALTER TABLE `documents_templates`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pro tabulku `document_category`
 --
 ALTER TABLE `document_category`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+
+--
+-- AUTO_INCREMENT pro tabulku `forms`
+--
+ALTER TABLE `forms`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+
+--
+-- AUTO_INCREMENT pro tabulku `form_fields`
+--
+ALTER TABLE `form_fields`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=60;
+
+--
+-- AUTO_INCREMENT pro tabulku `form_field_options`
+--
+ALTER TABLE `form_field_options`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+
+--
+-- AUTO_INCREMENT pro tabulku `form_submissions`
+--
+ALTER TABLE `form_submissions`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+
+--
+-- AUTO_INCREMENT pro tabulku `form_submission_values`
+--
+ALTER TABLE `form_submission_values`
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pro tabulku `income_invoices`
 --
 ALTER TABLE `income_invoices`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pro tabulku `income_invoice_product`
 --
 ALTER TABLE `income_invoice_product`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pro tabulku `invoices`
 --
 ALTER TABLE `invoices`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `invoice_product`
 --
 ALTER TABLE `invoice_product`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pro tabulku `itemTemplates`
+-- AUTO_INCREMENT pro tabulku `itemtemplates`
 --
-ALTER TABLE `itemTemplates`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+ALTER TABLE `itemtemplates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT pro tabulku `langs`
 --
 ALTER TABLE `langs`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pro tabulku `localized`
 --
 ALTER TABLE `localized`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=1827;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2203;
 
 --
 -- AUTO_INCREMENT pro tabulku `log`
 --
 ALTER TABLE `log`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=65;
 
 --
 -- AUTO_INCREMENT pro tabulku `loggin_ban`
 --
 ALTER TABLE `loggin_ban`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pro tabulku `mail_operator`
 --
 ALTER TABLE `mail_operator`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `milestone_checklist`
 --
 ALTER TABLE `milestone_checklist`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
 
 --
 -- AUTO_INCREMENT pro tabulku `modules`
 --
 ALTER TABLE `modules`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=75;
 
 --
 -- AUTO_INCREMENT pro tabulku `modules_sites`
 --
 ALTER TABLE `modules_sites`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=49;
 
 --
 -- AUTO_INCREMENT pro tabulku `newsletter`
 --
 ALTER TABLE `newsletter`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `newsletter_mails`
 --
 ALTER TABLE `newsletter_mails`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `newsletter_own_array`
 --
 ALTER TABLE `newsletter_own_array`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `notes`
 --
 ALTER TABLE `notes`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `notificate`
 --
 ALTER TABLE `notificate`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `offers`
 --
 ALTER TABLE `offers`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `offer_product`
 --
 ALTER TABLE `offer_product`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `orders_out`
 --
 ALTER TABLE `orders_out`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `order_out_product`
 --
 ALTER TABLE `order_out_product`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `order_out_text`
 --
 ALTER TABLE `order_out_text`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `order_product`
 --
 ALTER TABLE `order_product`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `param_templates`
 --
 ALTER TABLE `param_templates`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `partners`
 --
 ALTER TABLE `partners`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pro tabulku `partner_contacts`
 --
 ALTER TABLE `partner_contacts`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pro tabulku `partner_description`
 --
 ALTER TABLE `partner_description`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `partner_other_info`
 --
 ALTER TABLE `partner_other_info`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `partner_person`
 --
 ALTER TABLE `partner_person`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT pro tabulku `password_resets`
+--
+ALTER TABLE `password_resets`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pro tabulku `pozastavky`
 --
 ALTER TABLE `pozastavky`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pro tabulku `predavaciProtokoly`
+-- AUTO_INCREMENT pro tabulku `predavaciprotokoly`
 --
-ALTER TABLE `predavaciProtokoly`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+ALTER TABLE `predavaciprotokoly`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `price_list`
 --
 ALTER TABLE `price_list`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `products`
 --
 ALTER TABLE `products`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pro tabulku `product_categories`
 --
 ALTER TABLE `product_categories`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `product_images`
 --
 ALTER TABLE `product_images`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `product_in_price_list`
 --
 ALTER TABLE `product_in_price_list`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `projects`
 --
 ALTER TABLE `projects`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pro tabulku `project_checklist`
 --
 ALTER TABLE `project_checklist`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT pro tabulku `project_milestone`
 --
 ALTER TABLE `project_milestone`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
 
 --
 -- AUTO_INCREMENT pro tabulku `project_outway_items`
 --
 ALTER TABLE `project_outway_items`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `project_product`
 --
 ALTER TABLE `project_product`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pro tabulku `project_work_report`
 --
 ALTER TABLE `project_work_report`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `protokol_product`
 --
 ALTER TABLE `protokol_product`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `reklamace`
 --
 ALTER TABLE `reklamace`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `settings`
 --
 ALTER TABLE `settings`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=79;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_activity`
 --
 ALTER TABLE `setting_activity`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_alpha_kkov`
 --
 ALTER TABLE `setting_alpha_kkov`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_alpha_kod_cz_isco`
 --
 ALTER TABLE `setting_alpha_kod_cz_isco`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_alpha_koeficient`
 --
 ALTER TABLE `setting_alpha_koeficient`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_alpha_obcanstvi`
 --
 ALTER TABLE `setting_alpha_obcanstvi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_alpha_pobyt`
 --
 ALTER TABLE `setting_alpha_pobyt`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_alpha_pohlavi`
 --
 ALTER TABLE `setting_alpha_pohlavi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_alpha_pracovni_pozice`
 --
 ALTER TABLE `setting_alpha_pracovni_pozice`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_alpha_profese_cz_isco`
 --
 ALTER TABLE `setting_alpha_profese_cz_isco`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_alpha_smeny`
 --
 ALTER TABLE `setting_alpha_smeny`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_alpha_tridy`
 --
 ALTER TABLE `setting_alpha_tridy`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_alpha_vzdelani`
 --
 ALTER TABLE `setting_alpha_vzdelani`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_alpha_zdroj`
 --
 ALTER TABLE `setting_alpha_zdroj`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_bank_account`
 --
 ALTER TABLE `setting_bank_account`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_country`
 --
 ALTER TABLE `setting_country`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_currency`
 --
 ALTER TABLE `setting_currency`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_employes`
 --
 ALTER TABLE `setting_employes`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_export`
 --
 ALTER TABLE `setting_export`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_industry`
 --
 ALTER TABLE `setting_industry`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_invoice_category`
 --
 ALTER TABLE `setting_invoice_category`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_invoice_type`
 --
 ALTER TABLE `setting_invoice_type`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_jednotky`
 --
 ALTER TABLE `setting_jednotky`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_lines`
 --
 ALTER TABLE `setting_lines`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=23;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_menu`
 --
 ALTER TABLE `setting_menu`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=105;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_modules_params`
 --
 ALTER TABLE `setting_modules_params`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT pro tabulku `setting_OLColor`
+-- AUTO_INCREMENT pro tabulku `setting_olcolor`
 --
-ALTER TABLE `setting_OLColor`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `setting_olcolor`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT pro tabulku `setting_OLKaroserie`
+-- AUTO_INCREMENT pro tabulku `setting_olkaroserie`
 --
-ALTER TABLE `setting_OLKaroserie`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+ALTER TABLE `setting_olkaroserie`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
--- AUTO_INCREMENT pro tabulku `setting_OLObdobi`
+-- AUTO_INCREMENT pro tabulku `setting_olobdobi`
 --
-ALTER TABLE `setting_OLObdobi`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+ALTER TABLE `setting_olobdobi`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_page`
 --
 ALTER TABLE `setting_page`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_partner_source`
 --
 ALTER TABLE `setting_partner_source`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_payment_type`
 --
 ALTER TABLE `setting_payment_type`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_person_function`
 --
 ALTER TABLE `setting_person_function`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_places`
 --
 ALTER TABLE `setting_places`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_producers`
 --
 ALTER TABLE `setting_producers`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_project`
 --
 ALTER TABLE `setting_project`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT pro tabulku `setting_projectCategories`
+-- AUTO_INCREMENT pro tabulku `setting_projectcategories`
 --
-ALTER TABLE `setting_projectCategories`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+ALTER TABLE `setting_projectcategories`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_psc`
 --
 ALTER TABLE `setting_psc`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16811;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16811;
 
 --
--- AUTO_INCREMENT pro tabulku `setting_reklamaceKategorie`
+-- AUTO_INCREMENT pro tabulku `setting_reklamacekategorie`
 --
-ALTER TABLE `setting_reklamaceKategorie`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+ALTER TABLE `setting_reklamacekategorie`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
--- AUTO_INCREMENT pro tabulku `setting_reklamaceTyp`
+-- AUTO_INCREMENT pro tabulku `setting_reklamacetyp`
 --
-ALTER TABLE `setting_reklamaceTyp`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+ALTER TABLE `setting_reklamacetyp`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_relation`
 --
 ALTER TABLE `setting_relation`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=39;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_revenue`
 --
 ALTER TABLE `setting_revenue`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_source`
 --
 ALTER TABLE `setting_source`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_state`
 --
 ALTER TABLE `setting_state`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=151;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=151;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_tax`
 --
 ALTER TABLE `setting_tax`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pro tabulku `setting_territory`
 --
 ALTER TABLE `setting_territory`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
 
 --
 -- AUTO_INCREMENT pro tabulku `smartemailing_person_info`
 --
 ALTER TABLE `smartemailing_person_info`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `store`
 --
 ALTER TABLE `store`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `store_input`
 --
 ALTER TABLE `store_input`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `store_in_product`
 --
 ALTER TABLE `store_in_product`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `store_log`
 --
 ALTER TABLE `store_log`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `store_output`
 --
 ALTER TABLE `store_output`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `store_out_product`
 --
 ALTER TABLE `store_out_product`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
--- AUTO_INCREMENT pro tabulku `systemEmail`
+-- AUTO_INCREMENT pro tabulku `systememail`
 --
-ALTER TABLE `systemEmail`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+ALTER TABLE `systememail`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
 
 --
--- AUTO_INCREMENT pro tabulku `systemEmailTemplates`
+-- AUTO_INCREMENT pro tabulku `systememailtemplates`
 --
-ALTER TABLE `systemEmailTemplates`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
+ALTER TABLE `systememailtemplates`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=8;
 
 --
 -- AUTO_INCREMENT pro tabulku `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=63;
 
 --
 -- AUTO_INCREMENT pro tabulku `users_log`
 --
 ALTER TABLE `users_log`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=40;
 
 --
 -- AUTO_INCREMENT pro tabulku `users_settings`
 --
 ALTER TABLE `users_settings`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=69;
 
 --
 -- AUTO_INCREMENT pro tabulku `users_smtp_info`
 --
 ALTER TABLE `users_smtp_info`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- AUTO_INCREMENT pro tabulku `user_groups`
 --
 ALTER TABLE `user_groups`
-  MODIFY `id` int NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Omezení pro exportované tabulky
@@ -23339,6 +23948,30 @@ ALTER TABLE `alpha_pracovnici_uzivatele`
 --
 ALTER TABLE `alpha_pracovnici_uzivatele_sessions`
   ADD CONSTRAINT `fk_alpha_pracovnici_uzivatele_sessions_user` FOREIGN KEY (`user_id`) REFERENCES `alpha_pracovnici_uzivatele` (`id`) ON DELETE CASCADE;
+
+--
+-- Omezení pro tabulku `form_fields`
+--
+ALTER TABLE `form_fields`
+  ADD CONSTRAINT `fk_form_fields_form` FOREIGN KEY (`id_form`) REFERENCES `forms` (`id`) ON DELETE CASCADE;
+
+--
+-- Omezení pro tabulku `form_field_options`
+--
+ALTER TABLE `form_field_options`
+  ADD CONSTRAINT `fk_field_options_field` FOREIGN KEY (`id_form_field`) REFERENCES `form_fields` (`id`) ON DELETE CASCADE;
+
+--
+-- Omezení pro tabulku `form_submissions`
+--
+ALTER TABLE `form_submissions`
+  ADD CONSTRAINT `fk_form_submissions_form` FOREIGN KEY (`id_form`) REFERENCES `forms` (`id`);
+
+--
+-- Omezení pro tabulku `form_submission_values`
+--
+ALTER TABLE `form_submission_values`
+  ADD CONSTRAINT `fk_submission_values_submission` FOREIGN KEY (`id_submission`) REFERENCES `form_submissions` (`id`) ON DELETE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
