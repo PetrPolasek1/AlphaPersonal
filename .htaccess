@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteBase /portal/
+
+
+RewriteRule ^client/login/?$ login.php [L,QSA]
+
+RewriteRule ^client/login/u/([a-zA-Z0-9]+)/?$ dist/login.php?t=$1 [L,QSA]
