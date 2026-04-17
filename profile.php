@@ -8,6 +8,7 @@ session_start();
 
 // Načtení jádra (uprav cesty, pokud jsi to přesunul do složky 'core/')
 require_once 'core/helper.php';
+require_auth();
 require_once 'core/db.php'; 
 
 // Načtení MVC

@@ -10,22 +10,19 @@ class ForgotPasswordController {
 
     public function handleRequest() {
         if (is_post()) {
+            require_csrf();
             $email = post('email');
 
-            // Zavoláme model pro kontrolu a vytvoření tokenu
             $token = $this->model->createPasswordResetToken($email);
 
             if ($token) {
-                // Tady by v budoucnu bylo odeslání e-mailu přes PHPMailer
-                // Zatím jen zalogujeme pro tvou kontrolu
-                app_log("SIMULACE: Odeslán e-mail pro $email s tokenem $token");
-                
+                app_log("SIMULACE: Odeslan e-mail pro $email s tokenem $token");
+
                 $_SESSION['reset_email'] = $email;
-                $_SESSION['flash_success'] = "Odkaz pro obnovu hesla byl úspěšně odeslán na váš e-mail.";
+                $_SESSION['flash_success'] = t('password_reset_link_sent') !== 'password_reset_link_sent' ? t('password_reset_link_sent') : 'Odkaz pro obnovu hesla byl úspěšně odeslán na váš e-mail.';
                 redirect('check-email.php');
             } else {
-                // Pokud uživatel neexistuje, vypíšeme chybu (nebo obecnou hlášku)
-                $_SESSION['auth_error'] = "Uživatel s tímto e-mailem nebyl nalezen.";
+                $_SESSION['auth_error'] = t('password_reset_user_not_found') !== 'password_reset_user_not_found' ? t('password_reset_user_not_found') : 'Uživatel s tímto e-mailem nebyl nalezen.';
                 require_once __DIR__ . '/../view/forgot-password-view.php';
             }
             return;

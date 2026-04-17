@@ -1,8 +1,8 @@
 <?php
-// Automatická detekce aktuální stránky pro třídu "active"
+// AutomatickĂˇ detekce aktuĂˇlnĂ­ strĂˇnky pro tĹ™Ă­du "active"
 $currentPage = basename($_SERVER['PHP_SELF']);
 
-// Pomocná funkce pro kontrolu, zda je položka aktivní
+// PomocnĂˇ funkce pro kontrolu, zda je poloĹľka aktivnĂ­
 function isActive($pageName, $currentPage) {
     return ($pageName === $currentPage) ? 'active' : '';
 }
@@ -42,10 +42,10 @@ function isActive($pageName, $currentPage) {
                         <a href="message.php" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-chat-fill"></em></span>
                             <span class="nk-menu-text"><?php e(t('messages_menu')); ?></span>
-                            
-                            <?php if (!empty($unreadMessagesCount) && $unreadMessagesCount > 0): ?>
-                                <span class="badge text-bg-danger rounded-pill ms-auto shadow-sm"><?php e($unreadMessagesCount); ?></span>
-                            <?php endif; ?>
+                            <span
+                                id="sidebar-message-badge"
+                                class="badge text-bg-danger rounded-pill ms-auto shadow-sm <?= !empty($unreadMessagesCount) && $unreadMessagesCount > 0 ? '' : 'd-none'; ?>"
+                            ><?php e($unreadMessagesCount ?: ''); ?></span>
                         </a>
                     </li>
 
@@ -53,10 +53,10 @@ function isActive($pageName, $currentPage) {
                         <a href="request.php" class="nk-menu-link">
                             <span class="nk-menu-icon"><em class="icon ni ni-file-docs"></em></span>
                             <span class="nk-menu-text"><?php e(t('requests_menu')); ?></span>
-                            
-                            <?php if (!empty($updatedRequestsCount) && $updatedRequestsCount > 0): ?>
-                                <span class="badge text-bg-danger rounded-pill ms-auto shadow-sm"><?php e($updatedRequestsCount); ?></span>
-                            <?php endif; ?>
+                            <span
+                                id="sidebar-request-badge"
+                                class="badge text-bg-danger rounded-pill ms-auto shadow-sm <?= !empty($updatedRequestsCount) && $updatedRequestsCount > 0 ? '' : 'd-none'; ?>"
+                            ><?php e($updatedRequestsCount ?: ''); ?></span>
                         </a>
                     </li>
 
@@ -65,7 +65,7 @@ function isActive($pageName, $currentPage) {
         </div>
     </div>
 
-    <div class="nk-sidebar-element nk-sidebar-footer">
+    <div class="nk-sidebar-element nk-sidebar-footer d-none d-lg-block">
         <div class="nk-sidebar-footer-extended pt-3">
             <div class="border border-light rounded-3 shadow-sm bg-white mx-2 mb-3">
                 <a class="d-flex px-3 py-2 align-items-center text-decoration-none" href="profile.php">
@@ -74,7 +74,7 @@ function isActive($pageName, $currentPage) {
                             <img src="images/avatar/a.png" alt="Avatar">
                         </div>
                         <div class="media-text ms-2">
-                            <h6 class="fs-13px mb-0 text-dark"><?php e($fullName ?? 'Uživatel'); ?></h6>
+                            <h6 class="fs-13px mb-0 text-dark"><?php e($fullName ?? 'UĹľivatel'); ?></h6>
                         </div>
                     </div>
                     <em class="icon ni ni-chevron-right text-light fs-4"></em>

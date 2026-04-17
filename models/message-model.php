@@ -51,9 +51,14 @@ class MessageModel {
     }
 
     public function getUpdatedRequestsCount($userId) {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM form_submissions WHERE id_client = ? AND status IN ('new', 'zmeneno') AND is_read = 0");
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM form_submissions WHERE id_client = ? AND is_read = 0");
         $stmt->execute([$userId]);
         return $stmt->fetchColumn();
+    }
+
+    public function markMessageAsRead($msgId, $userId) {
+        $stmt = $this->pdo->prepare("UPDATE alpha_zpravy SET is_read = 1 WHERE id = ? AND recipient_id = ? AND is_deleted = 0");
+        return $stmt->execute([$msgId, $userId]);
     }
 }
 ?>

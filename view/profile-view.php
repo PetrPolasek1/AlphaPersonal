@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= (($_SESSION['lang_id'] ?? 1) == 3) ? 'en' : 'cs' ?>">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +11,8 @@
 <body class="nk-body ">
     <div class="nk-app-root " data-sidebar-collapse="lg">
         <div class="nk-main">
-            <div class="nk-sidebar nk-sidebar-fixed" id="sidebar">
+            <?php include __DIR__ . '/../core/sidebar.php'; ?>
+            <div class="nk-sidebar nk-sidebar-fixed d-none" id="profile-legacy-sidebar">
                 <div class="nk-compact-toggle">
                     <button class="btn btn-xs btn-outline-light btn-icon compact-toggle text-light bg-white rounded-3">
                         <em class="icon off ni ni-chevron-left"></em>
@@ -40,7 +41,7 @@
                     </div>
                 </div>
             </div>
-            
+
             <div class="nk-wrap">
                 <div class="nk-header nk-header-fixed">
                     <div class="container-fluid">
@@ -61,6 +62,12 @@
                                                 <div class="d-flex px-3 py-2 bg-primary bg-opacity-10 rounded-bottom-3">
                                                     <div class="media-text"><h6 class="fs-6 mb-0"><?php e($fullName); ?></h6></div>
                                                 </div>
+                                                <div class="px-3 pt-3 d-lg-none">
+                                                    <form action="api/client/auth/logout.php" method="POST" class="d-grid" onsubmit="clearClientStoredTokens()">
+                                                        <?= csrf_field() ?>
+                                                        <button type="submit" class="btn btn-outline-danger btn-sm"><?php e(t('logout_btn') !== 'logout_btn' ? t('logout_btn') : 'Odhlásit se'); ?></button>
+                                                    </form>
+                                                </div>
                                             </div>
                                         </div>
                                     </li>
@@ -74,10 +81,10 @@
                     <div class="container-fluid">
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
-                                
+
                                 <div class="row justify-content-center mt-4">
                                     <div class="col-12 col-lg-8 col-xl-6 col-xxl-5">
-                                        
+
                                         <div class="nk-block-head nk-page-head text-center mb-5">
                                             <div class="nk-block-head-content">
                                                 <h2 class="display- display-5"><?php e(t('profile_title') !== 'profile_title' ? t('profile_title') : 'Můj Profil'); ?></h2>
@@ -92,14 +99,14 @@
                                         <?php endif; ?>
 
                                         <div class="nk-block">
-                                            
+
                                             <div class="card card-bordered card-preview shadow-sm mb-4">
                                                 <div class="card-inner p-4 p-sm-5">
                                                     <div class="d-flex align-items-center justify-content-center mb-4 pb-2">
                                                         <div class="media media-lg media-circle media-middle text-bg-primary shadow-sm me-3"><img src="images/avatar/a.png" /></div>
                                                         <h4 class="mb-0 fs-2"><?php e(t('personal_details') !== 'personal_details' ? t('personal_details') : 'Osobní údaje'); ?></h4>
                                                     </div>
-                                                    
+
                                                     <table class="table table-flush table-middle mb-0">
                                                         <tbody>
                                                             <tr>
@@ -114,14 +121,14 @@
                                                                 <td class="tb-col py-3"><span class="fs-15px text-light"><?php e(t('address_label') !== 'address_label' ? t('address_label') : 'Adresa'); ?></span></td>
                                                                 <td class="tb-col py-3"><span class="fs-15px text-base"><strong><?php e($adresa ?: '-'); ?></strong></span></td>
                                                             </tr>
-                                                            
+
                                                             <?php foreach ($kontakty as $kontakt): ?>
                                                                 <tr>
                                                                     <td class="tb-col py-3">
                                                                         <span class="fs-15px text-light">
-                                                                            <?php 
+                                                                            <?php
                                                                                 $contactKey = 'contact_type_' . strtolower($kontakt['typ']);
-                                                                                e(t($contactKey) !== $contactKey ? t($contactKey) : ucfirst($kontakt['typ'])); 
+                                                                                e(t($contactKey) !== $contactKey ? t($contactKey) : ucfirst($kontakt['typ']));
                                                                             ?>
                                                                         </span>
                                                                     </td>
@@ -134,17 +141,25 @@
                                                     </table>
                                                 </div>
                                             </div>
-                                            
+
+                                            <div class="text-center mb-4">
+                                                <form action="api/client/auth/logout.php" method="POST" onsubmit="clearClientStoredTokens()">
+                                                    <?= csrf_field() ?>
+                                                    <button type="submit" class="btn btn-outline-danger px-5 shadow-sm"><?php e(t('logout_btn') !== 'logout_btn' ? t('logout_btn') : 'Odhlásit se'); ?></button>
+                                                </form>
+                                            </div>
+
                                             <div class="card card-bordered card-preview shadow-sm">
                                                 <div class="card-inner p-4 p-sm-5">
                                                     <div class="text-center mb-5 pb-2">
                                                         <em class="icon ni ni-lock-alt fs-1 text-primary bg-primary bg-opacity-10 p-3 rounded-circle shadow-sm"></em>
                                                         <h4 class="mt-4 mb-0 fs-2"><?php e(t('change_password') !== 'change_password' ? t('change_password') : 'Změna hesla'); ?></h4>
                                                     </div>
-                                                    
+
                                                     <form action="profile.php" method="POST">
+                                                        <?= csrf_field() ?>
                                                         <input type="hidden" name="action" value="change_password">
-                                                        
+
                                                         <div class="form-group mb-3">
                                                             <label class="form-label fs-15px text-soft"><?php e(t('old_password') !== 'old_password' ? t('old_password') : 'Aktuální heslo'); ?></label>
                                                             <div class="form-control-wrap">
@@ -163,34 +178,43 @@
                                                                 <input type="password" class="form-control form-control-lg fs-16px" name="confirm_password" required minlength="6">
                                                             </div>
                                                         </div>
-                                                        
+
                                                         <div class="form-group text-center">
                                                             <button type="submit" class="btn btn-lg btn-primary btn-block px-5 shadow"><?php e(t('save_password') !== 'save_password' ? t('save_password') : 'Uložit nové heslo'); ?></button>
                                                         </div>
                                                     </form>
                                                 </div>
                                             </div>
-                                            
+
                                         </div>
-                                        
+
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="nk-footer mt-auto">
                     <div class="container-fluid">
-                        <div class="nk-footer-copyright fs-6 px-3 text-center text-soft"> &copy; 2023 All Rights Reserved by CopyGen. </div>
+                        <div class="nk-footer-copyright fs-6 px-3 text-center text-soft"><?php e(t('footer_copyright') !== 'footer_copyright' ? t('footer_copyright') : '© 2023 All Rights Reserved by CopyGen.'); ?></div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-    
+
     <script src="assets/js/bundle.js?v1.1.0"></script>
     <script src="assets/js/scripts.js?v1.1.0"></script>
+    <script>
+        function clearClientStoredTokens() {
+            try {
+                sessionStorage.removeItem('client_access_token');
+                sessionStorage.removeItem('client_refresh_token');
+            } catch (error) {
+            }
+        }
+    </script>
 </body>
 </html>

@@ -1,6 +1,15 @@
 <?php
 // vytvor_klienta.php
 
+$remoteAddress = $_SERVER['REMOTE_ADDR'] ?? '';
+$isCli = PHP_SAPI === 'cli';
+$isLocalRequest = in_array($remoteAddress, ['127.0.0.1', '::1'], true);
+
+if (!$isCli && !$isLocalRequest) {
+    http_response_code(403);
+    exit('Pristup odepren.');
+}
+
 // 1. Nastavení připojení k databázi
 $host = 'localhost';
 $dbname = 'alphapersonal';

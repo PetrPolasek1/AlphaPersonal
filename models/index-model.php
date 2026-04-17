@@ -25,7 +25,7 @@ class IndexModel {
     }
 
     public function getUpdatedRequestsCount($userId) {
-        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM form_submissions WHERE id_client = ? AND status IN ('new', 'zmeneno') AND is_read = 0");
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM form_submissions WHERE id_client = ? AND is_read = 0");
         $stmt->execute([$userId]);
         return $stmt->fetchColumn();
     }

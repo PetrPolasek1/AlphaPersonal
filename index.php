@@ -8,6 +8,7 @@ session_start();
 
 // 1. Načtení helperu, překladů a databáze
 require_once 'core/helper.php';
+require_auth();
 require_once 'core/db.php'; 
 
 // 2. Načtení MVC tříd

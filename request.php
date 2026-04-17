@@ -4,6 +4,7 @@ session_start();
 // Načtení databáze a pomocných souborů
 require_once 'core/db.php'; 
 require_once 'core/helper.php';
+require_auth();
 
 // Načtení MVC
 require_once 'models/request-model.php';

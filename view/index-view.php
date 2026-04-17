@@ -1,21 +1,20 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= (($_SESSION['lang_id'] ?? 1) == 3) ? 'en' : 'cs' ?>">
 
 <head>
     <meta charset="UTF-8">
     <meta name="author" content="Softnio">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="images/favicon.png">
-    
+
     <title><?php e(t('dashboard') !== 'dashboard' ? t('dashboard') : 'Dashboard'); ?> - CopyGen</title>
-    
+
     <link rel="stylesheet" href="assets/css/style.css?v1.1.0">
     <style>
-        /* TVŮJ PŮVODNÍ GRID */
         .dashboard-fullscreen-grid {
             display: grid;
-            gap: 1.5rem; 
-            min-height: calc(100vh - 200px); 
+            gap: 1.5rem;
+            min-height: calc(100vh - 200px);
             padding-bottom: 2rem;
             grid-template-columns: 1fr;
             grid-auto-rows: minmax(150px, 1fr);
@@ -26,8 +25,7 @@
                 grid-template-rows: repeat(var(--grid-rows, 1), minmax(150px, 1fr));
             }
         }
-        
-        /* VIZUÁL KARTY A EFEKTY */
+
         .dashboard-fullscreen-grid .card {
             width: 100%;
             height: 100%;
@@ -60,37 +58,41 @@
 <body class="nk-body ">
     <div class="nk-app-root " data-sidebar-collapse="lg">
         <div class="nk-main">
-            
-            <?php 
-            /* * TADY JE OPRAVA NOTIFIKACÍ: 
-             * Proměnné pro odznaky musíš definovat PŘED načtením sidebaru.
-             * (Ideálně tyto dotazy dělej v kontroleru index.php a sem do view už se jen propíšou).
-             * Pro test si můžeš odkomentovat tyto dva řádky a hned uvidíš čísla v menu:
-             */
-            // $unreadMessagesCount = 3;
-            // $updatedRequestsCount = 1;
-            
-            include __DIR__ . '/../Core/sidebar.php'; 
-            ?>
-            
+
+            <?php include __DIR__ . '/../Core/sidebar.php'; ?>
+
             <div class="nk-wrap">
-                
+                <?php include __DIR__ . '/../core/header.php'; ?>
+
                 <div class="nk-content">
                     <div class="container-fluid">
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
-                                
+
                                 <div class="nk-block-head nk-page-head pb-4">
                                     <div class="nk-block-head-between">
                                         <div class="nk-block-head-content">
-                                            <h2 class="display-6"><?php e(t('welcome_user') !== 'welcome_user' ? t('welcome_user') : 'Welcome'); ?> <?php e($firstName ?? 'Uživateli'); ?>!</h2>
+                                            <h2 class="display-6"><?php e(t('welcome_user') !== 'welcome_user' ? t('welcome_user') : 'Welcome'); ?> <?php e($firstName ?? (t('default_user_name') !== 'default_user_name' ? t('default_user_name') : 'Uživatel')); ?>!</h2>
                                             <p><?php e(t('select_module_desc') !== 'select_module_desc' ? t('select_module_desc') : 'Vyberte formulář, který chcete vyplnit.'); ?></p>
-                                            
+
                                             <?php if (isset($_SESSION['flash_success'])): ?>
                                                 <div class="alert alert-success alert-icon mt-3">
                                                     <em class="icon ni ni-check-circle"></em> <?php e($_SESSION['flash_success']); ?>
                                                 </div>
                                                 <?php unset($_SESSION['flash_success']); ?>
+                                            <?php endif; ?>
+
+                                            <?php if (isset($_SESSION['flash_error'])): ?>
+                                                <div class="alert alert-danger alert-icon mt-3">
+                                                    <em class="icon ni ni-alert-circle"></em> <?php e($_SESSION['flash_error']); ?>
+                                                </div>
+                                                <?php unset($_SESSION['flash_error']); ?>
+                                            <?php endif; ?>
+
+                                            <?php if (!empty($notificationMessage)): ?>
+                                                <div class="alert alert-info alert-icon mt-3">
+                                                    <em class="icon ni ni-bell"></em> <?php e($notificationMessage); ?>
+                                                </div>
                                             <?php endif; ?>
                                         </div>
                                     </div>
@@ -136,7 +138,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                
+
                             </div>
                         </div>
                     </div>
@@ -145,14 +147,14 @@
                         <div class="d-flex align-items-center flex-wrap justify-content-between mx-n3">
                             <div class="nk-footer-links px-3">
                                 <ul class="nav nav-sm">
-                                    <li class="nav-item"><a class="nav-link" href="#">Home</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#">Pricing</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#">Privacy Policy</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#">FAQ</a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#">Contact</a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#"><?php e(t('home_admin') !== 'home_admin' ? t('home_admin') : 'Home'); ?></a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#"><?php e(t('footer_pricing') !== 'footer_pricing' ? t('footer_pricing') : 'Pricing'); ?></a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#"><?php e(t('footer_privacy_policy') !== 'footer_privacy_policy' ? t('footer_privacy_policy') : 'Privacy Policy'); ?></a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#"><?php e(t('footer_faq') !== 'footer_faq' ? t('footer_faq') : 'FAQ'); ?></a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#"><?php e(t('footer_contact') !== 'footer_contact' ? t('footer_contact') : 'Contact'); ?></a></li>
                                 </ul>
                             </div>
-                            <div class="nk-footer-copyright fs-6 px-3"> &copy; 2023 All Rights Reserved to <a href="#">Copygen</a>. </div>
+                            <div class="nk-footer-copyright fs-6 px-3"><?php e(t('footer_copyright') !== 'footer_copyright' ? t('footer_copyright') : '© 2023 All Rights Reserved to Copygen.'); ?></div>
                         </div>
                     </div>
                 </div> </div> </div> </div> <div class="modal fade" id="formModal" tabindex="-1" aria-labelledby="formModalLabel" aria-hidden="true">
@@ -176,7 +178,7 @@
             const formModalEl = document.getElementById('formModal');
             if (typeof bootstrap !== 'undefined' && formModalEl) {
                 formModal = new bootstrap.Modal(formModalEl);
-                formModalEl.addEventListener('hidden.bs.modal', function () {
+                formModalEl.addEventListener('hidden.bs.modal', function() {
                     document.getElementById('modal-form-content').innerHTML = '';
                 });
             }
@@ -209,8 +211,8 @@
                     if (!response.ok) throw new Error('Nepodařilo se načíst obsah. Status: ' + response.status);
                     return response.text();
                 })
-                .then(html => { 
-                    targetContainer.innerHTML = html; 
+                .then(html => {
+                    targetContainer.innerHTML = html;
                 })
                 .catch(error => {
                     targetContainer.innerHTML = `

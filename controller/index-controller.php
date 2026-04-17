@@ -9,24 +9,33 @@ class IndexController {
     }
 
     public function handleRequest() {
-        // Získání dat ze session (z loginu)
-        $userId = $_SESSION['user_id'] ?? 1; // Přidáno získání ID pro notifikace
-        $fullName = $_SESSION['user_name'] ?? 'Uživateli'; 
+        $userId = $_SESSION['user_id'] ?? 1;
+        $fullName = $_SESSION['user_name'] ?? (t('default_user_name') !== 'default_user_name' ? t('default_user_name') : 'Uživatel');
+        $userId = (int) ($_SESSION['user_id'] ?? 0);
         $firstName = explode(' ', trim($fullName))[0];
 
-        // Vytažení formulářů 
         $forms = $this->model->getActiveForms();
 
-        // Výpočet sloupců a řádků pro dynamický grid
         $count = count($forms);
         $gridCols = 4;
         $gridRows = max(1, ceil($count / $gridCols));
 
-        // --- NOTIFIKACE (načtení čísel pro sidebar) ---
         $unreadMessagesCount = $this->model->getUnreadMessagesCount($userId);
         $updatedRequestsCount = $this->model->getUpdatedRequestsCount($userId);
+        $notificationMessage = null;
 
-        // Načtení šablony
+        if (!empty($_SESSION['just_logged_in'])) {
+            $totalUnreadNotifications = (int) $unreadMessagesCount + (int) $updatedRequestsCount;
+
+            if ($totalUnreadNotifications === 1) {
+                $notificationMessage = t('new_notification_single') !== 'new_notification_single' ? t('new_notification_single') : 'Máte novou notifikaci.';
+            } elseif ($totalUnreadNotifications > 1) {
+                $notificationMessage = t('new_notification_multiple') !== 'new_notification_multiple' ? t('new_notification_multiple') : 'Máte nové notifikace.';
+            }
+
+            unset($_SESSION['just_logged_in']);
+        }
+
         require_once __DIR__ . '/../view/index-view.php';
     }
 }

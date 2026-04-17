@@ -1,12 +1,12 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="<?= (($_SESSION['lang_id'] ?? 1) == 3) ? 'en' : 'cs' ?>">
 <head>
     <meta charset="UTF-8">
-    <base href="/portal/dist/"> 
+    <base href="/portal/dist/">
     <meta name="author" content="Softnio">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="images/favicon.png">
-    
+
     <title><?php e(t('mess_loggin_title')); ?> - CopyGen</title>
     <link rel="stylesheet" href="assets/css/style.css?v1.1.0">
 </head>
@@ -33,27 +33,27 @@
                                 <div class="nk-block-head text-center mb-4 pb-2">
                                     <div class="nk-block-head-content">
                                         <h1 class="nk-block-title mb-1"><?php e(t('mess_loggin_title')); ?></h1>
-                                        
+
                                         <p class="small"><?php e(t('loggin_desc') !== 'loggin_desc' ? t('loggin_desc') : 'Sign in to your account to customize your content generation settings and view your history.'); ?></p>
                                     </div>
                                 </div>
-                                
+
                                 <div id="loginError" class="alert alert-danger d-none mb-3"></div>
-                                
+
                                 <div class="alert alert-info mb-4 text-center">
                                     <?php e(t('loggin_as') !== 'loggin_as' ? t('loggin_as') : 'Přihlašujete se jako:'); ?><br><strong><?php e($display_name); ?></strong>
                                 </div>
-                                
+
                                 <form id="loginForm" action="api/client/auth/login-by-token.php" method="POST">
                                     <input type="hidden" name="token" id="token" value="<?php e($token); ?>">
                                     <input type="hidden" name="email" value="<?php e($email); ?>">
-                                    
+
                                     <div class="row gy-3">
                                         <div class="col-12">
                                             <div class="form-group">
                                                 <label class="form-label" for="password"><?php e(t('loggin_pass')); ?></label>
                                                 <div class="form-control-wrap">
-                                                    <a href="password" class="password-toggle form-control-icon end" title="Toggle show/hide password">
+                                                    <a href="password" class="password-toggle form-control-icon end" title="<?php e(t('password_toggle_title') !== 'password_toggle_title' ? t('password_toggle_title') : 'Toggle show/hide password'); ?>">
                                                         <em class="icon ni ni-eye inactive"></em>
                                                         <em class="icon ni ni-eye-off active"></em>
                                                     </a>
@@ -63,7 +63,6 @@
                                         </div>
                                         <div class="col-12">
                                             <?php
-                                            // Vytvoříme odkaz na obnovu hesla a přilepíme k němu token z přihlášení, pokud existuje
                                             $forgotUrl = "forgot-password.php";
                                             if (!empty($token)) {
                                                 $forgotUrl .= "?token=" . htmlspecialchars($token);
@@ -78,12 +77,12 @@
                                         </div>
                                     </div>
                                 </form>
-                                
+
                             </div>
                         </div>
                     </div>
                 </div>
-                
+
                 <div class="nk-footer">
                     <div class="container-xl">
                         <div class="d-flex align-items-center flex-wrap justify-content-between mx-n3">
@@ -93,40 +92,52 @@
                                         <a class="nav-link" href="/#"><?php e(t('home_admin') !== 'home_admin' ? t('home_admin') : 'Home'); ?></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="/#">Pricing</a>
+                                        <a class="nav-link" href="/#"><?php e(t('footer_pricing') !== 'footer_pricing' ? t('footer_pricing') : 'Pricing'); ?></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="/#">Privacy Policy</a>
+                                        <a class="nav-link" href="/#"><?php e(t('footer_privacy_policy') !== 'footer_privacy_policy' ? t('footer_privacy_policy') : 'Privacy Policy'); ?></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="/#">FAQ</a>
+                                        <a class="nav-link" href="/#"><?php e(t('footer_faq') !== 'footer_faq' ? t('footer_faq') : 'FAQ'); ?></a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="/#">Contact</a>
+                                        <a class="nav-link" href="/#"><?php e(t('footer_contact') !== 'footer_contact' ? t('footer_contact') : 'Contact'); ?></a>
                                     </li>
                                 </ul>
                             </div>
-                            <div class="nk-footer-copyright fs-6 px-3"> &copy; 2023 All Rights Reserved to <a href="#">Copygen</a>. </div>
+                            <div class="nk-footer-copyright fs-6 px-3"><?php e(t('footer_copyright') !== 'footer_copyright' ? t('footer_copyright') : '© 2023 All Rights Reserved to Copygen.'); ?></div>
                         </div>
                     </div>
                 </div>
-                
+
             </div>
         </div>
     </div>
-    
+
     <script src="assets/js/bundle.js?v1.1.0"></script>
     <script src="assets/js/scripts.js?v1.1.0"></script>
     <script>
+        function storeClientTokens(data) {
+            if (!data || !data.access_token || !data.refresh_token) {
+                return;
+            }
+
+            try {
+                sessionStorage.setItem('client_access_token', data.access_token);
+                sessionStorage.setItem('client_refresh_token', data.refresh_token);
+            } catch (error) {
+            }
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('loginForm');
             const errorDiv = document.getElementById('loginError');
-            
+
             if (form) {
                 form.addEventListener('submit', function(e) {
-                    e.preventDefault(); 
+                    e.preventDefault();
                     errorDiv.classList.add('d-none');
-                    
+
                     fetch(form.action, {
                         method: form.method,
                         body: new FormData(form)
@@ -134,9 +145,10 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
+                            storeClientTokens(data);
                             window.location.href = 'index.php';
                         } else {
-                            errorDiv.textContent = data.message || 'Chyba přihlášení.';
+                            errorDiv.textContent = data.message || '<?php e(t("login_server_error") !== "login_server_error" ? t("login_server_error") : "Chyba přihlášení."); ?>';
                             errorDiv.classList.remove('d-none');
                         }
                     })

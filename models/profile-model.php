@@ -35,5 +35,17 @@ class ProfileModel {
         $stmt = $this->pdo->prepare('UPDATE alpha_pracovnici_uzivatele SET password_hash = ? WHERE id = ?');
         return $stmt->execute([$newHash, $userId]);
     }
+
+    public function getUnreadMessagesCount($userId) {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM alpha_zpravy WHERE recipient_id = ? AND is_deleted = 0 AND is_read = 0");
+        $stmt->execute([$userId]);
+        return $stmt->fetchColumn();
+    }
+
+    public function getUpdatedRequestsCount($userId) {
+        $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM form_submissions WHERE id_client = ? AND is_read = 0");
+        $stmt->execute([$userId]);
+        return $stmt->fetchColumn();
+    }
 }
 ?>

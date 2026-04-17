@@ -7,9 +7,9 @@ class ProfileController {
     }
 
     public function handleRequest() {
-        $userId = $_SESSION['user_id'] ?? null;
+        $userId = (int) ($_SESSION['user_id'] ?? 0);
         if (!$userId) {
-            redirect('login.php'); 
+            redirect(get_login_redirect_url());
         }
 
         $errorMsg = '';
@@ -17,6 +17,7 @@ class ProfileController {
 
         // Zpracování formuláře pro změnu hesla
         if (is_post() && post('action') === 'change_password') {
+            require_csrf();
             $oldPassword = post('old_password');
             $newPassword = post('new_password');
             $confirmPassword = post('confirm_password');
@@ -59,6 +60,9 @@ class ProfileController {
             $adresa = $this->model->getActiveAddress($idPracovnika);
             $kontakty = $this->model->getDefaultContacts($idPracovnika);
         }
+
+        $unreadMessagesCount = $this->model->getUnreadMessagesCount($userId);
+        $updatedRequestsCount = $this->model->getUpdatedRequestsCount($userId);
 
         require_once __DIR__ . '/../view/profile-view.php';
     }
