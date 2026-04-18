@@ -263,10 +263,4 @@ Aplikace používá MySQL/MariaDB a spoléhá mimo jiné na tabulky:
 
 - `phpmailer/phpmailer`
 
-## Doporučení pro další rozvoj
 
-- přesunout uploady mimo public web root po nasazení na server
-- oddělit konfiguraci prostředí do plnohodnotného `.env` řešení
-- doplnit automatické testy pro autentizaci, reset hesla a uploady
-- zvážit centrální router/front controller pro jednotnější architekturu
-- rozdělit velké view soubory na menší komponenty nebo partials
