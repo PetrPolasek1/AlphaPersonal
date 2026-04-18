@@ -206,13 +206,6 @@ Projekt používá lehkou MVC organizaci:
 | `api/client/auth/logout.php` | Odhlášení, revokace DB session a rotace login tokenu. |
 | `api/client/client_creation.php` | Lokální pomocný skript pro vytvoření klientského účtu a QR/login odkazu. |
 
-### Dokumentace a audit
-
-| Soubor | Účel |
-|---|---|
-| `audit.md` | Bezpečnostní a technický audit projektu. |
-| `README.md` | Tato projektová dokumentace. |
-
 ## Tok požadavku aplikací
 
 ### Přihlášení
