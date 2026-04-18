@@ -1,6 +1,7 @@
 RewriteEngine On
 RewriteBase /portal/
 
+RewriteRule ^documents/ - [F,L,NC]
 
 RewriteRule ^client/login/?$ login.php [L,QSA]
 

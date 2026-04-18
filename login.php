@@ -1,9 +1,12 @@
 <?php
-// login.php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
+/**
+ * -------------------------------------------------
+ * Root Entry: Login
+ * -------------------------------------------------
+ * Vstupni bod prihlaseni klienta.
+ * Nacita login model/controller a pripravuje
+ * zobrazeni prihlasovaciho formulare.
+ */
 session_start();
 
 // 1. Načtení helperu, databáze a překladů

@@ -1,4 +1,12 @@
 <?php
+/**
+ * -------------------------------------------------
+ * Controller: Profile
+ * -------------------------------------------------
+ * Zpracovava profil uzivatele.
+ * Resi nacteni osobnich udaju, kontaktu
+ * a zmenu hesla.
+ */
 class ProfileController {
     private $model;
 

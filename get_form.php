@@ -1,15 +1,23 @@
 <?php
+/**
+ * -------------------------------------------------
+ * Root Endpoint: Dynamic Form Loader
+ * -------------------------------------------------
+ * Vraci HTML fragment dynamickeho formulare.
+ * Pouziva se pro modalni i mobilni vykresleni
+ * formulare na dashboardu.
+ */
 session_start();
 
 require_once 'core/db.php';
 require_once 'core/language.php';
 require_once 'core/helper.php';
-require_once 'core/FormManager.php';
+require_once 'core/formManager.php';
 require_auth();
 
-$formId = get('id');
+$formId = (int) get('id', 0);
 
-if (!$formId) {
+if ($formId <= 0) {
     echo '<div class="alert alert-danger">' . htmlspecialchars(t('form_missing_id') !== 'form_missing_id' ? t('form_missing_id') : 'Chybejici ID formulare.', ENT_QUOTES, 'UTF-8') . '</div>';
     exit;
 }

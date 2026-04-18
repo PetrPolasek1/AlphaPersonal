@@ -1,3 +1,13 @@
+<?php
+/**
+ * -------------------------------------------------
+ * View: Check Email
+ * -------------------------------------------------
+ * Potvrzovaci obrazovka po vytvoreni reset zadosti.
+ * Zobrazuje informaci o dalsim kroku
+ * a lokalni preview reset odkazu.
+ */
+?>
 <!DOCTYPE html>
 <html lang="<?= (($_SESSION['lang_id'] ?? 1) == 3) ? 'en' : 'cs' ?>">
 
@@ -48,6 +58,14 @@
                                             <div class="text-success mt-2 fw-medium">
                                                 <?php e($_SESSION['flash_success']); unset($_SESSION['flash_success']); ?>
                                             </div>
+                                        <?php endif; ?>
+
+                                        <?php if (!empty($_SESSION['password_reset_preview_url'])): ?>
+                                            <div class="alert alert-warning mt-3 text-start">
+                                                <strong><?php e(t('local_preview_notice') !== 'local_preview_notice' ? t('local_preview_notice') : 'Lokální náhled odkazu:'); ?></strong><br>
+                                                <a href="<?php e($_SESSION['password_reset_preview_url']); ?>"><?php e($_SESSION['password_reset_preview_url']); ?></a>
+                                            </div>
+                                            <?php unset($_SESSION['password_reset_preview_url']); ?>
                                         <?php endif; ?>
 
                                     </div>

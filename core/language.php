@@ -1,5 +1,12 @@
 <?php
-// language.php
+/**
+ * -------------------------------------------------
+ * Core: Language Loader
+ * -------------------------------------------------
+ * Načítá překlady z databáze a poskytuje
+ * funkci `t()` pro lokalizovaný výstup
+ * napříč aplikací.
+ */
 
 /**
  * Funkce pro načtení překladů z databáze.

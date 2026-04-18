@@ -1,5 +1,12 @@
 <?php
-// controller/login-controller.php
+/**
+ * -------------------------------------------------
+ * Controller: Login
+ * -------------------------------------------------
+ * Ověřuje login token z URL.
+ * Připravuje jazyk, kontext uživatele
+ * a přihlašovací view.
+ */
 
 class LoginController
 {
@@ -28,6 +35,7 @@ class LoginController
             return;
         }
 
+        $_SESSION['login_return_token'] = $token;
         $_SESSION['lang_id'] = $dbUser['jazyk'] ?? 1;
         loadTranslations($this->pdo, $_SESSION['lang_id'], 'front');
 

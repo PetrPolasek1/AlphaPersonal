@@ -1,4 +1,11 @@
 <?php
+/**
+ * -------------------------------------------------
+ * Root Endpoint: Protected Document Download
+ * -------------------------------------------------
+ * Ověřuje oprávnění uživatele ke stažení dokumentu
+ * a vrací soubor pouze přes autorizovaný endpoint.
+ */
 session_start();
 
 require_once 'core/helper.php';
@@ -38,6 +45,8 @@ header('Content-Type: ' . $mimeType);
 header('Content-Disposition: attachment; filename="' . rawurlencode($fileName) . '"');
 header('Content-Length: ' . filesize($filePath));
 header('X-Content-Type-Options: nosniff');
+header('Cache-Control: private, no-store, no-cache, must-revalidate');
+header('Pragma: no-cache');
 readfile($filePath);
 exit;
 ?>

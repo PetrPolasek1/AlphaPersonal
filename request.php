@@ -1,5 +1,12 @@
 <?php
-// request.php
+/**
+ * -------------------------------------------------
+ * Root Entry: Requests
+ * -------------------------------------------------
+ * Vstupni bod seznamu klientskych pozadavku.
+ * Zajišťuje přístup do modulu požadavků
+ * a načítá request controller.
+ */
 session_start();
 // Načtení databáze a pomocných souborů
 require_once 'core/db.php'; 

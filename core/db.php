@@ -1,11 +1,19 @@
 <?php
-// db.php
+/**
+ * -------------------------------------------------
+ * Core: Database Bootstrap
+ * -------------------------------------------------
+ * Inicializuje PDO připojení k databázi.
+ * Současně navazuje jazykovou vrstvu,
+ * která závisí na aktivním PDO objektu.
+ */
 
-$host = 'localhost';
-$db   = 'alphapersonal';
-$user = 'root';
-$pass = '';
-$charset = 'utf8mb4';
+$host = getenv('APP_DB_HOST') ?: 'localhost';
+$db = getenv('APP_DB_NAME') ?: 'alphapersonal';
+$user = getenv('APP_DB_USER') ?: 'root';
+$pass = getenv('APP_DB_PASS');
+$pass = $pass === false ? '' : $pass;
+$charset = getenv('APP_DB_CHARSET') ?: 'utf8mb4';
 
 $dsn = "mysql:host=$host;dbname=$db;charset=$charset";
 $options = [

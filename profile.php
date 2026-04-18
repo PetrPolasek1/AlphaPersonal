@@ -1,9 +1,12 @@
 <?php
-// profile.php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
+/**
+ * -------------------------------------------------
+ * Root Entry: Profile
+ * -------------------------------------------------
+ * Vstupni bod profilove sekce.
+ * Ověřuje session a předává řízení controlleru
+ * pro profil a změnu hesla.
+ */
 session_start();
 
 // Načtení jádra (uprav cesty, pokud jsi to přesunul do složky 'core/')

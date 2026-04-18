@@ -1,9 +1,12 @@
 <?php
-// index.php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
+/**
+ * -------------------------------------------------
+ * Root Entry: Dashboard
+ * -------------------------------------------------
+ * Vstupni bod dashboardu klienta.
+ * Ověřuje aktivní session a předává řízení
+ * dashboard controlleru.
+ */
 session_start();
 
 // 1. Načtení helperu, překladů a databáze

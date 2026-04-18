@@ -1,5 +1,12 @@
 <?php
-// models/MessageModel.php
+/**
+ * -------------------------------------------------
+ * Model: Messages
+ * -------------------------------------------------
+ * Datova vrstva modulu zprav.
+ * Pracuje s inboxem, kosem, ctenim
+ * a vytvarenim zprav mezi uzivateli.
+ */
 
 class MessageModel {
     private $pdo;

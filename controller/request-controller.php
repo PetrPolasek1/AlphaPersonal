@@ -1,5 +1,12 @@
 <?php
-// controllers/request-controller.php
+/**
+ * -------------------------------------------------
+ * Controller: Requests
+ * -------------------------------------------------
+ * Zobrazuje přehled klientských požadavků.
+ * Současně vrací detail požadavku jako JSON
+ * pro AJAX dialog.
+ */
 
 class RequestController {
     private $model;

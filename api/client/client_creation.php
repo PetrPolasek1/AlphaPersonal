@@ -1,5 +1,15 @@
 <?php
-// vytvor_klienta.php
+/**
+ * -------------------------------------------------
+ * API Utility: Client Creation
+ * -------------------------------------------------
+ * Lokalni pomocny skript pro vytvoreni klienta.
+ * Slouzi pro administrativni nebo lokalni setup
+ * testovaciho uctu a login odkazu.
+ */
+
+require_once __DIR__ . '/../../core/helper.php';
+require_once __DIR__ . '/../../core/db.php';
 
 $remoteAddress = $_SERVER['REMOTE_ADDR'] ?? '';
 $isCli = PHP_SAPI === 'cli';
@@ -10,76 +20,63 @@ if (!$isCli && !$isLocalRequest) {
     exit('Pristup odepren.');
 }
 
-// 1. Nastavení připojení k databázi
-$host = 'localhost';
-$dbname = 'alphapersonal';
-$user = 'root';
-$heslo_db = '';
+$cliArgs = [];
+
+if ($isCli && isset($argv) && is_array($argv)) {
+    foreach (array_slice($argv, 1) as $argument) {
+        if (strpos($argument, '=') === false) {
+            continue;
+        }
+
+        [$key, $value] = explode('=', $argument, 2);
+        $cliArgs[$key] = $value;
+    }
+}
+
+$idPracovnika = (int) ($cliArgs['id_pracovnika'] ?? ($_REQUEST['id_pracovnika'] ?? 0));
+$loginEmail = normalize_email($cliArgs['email'] ?? ($_REQUEST['email'] ?? ''));
+$plainPassword = (string) ($cliArgs['password'] ?? ($_REQUEST['password'] ?? ''));
+
+if ($idPracovnika <= 0 || !is_valid_email($loginEmail) || strlen($plainPassword) < 6) {
+    http_response_code(422);
+    echo "<h3>Chybi vstupni data.</h3>";
+    echo "<p>Pouziti:</p>";
+    echo "<pre>php api/client/client_creation.php id_pracovnika=3 email=uzivatel@example.cz password=Tajne123</pre>";
+    exit;
+}
 
 try {
-    // Vytvoření PDO připojení s nastavením znakové sady
-    $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8mb4";
-    $pdo = new PDO($dsn, $user, $heslo_db);
-    
-    // Zapnutí vyhazování výjimek při chybách v SQL
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    $passwordHash = password_hash($plainPassword, PASSWORD_DEFAULT);
+    $loginQrToken = generate_secure_token();
+    $loginQrTokenHash = hash_token($loginQrToken);
 
-    // 2. Příprava dat pro nového uživatele
-    $id_pracovnika = 3;
-    $login_email = 'petr@gmail.com';
-    $heslo_v_textu = 'heslo123';
-
-    // 3. Bezpečné zahashování hesla
-    $password_hash = password_hash($heslo_v_textu, PASSWORD_DEFAULT);
-
-    // 4. Vygenerování bezpečného náhodného stringu pro login_qr_token (32 znaků)
-    $login_qr_token = bin2hex(random_bytes(16));
-
-    // 5. Příprava SQL dotazu
-    $sql = "INSERT INTO alpha_pracovnici_uzivatele 
-                (id_pracovnika, login_email, password_hash, login_qr_token) 
-            VALUES 
+    $sql = "INSERT INTO alpha_pracovnici_uzivatele
+                (id_pracovnika, login_email, password_hash, login_qr_token)
+            VALUES
                 (:id_pracovnika, :login_email, :password_hash, :login_qr_token)";
 
-    // Vytvoření prepared statementu
     $stmt = $pdo->prepare($sql);
-
-    // 6. Bezpečné spuštění dotazu s navázanými parametry
     $stmt->execute([
-        ':id_pracovnika' => $id_pracovnika,
-        ':login_email'   => $login_email,
-        ':password_hash' => $password_hash,
-        ':login_qr_token'=> $login_qr_token
+        ':id_pracovnika' => $idPracovnika,
+        ':login_email' => $loginEmail,
+        ':password_hash' => $passwordHash,
+        ':login_qr_token' => $loginQrTokenHash,
     ]);
 
-    // 7. Výpis úspěchu a generování QR odkazu
-    // Sestavení základní URL webu
     $baseUrl = 'http://localhost/portal';
-    // Sestavení finální URL pro přihlášení přesně podle zadání
-    $loginUrl = $baseUrl . '/client/login/u/' . $login_qr_token;
-    // Sestavení URL pro API na generování QR kódu
+    $loginUrl = $baseUrl . '/client/login/u/' . $loginQrToken;
     $qrApiUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' . urlencode($loginUrl);
 
-    echo "<h3>Účet byl úspěšně vytvořen!</h3>";
-    echo "<p>Níže naleznete unikátní přihlašovací odkaz a QR kód pro tohoto uživatele.</p>";
-    echo "<h4>Přihlašovací údaje:</h4>";
+    echo "<h3>Ucet byl uspesne vytvoren.</h3>";
+    echo "<p>Prihlasovaci udaje:</p>";
     echo "<ul>";
-    echo "<li><strong>Přihlašovací e-mail:</strong> " . htmlspecialchars($login_email) . "</li>";
-    echo "<li><strong>Heslo (čistý text):</strong> " . htmlspecialchars($heslo_v_textu) . "</li>";
+    echo "<li><strong>E-mail:</strong> " . htmlspecialchars($loginEmail, ENT_QUOTES, 'UTF-8') . "</li>";
+    echo "<li><strong>Heslo:</strong> " . htmlspecialchars($plainPassword, ENT_QUOTES, 'UTF-8') . "</li>";
     echo "</ul>";
-    echo "<h4>Bezpečnostní přihlašovací odkaz:</h4>";
-    echo '<p><a href="' . htmlspecialchars($loginUrl) . '" target="_blank">' . htmlspecialchars($loginUrl) . '</a></p>';
-    echo "<h4>QR kód pro přihlášení:</h4>";
-    echo '<p>Naskenujte kód mobilním telefonem pro rychlé přihlášení:</p>';
-    echo '<img src="' . htmlspecialchars($qrApiUrl) . '" alt="QR kód pro přihlášení">';
-
-} catch (PDOException $e) {
-    // Odchycení a výpis chyby databáze
-    echo "<h3>Chyba při práci s databází:</h3>";
-    echo "<p>" . htmlspecialchars($e->getMessage()) . "</p>";
-} catch (Exception $e) {
-    // Odchycení ostatních chyb (např. pokud selže random_bytes)
-    echo "<h3>Obecná chyba:</h3>";
-    echo "<p>" . htmlspecialchars($e->getMessage()) . "</p>";
+    echo "<p><strong>Prihlasovaci odkaz:</strong> <a href=\"" . htmlspecialchars($loginUrl, ENT_QUOTES, 'UTF-8') . "\" target=\"_blank\" rel=\"noopener noreferrer\">" . htmlspecialchars($loginUrl, ENT_QUOTES, 'UTF-8') . "</a></p>";
+    echo '<p><img src="' . htmlspecialchars($qrApiUrl, ENT_QUOTES, 'UTF-8') . '" alt="QR kod pro prihlaseni"></p>';
+} catch (Throwable $e) {
+    http_response_code(500);
+    echo "<h3>Chyba pri vytvareni uctu.</h3>";
+    echo "<p>" . htmlspecialchars($e->getMessage(), ENT_QUOTES, 'UTF-8') . "</p>";
 }
-?>

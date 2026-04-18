@@ -1,9 +1,12 @@
 <?php
-// zpravy.php
-ini_set('display_errors', 1);
-ini_set('display_startup_errors', 1);
-error_reporting(E_ALL);
-
+/**
+ * -------------------------------------------------
+ * Root Entry: Messages
+ * -------------------------------------------------
+ * Vstupni bod modulu zprav.
+ * Ověřuje přihlášení a načítá MVC vrstvu
+ * pro inbox, koš a akce se zprávami.
+ */
 session_start();
 
 require_once 'core/helper.php'; 

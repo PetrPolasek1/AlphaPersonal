@@ -1,4 +1,12 @@
 <?php
+/**
+ * -------------------------------------------------
+ * Core: Form Manager
+ * -------------------------------------------------
+ * Pomocna vrstva pro praci s definicemi formularu.
+ * Poskytuje načtení polí a starší helper
+ * pro ukládání requestů.
+ */
 
 class FormManager
 {
@@ -24,7 +32,7 @@ class FormManager
 
             $stmt = $this->pdo->prepare("INSERT INTO user_requests (id_user, id_form, status, created_at) VALUES (?, ?, 'pending', NOW())");
             $stmt->execute([$userId, $formId]);
-            $requestId = $stmt->getLastInsertId();
+            $requestId = $this->pdo->lastInsertId();
 
             $stmtVal = $this->pdo->prepare("INSERT INTO user_request_values (id_request, id_form_field, field_value) VALUES (?, ?, ?)");
 

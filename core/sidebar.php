@@ -1,4 +1,12 @@
 <?php
+/**
+ * -------------------------------------------------
+ * Core View Partial: Sidebar
+ * -------------------------------------------------
+ * Sdileny postranni panel aplikace.
+ * Renderuje hlavni navigaci a badge
+ * s pocty neprectenych notifikaci.
+ */
 // AutomatickĂˇ detekce aktuĂˇlnĂ­ strĂˇnky pro tĹ™Ă­du "active"
 $currentPage = basename($_SERVER['PHP_SELF']);
 

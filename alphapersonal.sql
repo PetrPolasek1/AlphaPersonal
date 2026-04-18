@@ -310,8 +310,8 @@ CREATE TABLE `alpha_pracovnici_uzivatele` (
 --
 
 INSERT INTO `alpha_pracovnici_uzivatele` (`id`, `id_pracovnika`, `login_email`, `password_hash`, `login_qr_token`, `login_qr_enabled`, `is_active`, `email_verified`, `email_verified_at`, `two_factor_enabled`, `two_factor_secret`, `failed_login_attempts`, `locked_until`, `last_login_at`, `last_login_ip`, `created_at`, `updated_at`) VALUES
-(3, 2, 'novyklient@test.cz', '$2y$10$oU7nWuD3LaK61YpP1axri.xkdF629dJ4d/8ZgiEODeXcE7j36ElwG', 'c7e89da571b1ff1bf59028b4e510ba08', 1, 1, 0, NULL, 0, NULL, 0, NULL, '2026-04-14 18:56:53', '::1', '2026-03-14 14:26:14', '2026-04-14 18:56:53'),
-(21, 3, 'petr@gmail.com', '$2y$10$HcDBwqAJ/YOY8C8B.tuaAOaBrEK7KbtzCwV7rrFmUV8Qux5pv4A02', 'cc0a1c3171d0a7744cab7e730d4b6850', 1, 1, 0, NULL, 0, NULL, 0, NULL, '2026-04-13 19:48:42', '::1', '2026-04-13 19:48:35', '2026-04-13 19:48:42');
+(3, 2, 'novyklient@test.cz', '$2y$10$oU7nWuD3LaK61YpP1axri.xkdF629dJ4d/8ZgiEODeXcE7j36ElwG', '986e7083416fba3e481ce8492c24285a6d247092fe19aadefb95565f6d2da975', 1, 1, 0, NULL, 0, NULL, 0, NULL, '2026-04-14 18:56:53', '::1', '2026-03-14 14:26:14', '2026-04-14 18:56:53'),
+(21, 3, 'petr@gmail.com', '$2y$10$HcDBwqAJ/YOY8C8B.tuaAOaBrEK7KbtzCwV7rrFmUV8Qux5pv4A02', '16497b24e860900f625c11925f56538c97c3b1bc3e9c88231d79ee37dccf9e0b', 1, 1, 0, NULL, 0, NULL, 0, NULL, '2026-04-13 19:48:42', '::1', '2026-04-13 19:48:35', '2026-04-13 19:48:42');
 
 -- --------------------------------------------------------
 
@@ -3088,8 +3088,7 @@ CREATE TABLE `password_resets` (
 -- Vypisuji data pro tabulku `password_resets`
 --
 
-INSERT INTO `password_resets` (`id`, `email`, `token`, `expires_at`, `created_at`) VALUES
-(3, 'novyklient@test.cz', '34c00854a0c65d4d2b69a6b220148bf5782058a9ea581d5f188de8603ae9bf76', '2026-04-11 14:00:20', '2026-04-11 11:00:20');
+-- Z bezpečnostních důvodů je tabulka `password_resets` v dumpu bez aktivních tokenů.
 
 -- --------------------------------------------------------
 

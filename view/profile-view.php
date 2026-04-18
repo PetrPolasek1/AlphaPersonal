@@ -1,3 +1,12 @@
+<?php
+/**
+ * -------------------------------------------------
+ * View: Profile
+ * -------------------------------------------------
+ * Renderuje profil klienta, osobni udaje,
+ * logout akce a formular pro zmenu hesla.
+ */
+?>
 <!DOCTYPE html>
 <html lang="<?= (($_SESSION['lang_id'] ?? 1) == 3) ? 'en' : 'cs' ?>">
 <head>
@@ -63,7 +72,7 @@
                                                     <div class="media-text"><h6 class="fs-6 mb-0"><?php e($fullName); ?></h6></div>
                                                 </div>
                                                 <div class="px-3 pt-3 d-lg-none">
-                                                    <form action="api/client/auth/logout.php" method="POST" class="d-grid" onsubmit="clearClientStoredTokens()">
+                                                    <form action="api/client/auth/logout.php" method="POST" class="d-grid">
                                                         <?= csrf_field() ?>
                                                         <button type="submit" class="btn btn-outline-danger btn-sm"><?php e(t('logout_btn') !== 'logout_btn' ? t('logout_btn') : 'Odhlásit se'); ?></button>
                                                     </form>
@@ -143,7 +152,7 @@
                                             </div>
 
                                             <div class="text-center mb-4">
-                                                <form action="api/client/auth/logout.php" method="POST" onsubmit="clearClientStoredTokens()">
+                                                <form action="api/client/auth/logout.php" method="POST">
                                                     <?= csrf_field() ?>
                                                     <button type="submit" class="btn btn-outline-danger px-5 shadow-sm"><?php e(t('logout_btn') !== 'logout_btn' ? t('logout_btn') : 'Odhlásit se'); ?></button>
                                                 </form>
@@ -207,14 +216,5 @@
 
     <script src="assets/js/bundle.js?v1.1.0"></script>
     <script src="assets/js/scripts.js?v1.1.0"></script>
-    <script>
-        function clearClientStoredTokens() {
-            try {
-                sessionStorage.removeItem('client_access_token');
-                sessionStorage.removeItem('client_refresh_token');
-            } catch (error) {
-            }
-        }
-    </script>
 </body>
 </html>

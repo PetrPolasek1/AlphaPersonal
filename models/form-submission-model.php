@@ -1,5 +1,12 @@
 <?php
-// models/form-submission-model.php
+/**
+ * -------------------------------------------------
+ * Model: Form Submission
+ * -------------------------------------------------
+ * Uklada odeslana formularova podani.
+ * Mapuje hodnoty poli podle typu
+ * do spravnych databazovych sloupcu.
+ */
 
 class FormSubmissionModel {
     private $pdo;

@@ -1,5 +1,12 @@
 <?php
-// controller/index-controller.php
+/**
+ * -------------------------------------------------
+ * Controller: Dashboard
+ * -------------------------------------------------
+ * Sklada data pro dashboard.
+ * Načítá formuláře, badge notifikací
+ * a login welcome stav.
+ */
 
 class IndexController {
     private $model;

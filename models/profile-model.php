@@ -1,4 +1,12 @@
 <?php
+/**
+ * -------------------------------------------------
+ * Model: Profile
+ * -------------------------------------------------
+ * Datova vrstva profilu uzivatele.
+ * Načítá profil, adresu, kontakty
+ * a ukládá nové heslo.
+ */
 class ProfileModel {
     private $pdo;
 

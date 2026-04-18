@@ -1,3 +1,13 @@
+<?php
+/**
+ * -------------------------------------------------
+ * View: Dashboard
+ * -------------------------------------------------
+ * Renderuje hlavni dashboard klienta,
+ * karty formularu a modal/mobilni kontejner
+ * pro dynamicke formularove podani.
+ */
+?>
 <!DOCTYPE html>
 <html lang="<?= (($_SESSION['lang_id'] ?? 1) == 3) ? 'en' : 'cs' ?>">
 
@@ -59,7 +69,7 @@
     <div class="nk-app-root " data-sidebar-collapse="lg">
         <div class="nk-main">
 
-            <?php include __DIR__ . '/../Core/sidebar.php'; ?>
+            <?php include __DIR__ . '/../core/sidebar.php'; ?>
 
             <div class="nk-wrap">
                 <?php include __DIR__ . '/../core/header.php'; ?>

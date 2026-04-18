@@ -86,6 +86,45 @@ function store_login_session(array $dbUser, string $loginToken, string $refreshT
     $_SESSION['just_logged_in'] = true;
 }
 
+function generate_secure_token(int $bytes = 32): string
+{
+    return bin2hex(random_bytes($bytes));
+}
+
+function hash_token(string $token): string
+{
+    return hash('sha256', $token);
+}
+
+function normalize_email(?string $email): string
+{
+    $email = trim((string) $email);
+
+    if ($email === '') {
+        return '';
+    }
+
+    return strtolower($email);
+}
+
+function is_valid_email(?string $email): bool
+{
+    $normalizedEmail = normalize_email($email);
+
+    return $normalizedEmail !== '' && filter_var($normalizedEmail, FILTER_VALIDATE_EMAIL) !== false;
+}
+
+function is_local_request(): bool
+{
+    $remoteAddress = trim((string) ($_SERVER['REMOTE_ADDR'] ?? ''));
+    return in_array($remoteAddress, ['127.0.0.1', '::1'], true);
+}
+
+function build_password_reset_url(string $token): string
+{
+    return 'reset-password.php?token=' . rawurlencode($token);
+}
+
 function get_login_redirect_url(): string
 {
     $token = trim((string)($_SESSION['login_token'] ?? ''));
@@ -248,9 +287,15 @@ function app_log(string $message): void
 {
     $basePath = dirname(__DIR__, 2);
     $file = $basePath . '/storage/logs/app.log';
+    $directory = dirname($file);
 
     $date = date('Y-m-d H:i:s');
-    file_put_contents($file, "[$date] $message\n", FILE_APPEND);
+
+    if (!is_dir($directory)) {
+        @mkdir($directory, 0750, true);
+    }
+
+    @file_put_contents($file, "[$date] $message\n", FILE_APPEND | LOCK_EX);
 }
 
 

@@ -1,3 +1,13 @@
+<?php
+/**
+ * -------------------------------------------------
+ * View: Error
+ * -------------------------------------------------
+ * Jednoducha chybova obrazovka
+ * pro neplatny nebo neautorizovany vstup
+ * do klientske aplikace.
+ */
+?>
 <!DOCTYPE html>
 <html lang="cs">
 <head>

@@ -1,5 +1,12 @@
 <?php
-// models/request-model.php
+/**
+ * -------------------------------------------------
+ * Model: Requests
+ * -------------------------------------------------
+ * Datova vrstva klientskych pozadavku.
+ * Vraci seznam podani, detail pozadavku,
+ * option labely i pristup k dokumentum.
+ */
 
 class RequestModel {
     private $pdo;

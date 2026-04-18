@@ -1,3 +1,13 @@
+<?php
+/**
+ * -------------------------------------------------
+ * View: Login
+ * -------------------------------------------------
+ * Renderuje prihlasovaci obrazovku klienta.
+ * Obsahuje formular s heslem a AJAX flow
+ * pro dokonceni prihlaseni.
+ */
+?>
 <!DOCTYPE html>
 <html lang="<?= (($_SESSION['lang_id'] ?? 1) == 3) ? 'en' : 'cs' ?>">
 <head>
@@ -40,11 +50,18 @@
 
                                 <div id="loginError" class="alert alert-danger d-none mb-3"></div>
 
+                                <?php if (isset($_SESSION['flash_success'])): ?>
+                                    <div class="alert alert-success mb-3">
+                                        <?php e($_SESSION['flash_success']); unset($_SESSION['flash_success']); ?>
+                                    </div>
+                                <?php endif; ?>
+
                                 <div class="alert alert-info mb-4 text-center">
                                     <?php e(t('loggin_as') !== 'loggin_as' ? t('loggin_as') : 'Přihlašujete se jako:'); ?><br><strong><?php e($display_name); ?></strong>
                                 </div>
 
                                 <form id="loginForm" action="api/client/auth/login-by-token.php" method="POST">
+                                    <?= csrf_field() ?>
                                     <input type="hidden" name="token" id="token" value="<?php e($token); ?>">
                                     <input type="hidden" name="email" value="<?php e($email); ?>">
 
@@ -62,13 +79,7 @@
                                             </div>
                                         </div>
                                         <div class="col-12">
-                                            <?php
-                                            $forgotUrl = "forgot-password.php";
-                                            if (!empty($token)) {
-                                                $forgotUrl .= "?token=" . htmlspecialchars($token);
-                                            }
-                                            ?>
-                                            <a class="link small" href="<?php echo $forgotUrl; ?>"><?php e(t('forgot_password') !== 'forgot_password' ? t('forgot_password') : 'Forgot password?'); ?></a>
+                                            <a class="link small" href="forgot-password.php"><?php e(t('forgot_password') !== 'forgot_password' ? t('forgot_password') : 'Forgot password?'); ?></a>
                                         </div>
                                         <div class="col-12">
                                             <div class="d-grid">
@@ -117,18 +128,6 @@
     <script src="assets/js/bundle.js?v1.1.0"></script>
     <script src="assets/js/scripts.js?v1.1.0"></script>
     <script>
-        function storeClientTokens(data) {
-            if (!data || !data.access_token || !data.refresh_token) {
-                return;
-            }
-
-            try {
-                sessionStorage.setItem('client_access_token', data.access_token);
-                sessionStorage.setItem('client_refresh_token', data.refresh_token);
-            } catch (error) {
-            }
-        }
-
         document.addEventListener('DOMContentLoaded', function() {
             const form = document.getElementById('loginForm');
             const errorDiv = document.getElementById('loginError');
@@ -145,7 +144,6 @@
                     .then(response => response.json())
                     .then(data => {
                         if (data.success) {
-                            storeClientTokens(data);
                             window.location.href = 'index.php';
                         } else {
                             errorDiv.textContent = data.message || '<?php e(t("login_server_error") !== "login_server_error" ? t("login_server_error") : "Chyba přihlášení."); ?>';

@@ -25,7 +25,7 @@
                                 </div>
                                 <div class="px-3 pt-3 d-grid gap-2">
                                     <a href="profile.php" class="btn btn-outline-primary btn-sm"><?php e(t('profile_btn') !== 'profile_btn' ? t('profile_btn') : 'Profil'); ?></a>
-                                    <form action="api/client/auth/logout.php" method="POST" class="d-grid" onsubmit="clearClientStoredTokens()">
+                                    <form action="api/client/auth/logout.php" method="POST" class="d-grid">
                                         <?= csrf_field() ?>
                                         <button type="submit" class="btn btn-outline-danger btn-sm"><?php e(t('logout_btn') !== 'logout_btn' ? t('logout_btn') : 'Odhlásit se'); ?></button>
                                     </form>
@@ -38,12 +38,3 @@
         </div>
     </div>
 </div>
-<script>
-    function clearClientStoredTokens() {
-        try {
-            sessionStorage.removeItem('client_access_token');
-            sessionStorage.removeItem('client_refresh_token');
-        } catch (error) {
-        }
-    }
-</script>

@@ -1,3 +1,13 @@
+<?php
+/**
+ * -------------------------------------------------
+ * View: Messages
+ * -------------------------------------------------
+ * Renderuje inbox, kos a detail zprav.
+ * Obsahuje UI akce pro cteni, odpoved
+ * a zmenu stavu zpravy.
+ */
+?>
 <!DOCTYPE html>
 <html lang="<?= (($_SESSION['lang_id'] ?? 1) == 3) ? 'en' : 'cs' ?>">
 <head>
@@ -10,7 +20,7 @@
     <div class="nk-app-root " data-sidebar-collapse="lg">
         <div class="nk-main">
 
-            <?php include __DIR__ . '/../Core/sidebar.php'; ?>
+            <?php include __DIR__ . '/../core/sidebar.php'; ?>
 
             <div class="nk-wrap">
                 <?php include __DIR__ . '/../core/header.php'; ?>
@@ -99,7 +109,7 @@
                                                                             <button class="btn btn-sm btn-icon btn-zoom" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></button>
                                                                             <div class="dropdown-menu dropdown-menu-end">
                                                                                 <ul class="link-list link-list-hover-bg-primary link-list-md">
-                                                                                    <li><a href="message.php?action=trash&id=<?= $msg['id'] ?>"><em class="icon ni ni-trash"></em><span><?php e(t('move_to_trash') !== 'move_to_trash' ? t('move_to_trash') : 'Do koše'); ?></span></a></li>
+                                                                                    <li><a href="#" onclick="submitMessageAction('trash', <?= (int) $msg['id'] ?>); return false;"><em class="icon ni ni-trash"></em><span><?php e(t('move_to_trash') !== 'move_to_trash' ? t('move_to_trash') : 'Do koše'); ?></span></a></li>
                                                                                 </ul>
                                                                             </div>
                                                                         </div>
@@ -152,8 +162,8 @@
                                                                             <button class="btn btn-sm btn-icon btn-zoom" data-bs-toggle="dropdown"><em class="icon ni ni-more-h"></em></button>
                                                                             <div class="dropdown-menu dropdown-menu-end">
                                                                                 <ul class="link-list link-list-hover-bg-primary link-list-md">
-                                                                                    <li><a href="message.php?action=restore&id=<?= $msg['id'] ?>"><em class="icon ni ni-curve-up-left"></em><span><?php e(t('restore_btn') !== 'restore_btn' ? t('restore_btn') : 'Obnovit'); ?></span></a></li>
-                                                                                    <li><a href="message.php?action=delete&id=<?= $msg['id'] ?>" class="text-danger"><em class="icon ni ni-trash"></em><span><?php e(t('delete_permanently') !== 'delete_permanently' ? t('delete_permanently') : 'Trvale smazat'); ?></span></a></li>
+                                                                                    <li><a href="#" onclick="submitMessageAction('restore', <?= (int) $msg['id'] ?>); return false;"><em class="icon ni ni-curve-up-left"></em><span><?php e(t('restore_btn') !== 'restore_btn' ? t('restore_btn') : 'Obnovit'); ?></span></a></li>
+                                                                                    <li><a href="#" class="text-danger" onclick="submitMessageAction('delete', <?= (int) $msg['id'] ?>); return false;"><em class="icon ni ni-trash"></em><span><?php e(t('delete_permanently') !== 'delete_permanently' ? t('delete_permanently') : 'Trvale smazat'); ?></span></a></li>
                                                                                 </ul>
                                                                             </div>
                                                                         </div>

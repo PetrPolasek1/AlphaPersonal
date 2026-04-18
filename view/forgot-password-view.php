@@ -1,3 +1,12 @@
+<?php
+/**
+ * -------------------------------------------------
+ * View: Forgot Password
+ * -------------------------------------------------
+ * Renderuje formular pro zadost o reset hesla
+ * a navigaci zpet do prihlaseni.
+ */
+?>
 <!DOCTYPE html>
 <html lang="<?= (($_SESSION['lang_id'] ?? 1) == 3) ? 'en' : 'cs' ?>">
 <head>
@@ -42,15 +51,7 @@
                                     </div>
                                 <?php endif; ?>
 
-                                <?php
-                                $urlToken = isset($_GET['token']) ? htmlspecialchars($_GET['token']) : '';
-                                $formAction = "forgot-password.php";
-                                if (!empty($urlToken)) {
-                                    $formAction .= "?token=" . $urlToken;
-                                }
-                                ?>
-
-                                <form action="<?php echo $formAction; ?>" method="POST">
+                                <form action="forgot-password.php" method="POST">
                                     <?= csrf_field() ?>
                                     <div class="row gy-3">
                                         <div class="col-12">
@@ -72,13 +73,12 @@
                                 <div class="text-center mt-3">
                                     <p class="small">
                                         <?php
-                                        if (!empty($urlToken)) {
-                                            $loginUrl = "/portal/client/login/u/" . $urlToken;
-                                        } else {
-                                            $loginUrl = "/portal/client/login";
-                                        }
+                                        $loginReturnToken = trim((string) ($_SESSION['login_return_token'] ?? ''));
+                                        $loginReturnUrl = $loginReturnToken !== ''
+                                            ? 'login.php?t=' . rawurlencode($loginReturnToken)
+                                            : 'login.php';
                                         ?>
-                                        <a href="<?php echo $loginUrl; ?>"><?php e(t('return_to_login') !== 'return_to_login' ? t('return_to_login') : 'Return to Login'); ?></a>
+                                        <a href="<?php e($loginReturnUrl); ?>"><?php e(t('return_to_login') !== 'return_to_login' ? t('return_to_login') : 'Return to Login'); ?></a>
                                     </p>
                                 </div>
                             </div>

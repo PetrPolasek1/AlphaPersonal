@@ -1,5 +1,12 @@
 <?php
-// models/index-model.php
+/**
+ * -------------------------------------------------
+ * Model: Dashboard
+ * -------------------------------------------------
+ * Datova vrstva dashboardu.
+ * Vraci aktivni formulare a notifikacni
+ * pocty pro sidebar a uvodni obrazovku.
+ */
 
 class IndexModel {
     private $pdo;
