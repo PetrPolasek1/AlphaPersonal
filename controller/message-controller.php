@@ -25,6 +25,11 @@ class MessageController {
         $this->userId = (int) ($_SESSION['user_id'] ?? 0);
         $errorMsg = '';
         $successMsg = '';
+        $perPage = 10;
+        $currentMessageTab = (string) ($_GET['tab'] ?? 'recents');
+        $currentMessageTab = $currentMessageTab === 'trash' ? 'trash' : 'recents';
+        $activePage = max(1, (int) ($_GET['active_page'] ?? 1));
+        $trashPage = max(1, (int) ($_GET['trash_page'] ?? 1));
 
         if (isset($_GET['success']) && $_GET['success'] == 1) {
             $successMsg = t('message_sent_success') !== 'message_sent_success' ? t('message_sent_success') : 'Zpráva byla úspěšně odeslána.';
@@ -81,8 +86,15 @@ class MessageController {
             }
         }
 
-        $activeMessages = $this->model->getMessages($this->userId, 0);
-        $trashedMessages = $this->model->getMessages($this->userId, 1);
+        $activeMessagesTotal = $this->model->getMessagesCount($this->userId, 0);
+        $trashedMessagesTotal = $this->model->getMessagesCount($this->userId, 1);
+        $activePages = max(1, (int) ceil($activeMessagesTotal / $perPage));
+        $trashPages = max(1, (int) ceil($trashedMessagesTotal / $perPage));
+        $activePage = min($activePage, $activePages);
+        $trashPage = min($trashPage, $trashPages);
+
+        $activeMessages = $this->model->getMessages($this->userId, 0, $perPage, ($activePage - 1) * $perPage);
+        $trashedMessages = $this->model->getMessages($this->userId, 1, $perPage, ($trashPage - 1) * $perPage);
         $fullName = $this->fullName;
 
         $unreadMessagesCount = $this->model->getUnreadMessagesCount($this->userId);

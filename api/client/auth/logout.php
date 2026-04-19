@@ -19,7 +19,7 @@ require_csrf();
 
 $userId = (int) ($_SESSION['user_id'] ?? 0);
 $refreshTokenHash = trim((string) ($_SESSION['refresh_token_hash'] ?? ''));
-$nextLoginToken = '';
+$redirectUrl = get_login_redirect_url();
 
 if ($refreshTokenHash !== '') {
     try {
@@ -34,25 +34,6 @@ if ($refreshTokenHash !== '') {
     }
 }
 
-if ($userId > 0) {
-    try {
-        $nextLoginToken = generate_secure_token();
-        $nextLoginTokenHash = hash_token($nextLoginToken);
-
-        $stmt = $pdo->prepare('UPDATE alpha_pracovnici_uzivatele SET login_qr_token = ? WHERE id = ?');
-        $stmt->execute([$nextLoginTokenHash, $userId]);
-    } catch (Throwable $e) {
-        app_log('Logout token rotation failed: ' . $e->getMessage());
-        $nextLoginToken = '';
-    }
-}
-
 clear_auth_session();
-
-$redirectUrl = 'http://localhost/portal/client/login';
-
-if ($nextLoginToken !== '') {
-    $redirectUrl = 'http://localhost/portal/client/login/u/' . rawurlencode($nextLoginToken);
-}
 
 redirect($redirectUrl);

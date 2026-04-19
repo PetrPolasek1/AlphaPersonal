@@ -62,6 +62,85 @@
             .dynamic-title { font-size: 1.5rem; margin-bottom: 0.5rem; }
             .dynamic-desc { font-size: 0.8rem; }
         }
+
+        .dashboard-faq-block {
+            margin-top: 2rem;
+            padding-bottom: 2rem;
+        }
+
+        .dashboard-faq-card {
+            border: 1px solid rgba(0, 0, 0, 0.05);
+            border-radius: 12px;
+            overflow: hidden;
+        }
+
+        .dashboard-faq-card .accordion-button {
+            font-weight: 600;
+        }
+
+        .dashboard-faq-card .accordion-button:not(.collapsed) {
+            box-shadow: none;
+        }
+
+        .dashboard-faq-card .accordion-body {
+            color: #526484;
+            line-height: 1.7;
+        }
+
+        .app-footer-row {
+            gap: 0.5rem 1rem;
+        }
+
+        .app-footer-nav {
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 0.125rem 0.25rem;
+        }
+
+        .app-footer-nav .nav-item {
+            min-width: 0;
+        }
+
+        .app-footer-nav .nav-link {
+            font-size: 0.72rem;
+            line-height: 1.2;
+            padding: 0.15rem 0.35rem;
+            text-align: center;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 767.98px) {
+            .app-footer-row {
+                flex-direction: column;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center;
+            }
+
+            .app-footer-nav {
+                display: grid;
+                grid-template-columns: minmax(0, 1.8fr) repeat(2, minmax(0, 0.7fr));
+                width: min(100%, 21rem);
+                gap: 0.1rem 0.2rem;
+                margin-inline: auto;
+            }
+
+            .nk-footer-links {
+                width: 100%;
+            }
+
+            .app-footer-nav .nav-link {
+                font-size: 0.625rem;
+                padding: 0.1rem 0.15rem;
+            }
+
+            .nk-footer-copyright {
+                width: 100%;
+                text-align: center;
+                font-size: 0.6875rem !important;
+            }
+        }
     </style>
 </head>
 
@@ -128,6 +207,86 @@
                                             <?php endforeach; ?>
                                         <?php endif; ?>
                                     </div>
+
+                                    <div class="dashboard-faq-block">
+                                        <div class="nk-block-head nk-block-head-sm pt-2">
+                                            <div class="nk-block-head-content">
+                                                <h3 class="nk-block-title">Rychlé otázky</h3>
+                                                <p class="text-soft mb-0">Krátké odpovědi na nejběžnější dotazy.</p>
+                                            </div>
+                                        </div>
+
+                                        <div class="card shadow-none dashboard-faq-card">
+                                            <div class="card-body p-0">
+                                                <div class="accordion" id="dashboardQuickFaq">
+                                                    <div class="accordion-item">
+                                                        <h2 class="accordion-header">
+                                                            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardFaqOne" aria-expanded="true" aria-controls="dashboardFaqOne">
+                                                                Jak se máš?
+                                                            </button>
+                                                        </h2>
+                                                        <div id="dashboardFaqOne" class="accordion-collapse collapse show" data-bs-parent="#dashboardQuickFaq">
+                                                            <div class="accordion-body">
+                                                                Mám se dobře a jsem připravený pomoct s dalším krokem v aplikaci.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="accordion-item">
+                                                        <h2 class="accordion-header">
+                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardFaqTwo" aria-expanded="false" aria-controls="dashboardFaqTwo">
+                                                                Kde začít?
+                                                            </button>
+                                                        </h2>
+                                                        <div id="dashboardFaqTwo" class="accordion-collapse collapse" data-bs-parent="#dashboardQuickFaq">
+                                                            <div class="accordion-body">
+                                                                Začni výběrem jedné karty nahoře. Po kliknutí se otevře formulář, ve kterém můžeš rovnou pokračovat.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="accordion-item">
+                                                        <h2 class="accordion-header">
+                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardFaqThree" aria-expanded="false" aria-controls="dashboardFaqThree">
+                                                                Uloží se moje data?
+                                                            </button>
+                                                        </h2>
+                                                        <div id="dashboardFaqThree" class="accordion-collapse collapse" data-bs-parent="#dashboardQuickFaq">
+                                                            <div class="accordion-body">
+                                                                Ano, po odeslání formuláře se údaje uloží a uvidíš je také v přehledu požadavků.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="accordion-item">
+                                                        <h2 class="accordion-header">
+                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardFaqFour" aria-expanded="false" aria-controls="dashboardFaqFour">
+                                                                Funguje to i na mobilu?
+                                                            </button>
+                                                        </h2>
+                                                        <div id="dashboardFaqFour" class="accordion-collapse collapse" data-bs-parent="#dashboardQuickFaq">
+                                                            <div class="accordion-body">
+                                                                Ano, dashboard i tento akordeon jsou připravené tak, aby byly přehledné na telefonu i na počítači.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+
+                                                    <div class="accordion-item">
+                                                        <h2 class="accordion-header">
+                                                            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#dashboardFaqFive" aria-expanded="false" aria-controls="dashboardFaqFive">
+                                                                Co když si nevím rady?
+                                                            </button>
+                                                        </h2>
+                                                        <div id="dashboardFaqFive" class="accordion-collapse collapse" data-bs-parent="#dashboardQuickFaq">
+                                                            <div class="accordion-body">
+                                                                Když si nebudeš jistý, otevři požadovaný formulář a pokračuj krok po kroku. Rozhraní je připravené tak, aby bylo co nejjednodušší.
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
 
                                 <div id="mobile-form-view" class="d-none">
@@ -154,14 +313,12 @@
                     </div>
                 </div> <div class="nk-footer">
                     <div class="container-xl">
-                        <div class="d-flex align-items-center flex-wrap justify-content-between mx-n3">
+                        <div class="d-flex align-items-center flex-wrap justify-content-between mx-n3 app-footer-row">
                             <div class="nk-footer-links px-3">
-                                <ul class="nav nav-sm">
-                                    <li class="nav-item"><a class="nav-link" href="#"><?php e(t('home_admin') !== 'home_admin' ? t('home_admin') : 'Home'); ?></a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#"><?php e(t('footer_pricing') !== 'footer_pricing' ? t('footer_pricing') : 'Pricing'); ?></a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#"><?php e(t('footer_privacy_policy') !== 'footer_privacy_policy' ? t('footer_privacy_policy') : 'Privacy Policy'); ?></a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#"><?php e(t('footer_faq') !== 'footer_faq' ? t('footer_faq') : 'FAQ'); ?></a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#"><?php e(t('footer_contact') !== 'footer_contact' ? t('footer_contact') : 'Contact'); ?></a></li>
+                                <ul class="nav nav-sm app-footer-nav">
+                                    <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><?php e(t('footer_privacy_policy') !== 'footer_privacy_policy' ? t('footer_privacy_policy') : 'Privacy Policy'); ?></a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><?php e(t('footer_faq') !== 'footer_faq' ? t('footer_faq') : 'FAQ'); ?></a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><?php e(t('footer_contact') !== 'footer_contact' ? t('footer_contact') : 'Contact'); ?></a></li>
                                 </ul>
                             </div>
                             <div class="nk-footer-copyright fs-6 px-3"><?php e(t('footer_copyright') !== 'footer_copyright' ? t('footer_copyright') : '© 2023 All Rights Reserved to Copygen.'); ?></div>
@@ -192,6 +349,26 @@
                     document.getElementById('modal-form-content').innerHTML = '';
                 });
             }
+        });
+
+        function syncResponsiveDashboardState() {
+            const mobileFormView = document.getElementById('mobile-form-view');
+            const formModalEl = document.getElementById('formModal');
+            const isMobile = window.innerWidth < 768;
+
+            if (!isMobile && mobileFormView && !mobileFormView.classList.contains('d-none')) {
+                closeMobileForm();
+            }
+
+            if (isMobile && formModal && formModalEl && formModalEl.classList.contains('show')) {
+                formModal.hide();
+            }
+        }
+
+        window.addEventListener('resize', syncResponsiveDashboardState);
+
+        document.addEventListener('DOMContentLoaded', function() {
+            syncResponsiveDashboardState();
         });
 
         function handleCardClick(id, formTitle) {

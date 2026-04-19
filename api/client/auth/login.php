@@ -82,8 +82,6 @@ try {
 
     $ip = $_SERVER['REMOTE_ADDR'] ?? '0.0.0.0';
     $userAgent = $_SERVER['HTTP_USER_AGENT'] ?? null;
-    $newLoginToken = generate_secure_token();
-    $newLoginTokenHash = hash_token($newLoginToken);
     $sessionSecret = generate_secure_token();
     $sessionHash = hash_token($sessionSecret);
 
@@ -92,11 +90,10 @@ try {
          SET failed_login_attempts = 0,
              locked_until = NULL,
              last_login_at = NOW(),
-             last_login_ip = ?,
-             login_qr_token = ?
+             last_login_ip = ?
          WHERE id = ?'
     );
-    $updateStmt->execute([$ip, $newLoginTokenHash, $dbUser['id']]);
+    $updateStmt->execute([$ip, $dbUser['id']]);
 
     $sessionStmt = $pdo->prepare(
         'INSERT INTO alpha_pracovnici_uzivatele_sessions (user_id, refresh_token_hash, user_agent, ip_address, expires_at)
@@ -104,8 +101,7 @@ try {
     );
     $sessionStmt->execute([$dbUser['id'], $sessionHash, $userAgent, $ip]);
 
-    $dbUser['login_qr_token'] = $newLoginToken;
-    store_login_session($dbUser, $newLoginToken, $sessionHash);
+    store_login_session($dbUser, (string) ($dbUser['login_qr_token'] ?? ''), $sessionHash);
 
     $_SESSION['user_name'] = trim((string) ($dbUser['jmeno'] ?? '') . ' ' . (string) ($dbUser['prijmeni'] ?? ''))
         ?: (t('default_user_name') !== 'default_user_name' ? t('default_user_name') : 'Uživatel');

@@ -22,6 +22,8 @@ class RequestController {
 
     public function handleRequest() {
         $this->userId = (int) ($_SESSION['user_id'] ?? 0);
+        $perPage = 10;
+        $requestsPage = max(1, (int) ($_GET['page'] ?? 1));
 
         if (is_post() && post('action') === 'detail') {
             require_csrf();
@@ -29,7 +31,10 @@ class RequestController {
             return;
         }
 
-        $requests = $this->model->getRequests($this->userId);
+        $requestsTotal = $this->model->getRequestsCount($this->userId);
+        $requestsPages = max(1, (int) ceil($requestsTotal / $perPage));
+        $requestsPage = min($requestsPage, $requestsPages);
+        $requests = $this->model->getRequests($this->userId, $perPage, ($requestsPage - 1) * $perPage);
         $fullName = $this->fullName;
 
         $unreadMessagesCount = $this->model->getUnreadMessagesCount($this->userId);

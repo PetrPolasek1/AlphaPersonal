@@ -7,6 +7,42 @@
  * a modal pro detail vybraneho podani.
  */
 ?>
+<?php
+$requestPageUrl = static function (int $pageNumber): string {
+    return 'request.php?' . http_build_query([
+        'page' => max(1, $pageNumber),
+    ]);
+};
+
+$renderRequestPagination = static function (int $currentPageNumber, int $totalPageCount, callable $urlBuilder): string {
+    if ($totalPageCount <= 1) {
+        return '';
+    }
+
+    $startPage = max(1, $currentPageNumber - 2);
+    $endPage = min($totalPageCount, $currentPageNumber + 2);
+
+    ob_start();
+    ?>
+    <nav class="app-pagination" aria-label="Pagination">
+        <ul class="pagination pagination-sm mb-0">
+            <li class="page-item <?= $currentPageNumber <= 1 ? 'disabled' : '' ?>">
+                <a class="page-link" href="<?= $currentPageNumber <= 1 ? '#' : htmlspecialchars($urlBuilder($currentPageNumber - 1), ENT_QUOTES, 'UTF-8') ?>">‹</a>
+            </li>
+            <?php for ($pageNumber = $startPage; $pageNumber <= $endPage; $pageNumber++): ?>
+                <li class="page-item <?= $pageNumber === $currentPageNumber ? 'active' : '' ?>">
+                    <a class="page-link" href="<?= htmlspecialchars($urlBuilder($pageNumber), ENT_QUOTES, 'UTF-8') ?>"><?= $pageNumber ?></a>
+                </li>
+            <?php endfor; ?>
+            <li class="page-item <?= $currentPageNumber >= $totalPageCount ? 'disabled' : '' ?>">
+                <a class="page-link" href="<?= $currentPageNumber >= $totalPageCount ? '#' : htmlspecialchars($urlBuilder($currentPageNumber + 1), ENT_QUOTES, 'UTF-8') ?>">›</a>
+            </li>
+        </ul>
+    </nav>
+    <?php
+    return (string) ob_get_clean();
+};
+?>
 <!DOCTYPE html>
 <html lang="<?= (($_SESSION['lang_id'] ?? 1) == 3) ? 'en' : 'cs' ?>">
 <head>
@@ -14,6 +50,127 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?php e(t('requests_title') !== 'requests_title' ? t('requests_title') : 'Požadavky'); ?> - CopyGen</title>
     <link rel="stylesheet" href="assets/css/style.css?v1.1.0">
+    <style>
+        .request-detail-list {
+            border: 1px solid rgba(15, 23, 42, 0.12);
+            border-radius: 1rem;
+            overflow: hidden;
+            background: #fff;
+        }
+
+        .request-detail-item {
+            padding: 0.95rem 1rem;
+            line-height: 1.65;
+        }
+
+        .request-detail-item + .request-detail-item {
+            border-top: 1px solid rgba(15, 23, 42, 0.08);
+        }
+
+        .request-detail-label {
+            font-weight: 700;
+            color: #364152;
+        }
+
+        .request-detail-value {
+            color: #526484;
+            white-space: pre-wrap;
+            word-break: break-word;
+        }
+
+        .request-detail-files {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-top: 0.55rem;
+        }
+
+        .app-pagination {
+            display: flex;
+            justify-content: center;
+            padding: 1rem 1rem 1.25rem;
+        }
+
+        .app-pagination .page-link {
+            min-width: 2.1rem;
+            text-align: center;
+        }
+
+        @media (max-width: 767.98px) {
+            .requests-table tbody {
+                display: block;
+                padding: 0.4rem;
+            }
+
+            .requests-table tbody tr {
+                display: block;
+                border: 1px solid rgba(15, 23, 42, 0.08);
+                border-radius: 0.7rem;
+                background: #fff;
+                box-shadow: 0 8px 18px rgba(15, 23, 42, 0.045);
+                padding: 0.52rem 0.58rem;
+            }
+
+            .requests-table tbody tr + tr {
+                margin-top: 0.45rem;
+            }
+
+            .requests-table tbody td {
+                display: block;
+                width: 100%;
+                border: 0;
+                padding: 0 0 0.3rem;
+            }
+
+            .requests-table tbody td:last-child {
+                padding-bottom: 0;
+            }
+
+            .requests-table tbody .tb-col-end {
+                text-align: left !important;
+            }
+
+            .requests-table tbody .tb-col-end > .d-inline-flex {
+                width: 100%;
+                justify-content: space-between;
+            }
+
+            .requests-table tbody .btn-outline-primary {
+                flex: 1;
+                justify-content: center;
+                min-height: 1.7rem;
+                padding: 0.18rem 0.4rem;
+                font-size: 0.7rem;
+                line-height: 1.1;
+            }
+
+            .requests-table .caption-text {
+                font-size: 0.7rem;
+                line-height: 1.15;
+            }
+
+            .requests-table .sub-text,
+            .requests-table .text-light {
+                font-size: 0.58rem !important;
+                line-height: 1.15;
+            }
+
+            .requests-table .badge {
+                font-size: 0.6rem !important;
+                padding: 0.1rem 0.38rem !important;
+            }
+
+            .app-pagination {
+                padding: 0.45rem 0.45rem 0.65rem;
+            }
+
+            .app-pagination .page-link {
+                min-width: 1.65rem;
+                padding: 0.16rem 0.35rem;
+                font-size: 0.7rem;
+            }
+        }
+    </style>
 </head>
 <body class="nk-body ">
     <div class="nk-app-root " data-sidebar-collapse="lg">
@@ -40,7 +197,7 @@
 
                                 <div class="nk-block">
                                     <div class="card shadow-none">
-                                        <table class="table table-middle mb-0">
+                                        <table class="table table-middle mb-0 requests-table">
                                             <tbody>
                                                 <?php if (empty($requests)): ?>
                                                     <tr><td class="text-center py-4"><?php e(t('no_requests_found') !== 'no_requests_found' ? t('no_requests_found') : 'Žádné požadavky nebyly nalezeny.'); ?></td></tr>
@@ -108,6 +265,7 @@
                                                 <?php endif; ?>
                                             </tbody>
                                         </table>
+                                        <?= $renderRequestPagination($requestsPage, $requestsPages, static fn (int $pageNumber): string => $requestPageUrl($pageNumber)) ?>
                                     </div>
                                 </div>
 
@@ -248,28 +406,28 @@
             const rowsHtml = detail.rows.map(row => {
                 if (row.files && row.files.length) {
                     const filesHtml = row.files.map(file => `
-                        <a href="${escapeAttribute(file.url)}" download class="btn btn-sm btn-outline-primary me-2 mb-2">
+                        <a href="${escapeAttribute(file.url)}" download class="btn btn-sm btn-outline-primary">
                             <em class="icon ni ni-download"></em> <span>${escapeHtml(file.name)}</span>
                         </a>
                     `).join('');
 
                     return `
-                        <div class="border rounded-3 p-3 mb-3">
-                            <div class="fw-bold mb-2">${escapeHtml(row.label || '<?php e(t('field_file_fallback') !== 'field_file_fallback' ? t('field_file_fallback') : 'Soubor'); ?>')}</div>
-                            <div>${filesHtml}</div>
+                        <div class="request-detail-item">
+                            <span class="request-detail-label">${escapeHtml(row.label || '<?php e(t('field_file_fallback') !== 'field_file_fallback' ? t('field_file_fallback') : 'Soubor'); ?>')}:</span>
+                            <div class="request-detail-files">${filesHtml}</div>
                         </div>
                     `;
                 }
 
                 return `
-                    <div class="border rounded-3 p-3 mb-3">
-                        <div class="fw-bold mb-2">${escapeHtml(row.label || '<?php e(t('field_value_fallback') !== 'field_value_fallback' ? t('field_value_fallback') : 'Pole'); ?>')}</div>
-                        <div style="white-space: pre-wrap;">${escapeHtml(row.value || '-')}</div>
+                    <div class="request-detail-item">
+                        <span class="request-detail-label">${escapeHtml(row.label || '<?php e(t('field_value_fallback') !== 'field_value_fallback' ? t('field_value_fallback') : 'Pole'); ?>')}:</span>
+                        <span class="request-detail-value"> ${escapeHtml(row.value || '-')}</span>
                     </div>
                 `;
             }).join('');
 
-            contentEl.innerHTML = rowsHtml;
+            contentEl.innerHTML = `<div class="request-detail-list">${rowsHtml}</div>`;
         }
 
         function escapeHtml(value) {

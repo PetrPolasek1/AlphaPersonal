@@ -39,15 +39,45 @@ class MessageModel {
         return $stmt->execute([$msgId, $userId]);
     }
 
-    public function getMessages($userId, $isDeleted) {
-        $stmt = $this->pdo->prepare("
+    public function getMessages($userId, $isDeleted, ?int $limit = null, int $offset = 0) {
+        $orderBy = ((int) $isDeleted === 0)
+            ? "z.is_read ASC, z.created_at DESC, z.id DESC"
+            : "z.created_at DESC, z.id DESC";
+
+        $sql = "
             SELECT z.*, (SELECT login_email FROM alpha_pracovnici_uzivatele WHERE id = z.sender_id LIMIT 1) AS sender_email
             FROM alpha_zpravy z
             WHERE z.recipient_id = ? AND z.is_deleted = ? 
-            ORDER BY z.created_at DESC
-        ");
-        $stmt->execute([$userId, $isDeleted]);
+            ORDER BY {$orderBy}
+        ";
+
+        if ($limit !== null) {
+            $sql .= " LIMIT ? OFFSET ?";
+        }
+
+        $stmt = $this->pdo->prepare($sql);
+
+        if ($limit !== null) {
+            $stmt->bindValue(1, (int) $userId, PDO::PARAM_INT);
+            $stmt->bindValue(2, (int) $isDeleted, PDO::PARAM_INT);
+            $stmt->bindValue(3, (int) $limit, PDO::PARAM_INT);
+            $stmt->bindValue(4, max(0, (int) $offset), PDO::PARAM_INT);
+            $stmt->execute();
+        } else {
+            $stmt->execute([$userId, $isDeleted]);
+        }
+
         return $stmt->fetchAll();
+    }
+
+    public function getMessagesCount($userId, $isDeleted) {
+        $stmt = $this->pdo->prepare("
+            SELECT COUNT(*)
+            FROM alpha_zpravy
+            WHERE recipient_id = ? AND is_deleted = ?
+        ");
+        $stmt->execute([(int) $userId, (int) $isDeleted]);
+        return (int) $stmt->fetchColumn();
     }
 
     // --- PŘIDÁNO PRO NOTIFIKACE ---

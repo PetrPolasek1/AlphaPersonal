@@ -15,7 +15,7 @@ class RequestModel {
         $this->pdo = $pdo;
     }
 
-    public function getRequests($userId) {
+    public function getRequests($userId, ?int $limit = null, int $offset = 0) {
         $sql = "SELECT 
                     f.title_localized_key AS typ_formulare, 
                     fs.id_form AS form_id,
@@ -34,12 +34,33 @@ class RequestModel {
                 JOIN forms f ON fs.id_form = f.id
                 WHERE fs.id_client = :user_id
                 ORDER BY fs.submitted_at DESC";
+
+        if ($limit !== null) {
+            $sql .= " LIMIT :limit OFFSET :offset";
+        }
                 
         $stmt = $this->pdo->prepare($sql);
         $stmt->bindValue(':user_id', (int)$userId, PDO::PARAM_INT);
+
+        if ($limit !== null) {
+            $stmt->bindValue(':limit', (int) $limit, PDO::PARAM_INT);
+            $stmt->bindValue(':offset', max(0, (int) $offset), PDO::PARAM_INT);
+        }
+
         $stmt->execute();
         
         return $stmt->fetchAll(PDO::FETCH_ASSOC); 
+    }
+
+    public function getRequestsCount($userId) {
+        $stmt = $this->pdo->prepare("
+            SELECT COUNT(*)
+            FROM form_submissions
+            WHERE id_client = :user_id
+        ");
+        $stmt->bindValue(':user_id', (int) $userId, PDO::PARAM_INT);
+        $stmt->execute();
+        return (int) $stmt->fetchColumn();
     }
 
     public function getRequestDetail($submissionId, $userId) {

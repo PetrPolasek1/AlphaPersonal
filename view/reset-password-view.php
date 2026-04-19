@@ -16,6 +16,61 @@
     <link rel="shortcut icon" href="images/favicon.png">
     <title><?php e(t('reset_password_title') !== 'reset_password_title' ? t('reset_password_title') : 'Nastavení nového hesla'); ?> - CopyGen</title>
     <link rel="stylesheet" href="assets/css/style.css?v1.1.0">
+    <style>
+        .app-footer-row {
+            gap: 0.5rem 1rem;
+        }
+
+        .app-footer-nav {
+            justify-content: center;
+            gap: 0.125rem 0.25rem;
+        }
+
+        .app-footer-nav .nav-item {
+            min-width: 0;
+        }
+
+        .app-footer-nav .nav-link {
+            font-size: 0.72rem;
+            line-height: 1.2;
+            padding: 0.15rem 0.35rem;
+            text-align: center;
+            white-space: normal;
+            overflow-wrap: anywhere;
+        }
+
+        @media (max-width: 767.98px) {
+            .app-footer-row {
+                flex-direction: column;
+                align-items: center !important;
+                justify-content: center !important;
+                text-align: center;
+            }
+
+            .app-footer-nav {
+                display: grid;
+                grid-template-columns: minmax(0, 1.8fr) repeat(2, minmax(0, 0.7fr));
+                width: min(100%, 21rem);
+                gap: 0.1rem 0.2rem;
+                margin-inline: auto;
+            }
+
+            .nk-footer-links {
+                width: 100%;
+            }
+
+            .app-footer-nav .nav-link {
+                font-size: 0.625rem;
+                padding: 0.1rem 0.15rem;
+            }
+
+            .nk-footer-copyright {
+                width: 100%;
+                text-align: center;
+                font-size: 0.6875rem !important;
+            }
+        }
+    </style>
 </head>
 <body class="nk-body ">
     <div class="nk-app-root ">
@@ -94,11 +149,12 @@
 
                 <div class="nk-footer">
                     <div class="container-xl">
-                        <div class="d-flex align-items-center flex-wrap justify-content-between mx-n3">
+                        <div class="d-flex align-items-center flex-wrap justify-content-between mx-n3 app-footer-row">
                             <div class="nk-footer-links px-3">
-                                <ul class="nav nav-sm">
-                                    <li class="nav-item"><a class="nav-link" href="#"><?php e(t('home_admin') !== 'home_admin' ? t('home_admin') : 'Home'); ?></a></li>
-                                    <li class="nav-item"><a class="nav-link" href="#"><?php e(t('footer_privacy_policy') !== 'footer_privacy_policy' ? t('footer_privacy_policy') : 'Privacy Policy'); ?></a></li>
+                                <ul class="nav nav-sm app-footer-nav">
+                                    <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><?php e(t('footer_privacy_policy') !== 'footer_privacy_policy' ? t('footer_privacy_policy') : 'Privacy Policy'); ?></a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><?php e(t('footer_faq') !== 'footer_faq' ? t('footer_faq') : 'FAQ'); ?></a></li>
+                                    <li class="nav-item"><a class="nav-link" href="#" onclick="return false;"><?php e(t('footer_contact') !== 'footer_contact' ? t('footer_contact') : 'Contact'); ?></a></li>
                                 </ul>
                             </div>
                             <div class="nk-footer-copyright fs-6 px-3"><?php e(t('footer_copyright_short') !== 'footer_copyright_short' ? t('footer_copyright_short') : '© 2023 Copygen.'); ?></div>
