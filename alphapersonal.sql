@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Počítač: 127.0.0.1
--- Vytvořeno: Stř 15. dub 2026, 09:03
+-- Vytvořeno: Ned 19. dub 2026, 18:56
 -- Verze serveru: 10.4.32-MariaDB
 -- Verze PHP: 8.2.12
 
@@ -160,7 +160,7 @@ CREATE TABLE `alpha_pracovnici` (
 --
 
 INSERT INTO `alpha_pracovnici` (`id`, `jmeno`, `prijmeni`, `datum_narozeni`, `misto_narozeni`, `obcanstvi`, `jazyk`, `pohlavi`, `druh_pobytu`, `adresa_v_zemi_puvodu`, `vzdelani`, `poznamka`, `stav`) VALUES
-(2, 'Lukáš', 'Pavelek', '1985-06-12 13:40:13', 'Opava', 1, 1, 1, 0, '', 0, '', 0),
+(2, 'Lukáš', 'Pavelek', '1985-06-12 13:40:13', 'Opava', 1, 3, 1, 0, '', 0, '', 0),
 (3, 'Petr', 'Polášek', '2004-12-17 13:40:13', 'Ostrava', 1, 1, 1, 0, '', 0, '', 0);
 
 -- --------------------------------------------------------
@@ -310,8 +310,8 @@ CREATE TABLE `alpha_pracovnici_uzivatele` (
 --
 
 INSERT INTO `alpha_pracovnici_uzivatele` (`id`, `id_pracovnika`, `login_email`, `password_hash`, `login_qr_token`, `login_qr_enabled`, `is_active`, `email_verified`, `email_verified_at`, `two_factor_enabled`, `two_factor_secret`, `failed_login_attempts`, `locked_until`, `last_login_at`, `last_login_ip`, `created_at`, `updated_at`) VALUES
-(3, 2, 'novyklient@test.cz', '$2y$10$oU7nWuD3LaK61YpP1axri.xkdF629dJ4d/8ZgiEODeXcE7j36ElwG', '986e7083416fba3e481ce8492c24285a6d247092fe19aadefb95565f6d2da975', 1, 1, 0, NULL, 0, NULL, 0, NULL, '2026-04-14 18:56:53', '::1', '2026-03-14 14:26:14', '2026-04-14 18:56:53'),
-(21, 3, 'petr@gmail.com', '$2y$10$HcDBwqAJ/YOY8C8B.tuaAOaBrEK7KbtzCwV7rrFmUV8Qux5pv4A02', '16497b24e860900f625c11925f56538c97c3b1bc3e9c88231d79ee37dccf9e0b', 1, 1, 0, NULL, 0, NULL, 0, NULL, '2026-04-13 19:48:42', '::1', '2026-04-13 19:48:35', '2026-04-13 19:48:42');
+(3, 2, 'novyklient@test.cz', '$2y$10$oU7nWuD3LaK61YpP1axri.xkdF629dJ4d/8ZgiEODeXcE7j36ElwG', '80b35b58dd24f13ca108d95a72f2f352300f5ba50a02ca88eefdf5c014518f08', 1, 1, 0, NULL, 0, NULL, 0, NULL, '2026-04-19 18:53:10', '::1', '2026-03-14 14:26:14', '2026-04-19 18:53:10'),
+(21, 3, 'petr@gmail.com', '$2y$10$HcDBwqAJ/YOY8C8B.tuaAOaBrEK7KbtzCwV7rrFmUV8Qux5pv4A02', 'cc0a1c3171d0a7744cab7e730d4b6850', 1, 1, 0, NULL, 0, NULL, 0, NULL, '2026-04-13 19:48:42', '::1', '2026-04-13 19:48:35', '2026-04-13 19:48:42');
 
 -- --------------------------------------------------------
 
@@ -335,31 +335,18 @@ CREATE TABLE `alpha_pracovnici_uzivatele_sessions` (
 --
 
 INSERT INTO `alpha_pracovnici_uzivatele_sessions` (`id`, `user_id`, `refresh_token_hash`, `user_agent`, `ip_address`, `expires_at`, `revoked_at`, `created_at`) VALUES
-(13, 3, '217476074b3c5cc8a333dfd5435c4c050cc35208121bac869da3a4e723fb9168', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-24 18:43:31', NULL, '2026-03-25 18:43:31'),
-(15, 3, 'd283199a07041657fa22c342fa47794fda40b1fa6a1bf23b96ae4384f02f72fe', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-26 14:44:13', NULL, '2026-03-27 14:44:13'),
-(16, 3, '1ac95cc9cdb2a3a46fd49b18cdc6d6486940b6eaa8a251869157ac6bec9ac7a7', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-26 16:31:27', NULL, '2026-03-27 16:31:27'),
-(17, 3, 'e682332926f7bcf820863872f8e24424f43b8905f66558053aef2008edbfb610', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-26 16:31:38', NULL, '2026-03-27 16:31:38'),
-(18, 3, '4416bcff1beb0bc864d3d88c5e6c6ff7efeeaa2992f59fbebc8a2623d84b16de', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-26 16:34:05', NULL, '2026-03-27 16:34:05'),
-(19, 3, '9e29a038517dd912a96be7e67f9088dacfe5b2542623a06cb6a4a75975c70ae4', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-28 20:03:11', NULL, '2026-03-29 20:03:11'),
-(20, 3, 'a9cce7d5e052085b66e833e7ca238713559ed85397548938cc5740eb919250f4', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-28 20:03:41', NULL, '2026-03-29 20:03:41'),
-(24, 3, '3b11aa82d5750b55395715f8fd32721f93673e919d9cc0142977eece7af67dc8', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/144.0.0.0 Safari/537.36 OPR/128.0.0.0', '::1', '2026-04-30 15:14:47', NULL, '2026-03-31 15:14:47'),
-(25, 3, '0b8bd30e2e80d5fef3dc5e86a071b65df0b15b037b0983f76953bbdbda9bb4bf', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-04 13:37:59', NULL, '2026-04-04 13:37:59'),
-(26, 3, '969ab992585a29723a0c6c938829169480b66110eaf3868850254516a9028cb2', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-10 14:10:42', NULL, '2026-04-10 14:10:42'),
-(27, 3, '84202da6f051a608142517d7ecffb1979f067d06467b074bc42ef319d91cf00c', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-10 18:32:36', NULL, '2026-04-10 18:32:36'),
-(28, 3, '39a4c3fcb8e18cb20247f44263248580450184306ee06891239009b8d1b73fee', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-11 13:00:43', NULL, '2026-04-11 13:00:43'),
-(29, 3, '6538a1b20a452b1f6024121626f950d3e72dad420ad172a6f0e16810b614faa2', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 19:36:25', NULL, '2026-04-13 19:36:25'),
-(30, 21, 'e925051545d6280f40efa387bcd34f711aee4fb80381d458e38c79f0daf80ff0', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 19:48:42', NULL, '2026-04-13 19:48:42'),
-(31, 3, 'df5af5dc1eb91afebfccf145cb5387cd1017394546ead91c617ada7b2a85b461', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 19:49:08', NULL, '2026-04-13 19:49:08'),
-(32, 3, '9242d0f458b26a448cbe7fc003914b93096c7861635dafb34f0c840cbf6f79d5', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 20:26:00', NULL, '2026-04-13 20:26:00'),
-(33, 3, '9b4459fb80cf79da81ac3b65891edc54d20dfe95464bd0149984658bed0beb80', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 20:31:43', NULL, '2026-04-13 20:31:43'),
-(34, 3, '87becda151549e2abc6b4a33916ca9da10573bcca702ccbea79ed1fa3714f1de', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 20:35:18', NULL, '2026-04-13 20:35:18'),
-(35, 3, 'f6ef2ebb899be1b532d489c65eccf26be07584b198767fdf3a44858384d304ca', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 20:38:27', NULL, '2026-04-13 20:38:27'),
-(36, 3, '1f5d97983e1f58b050cff494367f7b57b92e7a09a021b8d7fb98fa1a5c19a2c3', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-13 21:20:16', NULL, '2026-04-13 21:20:16'),
-(37, 3, '6b26b2545fbc4baa77b7aac74e98092bf867d936562a6bcccbf86a2537c0f532', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-14 18:28:51', NULL, '2026-04-14 18:28:51'),
-(38, 3, '60c0f72dd1bbc869462572a9bc77a9e39b63d8d0982284f59ee743d82efc5709', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-14 18:37:29', NULL, '2026-04-14 18:37:29'),
-(39, 3, 'e226cfbd1b3ee766a5b0000e0761ac05665b3c980f998c346b6ef27217b93b9d', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-14 18:42:04', NULL, '2026-04-14 18:42:04'),
-(40, 3, '8bb4646764f7a13c761052abb470de889934b37b9da44b4defec994e0600b10a', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-14 18:44:26', NULL, '2026-04-14 18:44:26'),
-(41, 3, '669fa2dc8f210e07c57d7368ca0f22d7572bd938c7a030a8b09e92458c395a13', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-14 18:56:53', NULL, '2026-04-14 18:56:53');
+(52, 3, '6eb156930aa89c19259600ee5ae918c4c54f3a00ccec03ef3502affed5a5e4ee', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-17 09:42:47', '2026-04-17 09:42:50', '2026-04-17 09:42:47'),
+(53, 3, 'a444511cb6e275c99acac9281ec15238e447887b51b70fb286a409b43e0d92dc', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-17 09:43:09', '2026-04-17 09:47:04', '2026-04-17 09:43:09'),
+(54, 3, 'c6e4ab0cd1634bbb043f8c153de51d92afe1aa9bded5799793fcf4af80638e2c', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-17 09:53:04', NULL, '2026-04-17 09:53:04'),
+(55, 3, '52cf80cc8e7a99f273bcb586bfd5c2d7e618f27eef038e666247154f5d3b822a', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-17 19:17:47', NULL, '2026-04-17 19:17:47'),
+(56, 3, '3fa8a28343c1da4c9aa2a33d37aae8eaf5d952a14b67ce17dc0d9ac25cb8b20c', 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_5 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/18.5 Mobile/15E148 Safari/604.1', '::1', '2026-05-17 19:28:17', NULL, '2026-04-17 19:28:17'),
+(57, 3, 'd710317e63240357e9c6cb7a20713cde7c9654213d48bc9f4930bc18cf32e23d', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-19 16:41:45', NULL, '2026-04-19 16:41:45'),
+(58, 3, 'e92b3d2348d81a56eb33e50d68d69f7520d2edfbbac9e3c750efe2d4be5e673d', 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.3 Mobile/15E148 Safari/604.1', '192.168.0.110', '2026-05-19 17:29:46', '2026-04-19 17:31:11', '2026-04-19 17:29:46'),
+(59, 3, '530c0f55063a31302270ba9b7bfc1ab69699a3c018b7f818875d516b97037369', 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.3 Mobile/15E148 Safari/604.1', '192.168.0.110', '2026-05-19 17:33:28', '2026-04-19 18:04:35', '2026-04-19 17:33:28'),
+(60, 3, '4327d637e212fa07a3d940b65c12b029d7062a457a9b00ef755482a0c8604b8b', 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.3 Mobile/15E148 Safari/604.1', '192.168.0.110', '2026-05-19 18:04:43', NULL, '2026-04-19 18:04:43'),
+(61, 3, 'd0950cab22f7f1658a11b477ebeca5f73fec6e2f11a152ebdd50a91efa945f39', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-19 18:05:30', NULL, '2026-04-19 18:05:30'),
+(62, 3, 'aac96261c88941d3fb952d0603f44d5e04743220d8dc95d6972cad80b171133a', 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.3 Mobile/15E148 Safari/604.1', '192.168.0.110', '2026-05-19 18:31:05', NULL, '2026-04-19 18:31:05'),
+(63, 3, '4af66d31f3c08fdd0ff5beb0e28c8f9aa56bcd41dcd4427fad7146acd5e477c1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '::1', '2026-05-19 18:53:10', NULL, '2026-04-19 18:53:10');
 
 -- --------------------------------------------------------
 
@@ -416,6 +403,28 @@ CREATE TABLE `alpha_zpravy` (
   `created_at` datetime NOT NULL DEFAULT current_timestamp(),
   `is_read` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+--
+-- Vypisuji data pro tabulku `alpha_zpravy`
+--
+
+INSERT INTO `alpha_zpravy` (`id`, `sender_id`, `recipient_id`, `subject`, `content`, `category`, `is_deleted`, `created_at`, `is_read`) VALUES
+(1, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 0),
+(2, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 0),
+(3, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 0),
+(4, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 0),
+(5, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 0),
+(6, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 0),
+(7, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 0),
+(8, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 0),
+(9, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 0),
+(10, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 0),
+(11, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 1),
+(12, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 1),
+(13, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 1),
+(14, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 1),
+(15, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 1),
+(16, 21, 3, 'Ahoj', 'Ahoj', 'Zpráva', 0, '2026-04-19 18:29:23', 1);
 
 -- --------------------------------------------------------
 
@@ -706,12 +715,12 @@ INSERT INTO `form_fields` (`id`, `id_form`, `code`, `field_type`, `label_localiz
 (45, 3, 'predmet', 'text', 'field_subject_label', 'field_subject_ph', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
 (46, 3, 'popis', 'textarea', 'field_description_label', 'field_description_ph', NULL, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
 (47, 3, 'fotky', 'file', 'field_photos_label', '', NULL, 3, 0, NULL, NULL, NULL, NULL, NULL, NULL, 1),
-(48, 4, 'predmet', 'text', 'field_cert_type_label', 'Např. Potvrzení o příjmu', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(48, 4, 'predmet', 'text', 'field_subject_label', 'field_subject_ph', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
 (49, 4, 'popis', 'textarea', 'field_description_label', 'field_description_ph', NULL, 2, 0, NULL, NULL, NULL, NULL, NULL, NULL, 1),
 (50, 4, 'prilohy', 'file', 'field_attachments_label', '', NULL, 3, 0, NULL, NULL, NULL, NULL, NULL, NULL, 1),
 (51, 5, 'predmet', 'text', 'field_subject_label', 'field_subject_ph', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
 (52, 5, 'zprava', 'textarea', 'field_description_label', 'field_description_ph', NULL, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
-(53, 6, 'predmet', 'text', 'field_absence_reason_label', 'field_subject_ph', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
+(53, 6, 'predmet', 'text', 'field_subject_label', 'field_subject_ph', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
 (54, 6, 'datum_absence', 'date', 'field_date_label', '', NULL, 2, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
 (55, 6, 'zprava', 'textarea', 'field_description_label', 'field_description_ph', NULL, 3, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
 (56, 7, 'predmet', 'text', 'field_subject_label', 'field_subject_ph', NULL, 1, 1, NULL, NULL, NULL, NULL, NULL, NULL, 1),
@@ -767,7 +776,8 @@ CREATE TABLE `form_submissions` (
 
 INSERT INTO `form_submissions` (`id`, `id_form`, `id_lang`, `id_client`, `status`, `ip_address`, `user_agent`, `submitted_at`, `is_read`) VALUES
 (1, 4, 1, 3, 'done', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '2026-04-13 18:56:54', 1),
-(2, 4, 1, 3, 'new', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '2026-04-13 19:35:17', 1);
+(2, 4, 1, 3, 'done', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '2026-04-13 19:35:17', 1),
+(3, 1, 1, 3, 'done', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '2026-04-17 08:59:11', 1);
 
 -- --------------------------------------------------------
 
@@ -799,7 +809,12 @@ INSERT INTO `form_submission_values` (`id`, `id_submission`, `id_form_field`, `v
 (3, 1, 50, NULL, '1776099414_user3_0.mp3', NULL, NULL, NULL, NULL, NULL, '2026-04-13 18:56:54'),
 (4, 2, 48, NULL, 'ABC', NULL, NULL, NULL, NULL, NULL, '2026-04-13 19:35:17'),
 (5, 2, 49, NULL, 'AHOJ, 1 2 3', NULL, NULL, NULL, NULL, NULL, '2026-04-13 19:35:17'),
-(6, 2, 50, NULL, '1776101717_user3_0.jpg', NULL, NULL, NULL, NULL, NULL, '2026-04-13 19:35:17');
+(6, 2, 50, NULL, '1776101717_user3_0.jpg', NULL, NULL, NULL, NULL, NULL, '2026-04-13 19:35:17'),
+(7, 3, 37, NULL, 'Dovolena', NULL, NULL, NULL, NULL, NULL, '2026-04-17 08:59:11'),
+(8, 3, 38, NULL, 'neplacena', NULL, NULL, NULL, NULL, NULL, '2026-04-17 08:59:11'),
+(9, 3, 39, NULL, NULL, NULL, NULL, '2026-04-16', NULL, NULL, '2026-04-17 08:59:11'),
+(10, 3, 40, NULL, NULL, NULL, NULL, '2026-04-19', NULL, NULL, '2026-04-17 08:59:11'),
+(11, 3, 41, NULL, NULL, NULL, NULL, NULL, NULL, NULL, '2026-04-17 08:59:11');
 
 -- --------------------------------------------------------
 
@@ -2258,7 +2273,145 @@ INSERT INTO `localized` (`id`, `id_lang`, `typ`, `page`, `name`, `content`) VALU
 (2199, 3, 'Front', 'All', 'sending_btn', 'Sending...'),
 (2200, 3, 'Front', 'All', 'close_btn', 'Close'),
 (2201, 1, 'Front', 'All', 'submit_request_btn', 'Odeslat žádost'),
-(2202, 3, 'Front', 'All', 'submit_request_btn', 'Submit Request');
+(2202, 3, 'Front', 'All', 'submit_request_btn', 'Submit Request'),
+(2203, 1, 'front', 'all', 'loggin_desc', 'Přihlaste se ke svému účtu, upravte nastavení a zobrazte historii.'),
+(2204, 1, 'front', 'all', 'loggin_as', 'Přihlašujete se jako:'),
+(2205, 1, 'front', 'all', 'forgot_password', 'Zapomněli jste heslo?'),
+(2206, 1, 'front', 'all', 'error_server_com', 'Došlo k chybě při komunikaci se serverem.'),
+(2207, 1, 'front', 'all', 'home_admin', 'Domů'),
+(2208, 3, 'front', 'all', 'loggin_desc', 'Sign in to your account to customize your content generation settings and view your history.'),
+(2209, 3, 'front', 'all', 'loggin_as', 'You are signing in as:'),
+(2210, 3, 'front', 'all', 'forgot_password', 'Forgot password?'),
+(2211, 3, 'front', 'all', 'error_server_com', 'An error occurred while communicating with the server.'),
+(2212, 3, 'front', 'all', 'home_admin', 'Home'),
+(2213, 1, 'front', 'all', 'profile_btn', 'Profil'),
+(2214, 1, 'front', 'all', 'logout_btn', 'Odhlásit se'),
+(2215, 1, 'front', 'all', 'default_user_name', 'Uživatel'),
+(2216, 1, 'front', 'all', 'request_detail_btn', 'Detail'),
+(2217, 1, 'front', 'all', 'request_detail_title', 'Detail požadavku'),
+(2218, 1, 'front', 'all', 'request_updated_label', 'Změněný požadavek'),
+(2219, 1, 'front', 'all', 'request_detail_load_error', 'Detail se nepodařilo načíst.'),
+(2220, 1, 'front', 'all', 'no_request_values', 'Tento požadavek zatím nemá uložené žádné hodnoty.'),
+(2221, 1, 'front', 'all', 'field_file_fallback', 'Soubor'),
+(2222, 1, 'front', 'all', 'field_value_fallback', 'Pole'),
+(2223, 1, 'front', 'all', 'untitled_request', 'Bez názvu'),
+(2224, 1, 'front', 'all', 'reply_btn', 'Odpovědět'),
+(2225, 1, 'front', 'all', 'reply_message_title', 'Odpovědět na zprávu'),
+(2226, 1, 'front', 'all', 'reply_subject_prefix', 'Re:'),
+(2227, 1, 'front', 'all', 'password_toggle_title', 'Zobrazit / skrýt heslo'),
+(2228, 1, 'front', 'all', 'footer_pricing', 'Ceník'),
+(2229, 1, 'front', 'all', 'footer_privacy_policy', 'Zásady ochrany osobních údajů'),
+(2230, 1, 'front', 'all', 'footer_faq', 'FAQ'),
+(2231, 1, 'front', 'all', 'footer_contact', 'Kontakt'),
+(2232, 1, 'front', 'all', 'footer_copyright', '© 2023 Všechna práva vyhrazena pro CopyGen.'),
+(2233, 1, 'front', 'all', 'footer_copyright_short', '© 2023 CopyGen.'),
+(2234, 1, 'front', 'all', 'forgot_password_title', 'Obnovení hesla'),
+(2235, 1, 'front', 'all', 'forgot_password_heading', 'Obnovit heslo'),
+(2236, 1, 'front', 'all', 'forgot_password_description', 'Zadejte svou e-mailovou adresu a pošleme vám instrukce k obnovení hesla.'),
+(2237, 1, 'front', 'all', 'forgot_password_email_label', 'E-mailová adresa'),
+(2238, 1, 'front', 'all', 'forgot_password_email_placehol', 'Zadejte e-mailovou adresu'),
+(2239, 1, 'front', 'all', 'forgot_password_send_link', 'Odeslat odkaz'),
+(2240, 1, 'front', 'all', 'return_to_login', 'Zpět na přihlášení'),
+(2241, 1, 'front', 'all', 'check_email_title', 'Zkontrolujte svůj e-mail'),
+(2242, 1, 'front', 'all', 'check_email_heading', 'Zkontrolujte svůj e-mail'),
+(2243, 1, 'front', 'all', 'check_email_description_intro', 'Zkontrolujte e-mailovou adresu'),
+(2244, 1, 'front', 'all', 'check_email_description_fallba', 'váš e-mail'),
+(2245, 1, 'front', 'all', 'check_email_description_outro', 'pro instrukce k obnovení hesla.'),
+(2246, 1, 'front', 'all', 'check_email_resend', 'Odeslat e-mail znovu'),
+(2247, 1, 'front', 'all', 'file_missing', 'Chybějící soubor.'),
+(2248, 1, 'front', 'all', 'access_denied', 'Přístup odepřen.'),
+(2249, 1, 'front', 'all', 'file_not_found', 'Soubor nebyl nalezen.'),
+(2250, 1, 'front', 'all', 'invalid_request', 'Neplatný požadavek.'),
+(2251, 1, 'front', 'all', 'message_sent_success', 'Zpráva byla úspěšně odeslána.'),
+(2252, 1, 'front', 'all', 'message_recipient_not_found', 'Uživatel s tímto e-mailem nebyl nalezen.'),
+(2253, 1, 'front', 'all', 'message_recipient_inactive', 'Účet příjemce není aktivní.'),
+(2254, 1, 'front', 'all', 'message_recipient_locked', 'Účet příjemce je dočasně uzamčen nebo vypršel.'),
+(2255, 1, 'front', 'all', 'request_not_found', 'Požadavek nebyl nalezen.'),
+(2256, 1, 'front', 'all', 'password_reset_link_sent', 'Odkaz pro obnovu hesla byl úspěšně odeslán na váš e-mail.'),
+(2257, 1, 'front', 'all', 'password_reset_user_not_found', 'Uživatel s tímto e-mailem nebyl nalezen.'),
+(2258, 1, 'front', 'all', 'login_method_not_allowed', 'Metoda není povolena.'),
+(2259, 1, 'front', 'all', 'login_invalid_credentials', 'Neplatné přihlašovací údaje.'),
+(2260, 1, 'front', 'all', 'login_account_inactive', 'Tento účet není aktivní.'),
+(2261, 1, 'front', 'all', 'login_qr_not_enabled', 'Přihlášení pomocí QR není pro tento účet povoleno.'),
+(2262, 1, 'front', 'all', 'login_account_locked', 'Účet je uzamčen.'),
+(2263, 1, 'front', 'all', 'login_server_error', 'Interní chyba serveru.'),
+(2264, 1, 'front', 'all', 'form_submission_error', 'Chyba při odesílání formuláře.'),
+(2265, 1, 'front', 'all', 'form_submission_success', 'Tvoje žádost byla úspěšně odeslána!'),
+(2266, 1, 'front', 'all', 'form_submission_save_error', 'Něco se pokazilo při ukládání do databáze, zkus to prosím znovu.'),
+(2267, 1, 'front', 'all', 'form_missing_id', 'Chybějící ID formuláře.'),
+(2268, 1, 'front', 'all', 'form_no_fields', 'Tento formulář zatím nemá žádná pole.'),
+(2269, 1, 'front', 'all', 'characters_suffix', 'znaků'),
+(2270, 3, 'front', 'all', 'profile_btn', 'Profile'),
+(2271, 3, 'front', 'all', 'logout_btn', 'Log out'),
+(2272, 3, 'front', 'all', 'default_user_name', 'User'),
+(2273, 3, 'front', 'all', 'request_detail_btn', 'Detail'),
+(2274, 3, 'front', 'all', 'request_detail_title', 'Request Detail'),
+(2275, 3, 'front', 'all', 'request_updated_label', 'Updated request'),
+(2276, 3, 'front', 'all', 'request_detail_load_error', 'Failed to load request detail.'),
+(2277, 3, 'front', 'all', 'no_request_values', 'This request does not have any saved values yet.'),
+(2278, 3, 'front', 'all', 'field_file_fallback', 'File'),
+(2279, 3, 'front', 'all', 'field_value_fallback', 'Field'),
+(2280, 3, 'front', 'all', 'untitled_request', 'Untitled'),
+(2281, 3, 'front', 'all', 'reply_btn', 'Reply'),
+(2282, 3, 'front', 'all', 'reply_message_title', 'Reply to message'),
+(2283, 3, 'front', 'all', 'reply_subject_prefix', 'Re:'),
+(2284, 3, 'front', 'all', 'password_toggle_title', 'Toggle show/hide password'),
+(2285, 3, 'front', 'all', 'footer_pricing', 'Pricing'),
+(2286, 3, 'front', 'all', 'footer_privacy_policy', 'Privacy Policy'),
+(2287, 3, 'front', 'all', 'footer_faq', 'FAQ'),
+(2288, 3, 'front', 'all', 'footer_contact', 'Contact'),
+(2289, 3, 'front', 'all', 'footer_copyright', '© 2023 All Rights Reserved to CopyGen.'),
+(2290, 3, 'front', 'all', 'footer_copyright_short', '© 2023 CopyGen.'),
+(2291, 3, 'front', 'all', 'forgot_password_title', 'Forgot Password'),
+(2292, 3, 'front', 'all', 'forgot_password_heading', 'Reset Your Password'),
+(2293, 3, 'front', 'all', 'forgot_password_description', 'Enter your email address and we will send you instructions to reset your password.'),
+(2294, 3, 'front', 'all', 'forgot_password_email_label', 'Email Address'),
+(2295, 3, 'front', 'all', 'forgot_password_email_placehol', 'Enter email address'),
+(2296, 3, 'front', 'all', 'forgot_password_send_link', 'Send Link'),
+(2297, 3, 'front', 'all', 'return_to_login', 'Return to Login'),
+(2298, 3, 'front', 'all', 'check_email_title', 'Check Your Email'),
+(2299, 3, 'front', 'all', 'check_email_heading', 'Check Your Email'),
+(2300, 3, 'front', 'all', 'check_email_description_intro', 'Please check the email address'),
+(2301, 3, 'front', 'all', 'check_email_description_fallba', 'your email'),
+(2302, 3, 'front', 'all', 'check_email_description_outro', 'for instructions to reset your password.'),
+(2303, 3, 'front', 'all', 'check_email_resend', 'Resend Email'),
+(2304, 3, 'front', 'all', 'file_missing', 'Missing file.'),
+(2305, 3, 'front', 'all', 'access_denied', 'Access denied.'),
+(2306, 3, 'front', 'all', 'file_not_found', 'File was not found.'),
+(2307, 3, 'front', 'all', 'invalid_request', 'Invalid request.'),
+(2308, 3, 'front', 'all', 'message_sent_success', 'Message was sent successfully.'),
+(2309, 3, 'front', 'all', 'message_recipient_not_found', 'User with this email was not found.'),
+(2310, 3, 'front', 'all', 'message_recipient_inactive', 'Recipient account is not active.'),
+(2311, 3, 'front', 'all', 'message_recipient_locked', 'Recipient account is temporarily locked or expired.'),
+(2312, 3, 'front', 'all', 'request_not_found', 'Request was not found.'),
+(2313, 3, 'front', 'all', 'password_reset_link_sent', 'Password reset link was sent to your email.'),
+(2314, 3, 'front', 'all', 'password_reset_user_not_found', 'User with this email was not found.'),
+(2315, 3, 'front', 'all', 'login_method_not_allowed', 'Method not allowed.'),
+(2316, 3, 'front', 'all', 'login_invalid_credentials', 'Invalid login credentials.'),
+(2317, 3, 'front', 'all', 'login_account_inactive', 'This account is not active.'),
+(2318, 3, 'front', 'all', 'login_qr_not_enabled', 'QR login is not enabled for this account.'),
+(2319, 3, 'front', 'all', 'login_account_locked', 'Account is locked.'),
+(2320, 3, 'front', 'all', 'login_server_error', 'Internal server error.'),
+(2321, 3, 'front', 'all', 'form_submission_error', 'Error while submitting the form.'),
+(2322, 3, 'front', 'all', 'form_submission_success', 'Your request was sent successfully!'),
+(2323, 3, 'front', 'all', 'form_submission_save_error', 'Something went wrong while saving to the database. Please try again.'),
+(2324, 3, 'front', 'all', 'form_missing_id', 'Missing form ID.'),
+(2325, 3, 'front', 'all', 'form_no_fields', 'This form does not have any fields yet.'),
+(2326, 3, 'front', 'all', 'characters_suffix', 'characters'),
+(2327, 1, 'front', 'all', 'forgot_password_email_ph', 'Zadejte e-mailovou adresu'),
+(2328, 1, 'front', 'all', 'check_email_desc_fallback', 'váš e-mail'),
+(2329, 3, 'front', 'all', 'forgot_password_email_ph', 'Enter email address'),
+(2330, 3, 'front', 'all', 'check_email_desc_fallback', 'your email'),
+(2331, 1, 'front', 'all', 'new_notification_single', 'Máte novou notifikaci.'),
+(2332, 1, 'front', 'all', 'new_notification_multiple', 'Máte nové notifikace.'),
+(2333, 1, 'front', 'all', 'boolean_yes', 'Ano'),
+(2334, 1, 'front', 'all', 'boolean_no', 'Ne'),
+(2335, 3, 'front', 'all', 'new_notification_single', 'You have a new notification.'),
+(2336, 3, 'front', 'all', 'new_notification_multiple', 'You have new notifications.'),
+(2337, 3, 'front', 'all', 'boolean_yes', 'Yes'),
+(2338, 3, 'front', 'all', 'boolean_no', 'No'),
+(2339, 1, 'front', 'all', 'date_range_invalid', 'Datum do nemuze byt drive nez datum od.'),
+(2340, 3, 'front', 'all', 'date_range_invalid', 'End date cannot be earlier than start date.');
 
 -- --------------------------------------------------------
 
@@ -3088,7 +3241,8 @@ CREATE TABLE `password_resets` (
 -- Vypisuji data pro tabulku `password_resets`
 --
 
--- Z bezpečnostních důvodů je tabulka `password_resets` v dumpu bez aktivních tokenů.
+INSERT INTO `password_resets` (`id`, `email`, `token`, `expires_at`, `created_at`) VALUES
+(3, 'novyklient@test.cz', '34c00854a0c65d4d2b69a6b220148bf5782058a9ea581d5f188de8603ae9bf76', '2026-04-11 14:00:20', '2026-04-11 11:00:20');
 
 -- --------------------------------------------------------
 
@@ -23192,7 +23346,7 @@ ALTER TABLE `alpha_pracovnici_uzivatele`
 -- AUTO_INCREMENT pro tabulku `alpha_pracovnici_uzivatele_sessions`
 --
 ALTER TABLE `alpha_pracovnici_uzivatele_sessions`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=64;
 
 --
 -- AUTO_INCREMENT pro tabulku `alpha_uzivatele_mista_prace`
@@ -23210,7 +23364,7 @@ ALTER TABLE `alpha_uzivatele_pracoviste`
 -- AUTO_INCREMENT pro tabulku `alpha_zpravy`
 --
 ALTER TABLE `alpha_zpravy`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=17;
 
 --
 -- AUTO_INCREMENT pro tabulku `campaign`
@@ -23282,13 +23436,13 @@ ALTER TABLE `form_field_options`
 -- AUTO_INCREMENT pro tabulku `form_submissions`
 --
 ALTER TABLE `form_submissions`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT pro tabulku `form_submission_values`
 --
 ALTER TABLE `form_submission_values`
-  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` bigint(20) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT pro tabulku `income_invoices`
@@ -23330,7 +23484,7 @@ ALTER TABLE `langs`
 -- AUTO_INCREMENT pro tabulku `localized`
 --
 ALTER TABLE `localized`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2203;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2341;
 
 --
 -- AUTO_INCREMENT pro tabulku `log`
