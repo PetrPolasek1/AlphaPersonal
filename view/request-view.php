@@ -120,7 +120,8 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
             white-space: nowrap;
             background: #eceef3;
             color: #98a2b3;
-            border: 1px solid transparent;
+            border: 1px solid #d8dee8;
+            box-shadow: 0 0 0 3px #fff;
         }
 
         .request-status-pill.is-active.text-bg-info-soft,
@@ -133,21 +134,25 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
         .request-status-pill.is-active.text-bg-info-soft {
             color: #07BDF5;
             background-color: #e1f7fe !important;
+            border-color: #b5ebfc;
         }
 
         .request-status-pill.is-active.text-bg-warning-soft {
             color: #f2bc16;
             background-color: #fdf7e3 !important;
+            border-color: #fbebb9;
         }
 
         .request-status-pill.is-active.text-bg-success-soft {
             color: #2dc58c;
             background-color: #e6f8f1 !important;
+            border-color: #c0eedd;
         }
 
         .request-status-pill.is-active.text-bg-danger-soft {
             color: #df3c4e;
             background-color: #fbe8ea !important;
+            border-color: #f5c5ca;
         }
 
         .request-status-step:first-child .request-status-pill {
@@ -338,11 +343,24 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
                                                 <?php else: ?>
                                                     <?php foreach ($requests as $request):
                                                         $statusClass = 'text-bg-primary-soft';
+                                                        $statusLabel = (string) ($request['status'] ?? '');
                                                         switch ($request['status']) {
-                                                            case 'new': $statusClass = 'text-bg-info-soft'; break;
-                                                            case 'processing': $statusClass = 'text-bg-warning-soft'; break;
-                                                            case 'done': $statusClass = 'text-bg-success-soft'; break;
-                                                            case 'rejected': $statusClass = 'text-bg-danger-soft'; break;
+                                                            case 'new':
+                                                                $statusClass = 'text-bg-info-soft';
+                                                                $statusLabel = t('status_new') !== 'status_new' ? t('status_new') : 'New';
+                                                                break;
+                                                            case 'processing':
+                                                                $statusClass = 'text-bg-warning-soft';
+                                                                $statusLabel = t('status_processing') !== 'status_processing' ? t('status_processing') : 'Processing';
+                                                                break;
+                                                            case 'done':
+                                                                $statusClass = 'text-bg-success-soft';
+                                                                $statusLabel = t('status_done') !== 'status_done' ? t('status_done') : 'Completed';
+                                                                break;
+                                                            case 'rejected':
+                                                                $statusClass = 'text-bg-danger-soft';
+                                                                $statusLabel = t('status_rejected') !== 'status_rejected' ? t('status_rejected') : 'Rejected';
+                                                                break;
                                                         }
                                                         $displayTitle = !empty($request['klientsky_nazev']) ? $request['klientsky_nazev'] : (t('untitled_request') !== 'untitled_request' ? t('untitled_request') : 'Bez názvu');
                                                     ?>
@@ -364,7 +382,7 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
 
                                                         <td class="tb-col tb-col-sm">
                                                             <div class="badge <?= $statusClass ?> rounded-pill px-2 py-1 fs-6 lh-sm">
-                                                                <?php e($request['status']); ?>
+                                                                <?php e($statusLabel); ?>
                                                             </div>
                                                         </td>
                                                         <td class="tb-col tb-col-md">

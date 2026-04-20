@@ -138,6 +138,31 @@ $renderPagination = static function (int $currentPageNumber, int $totalPageCount
             overflow: hidden;
         }
 
+        .messages-table .message-actions-dropdown {
+            position: relative;
+        }
+
+        .messages-table .message-actions-dropdown .dropdown-menu {
+            min-width: 12.5rem;
+            padding: 0.3rem;
+            border: 0;
+            border-radius: 0.85rem;
+            box-shadow: 0 18px 35px rgba(15, 23, 42, 0.14);
+        }
+
+        .messages-table .message-actions-dropdown .link-list a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 0.55rem;
+            width: 100%;
+            box-sizing: border-box;
+            border-radius: 0.55rem;
+            text-align: center;
+            padding: 0.55rem 0.7rem !important;
+            white-space: nowrap;
+        }
+
         .app-pagination {
             display: flex;
             justify-content: center;

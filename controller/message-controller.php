@@ -35,6 +35,24 @@ class MessageController {
             $successMsg = t('message_sent_success') !== 'message_sent_success' ? t('message_sent_success') : 'Zpráva byla úspěšně odeslána.';
         }
 
+        if (isset($_GET['bulk_read_trashed']) && $_GET['bulk_read_trashed'] == 1) {
+            $successMsg = t('read_messages_moved_to_trash') !== 'read_messages_moved_to_trash'
+                ? t('read_messages_moved_to_trash')
+                : 'Přečtené zprávy byly přesunuty do koše.';
+        }
+
+        if (isset($_GET['bulk_selected']) && $_GET['bulk_selected'] === 'trashed') {
+            $successMsg = t('selected_messages_moved_to_trash') !== 'selected_messages_moved_to_trash'
+                ? t('selected_messages_moved_to_trash')
+                : 'Vybrané zprávy byly přesunuty do koše.';
+        }
+
+        if (isset($_GET['bulk_selected']) && $_GET['bulk_selected'] === 'deleted') {
+            $successMsg = t('selected_messages_deleted') !== 'selected_messages_deleted'
+                ? t('selected_messages_deleted')
+                : 'Vybrané zprávy byly smazány.';
+        }
+
         if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'mark_read') {
             require_csrf();
             $msgId = (int) ($_POST['id'] ?? 0);
@@ -57,6 +75,13 @@ class MessageController {
             }
 
             header('Location: message.php');
+            exit;
+        }
+
+        if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['action']) && $_POST['action'] === 'trash_read_messages') {
+            require_csrf();
+            $this->model->trashAllReadMessages($this->userId);
+            header('Location: message.php?tab=recents&bulk_read_trashed=1');
             exit;
         }
 
@@ -95,6 +120,7 @@ class MessageController {
 
         $activeMessages = $this->model->getMessages($this->userId, 0, $perPage, ($activePage - 1) * $perPage);
         $trashedMessages = $this->model->getMessages($this->userId, 1, $perPage, ($trashPage - 1) * $perPage);
+        $readActiveMessagesCount = $this->model->getReadActiveMessagesCount($this->userId);
         $fullName = $this->fullName;
 
         $unreadMessagesCount = $this->model->getUnreadMessagesCount($this->userId);

@@ -81,6 +81,25 @@ class MessageModel {
     }
 
     // --- PŘIDÁNO PRO NOTIFIKACE ---
+    public function getReadActiveMessagesCount($userId) {
+        $stmt = $this->pdo->prepare("
+            SELECT COUNT(*)
+            FROM alpha_zpravy
+            WHERE recipient_id = ? AND is_deleted = 0 AND is_read = 1
+        ");
+        $stmt->execute([(int) $userId]);
+        return (int) $stmt->fetchColumn();
+    }
+
+    public function trashAllReadMessages($userId) {
+        $stmt = $this->pdo->prepare("
+            UPDATE alpha_zpravy
+            SET is_deleted = 1
+            WHERE recipient_id = ? AND is_deleted = 0 AND is_read = 1
+        ");
+        return $stmt->execute([(int) $userId]);
+    }
+
     public function getUnreadMessagesCount($userId) {
         $stmt = $this->pdo->prepare("SELECT COUNT(*) FROM alpha_zpravy WHERE recipient_id = ? AND is_deleted = 0 AND is_read = 0");
         $stmt->execute([$userId]);
