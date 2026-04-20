@@ -85,6 +85,140 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
             margin-top: 0.55rem;
         }
 
+        .request-status-flow {
+            display: grid;
+            grid-template-columns: auto 1fr auto 1fr auto;
+            align-items: start;
+            column-gap: 0;
+            width: 100%;
+            margin-bottom: 0.6rem;
+        }
+
+        .request-status-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 0.45rem;
+            flex: 0 0 auto;
+            min-width: 0;
+            transition: transform 0.2s ease;
+            position: relative;
+            z-index: 1;
+        }
+
+        .request-status-pill {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            min-width: 76px;
+            min-height: 40px;
+            padding: 0.5rem 0.95rem;
+            border-radius: 999px;
+            font-size: 0.875rem;
+            font-weight: 600;
+            line-height: 1;
+            white-space: nowrap;
+            background: #eceef3;
+            color: #98a2b3;
+            border: 1px solid transparent;
+        }
+
+        .request-status-pill.is-active.text-bg-info-soft,
+        .request-status-pill.is-active.text-bg-warning-soft,
+        .request-status-pill.is-active.text-bg-success-soft,
+        .request-status-pill.is-active.text-bg-danger-soft {
+            color: inherit;
+        }
+
+        .request-status-pill.is-active.text-bg-info-soft {
+            color: #07BDF5;
+            background-color: #e1f7fe !important;
+        }
+
+        .request-status-pill.is-active.text-bg-warning-soft {
+            color: #f2bc16;
+            background-color: #fdf7e3 !important;
+        }
+
+        .request-status-pill.is-active.text-bg-success-soft {
+            color: #2dc58c;
+            background-color: #e6f8f1 !important;
+        }
+
+        .request-status-pill.is-active.text-bg-danger-soft {
+            color: #df3c4e;
+            background-color: #fbe8ea !important;
+        }
+
+        .request-status-step:first-child .request-status-pill {
+            min-width: 64px;
+            padding-right: 1.2rem;
+        }
+
+        .request-status-time {
+            font-size: 0.75rem;
+            line-height: 1.2;
+            color: #98a2b3;
+            text-align: center;
+            min-height: 2.4em;
+            max-width: 88px;
+        }
+
+        .request-status-connector {
+            position: relative;
+            height: 40px;
+            z-index: 0;
+        }
+
+        .request-status-connector::before {
+            content: "";
+            position: absolute;
+            top: 18px;
+            left: -38px;
+            right: -38px;
+            height: 4px;
+            border-radius: 999px;
+            background: rgba(17, 24, 39, 0.9);
+            opacity: 0.12;
+        }
+
+        .request-status-connector.is-active::before {
+            opacity: 1;
+        }
+
+        @media (max-width: 575.98px) {
+            .request-status-flow {
+                grid-template-columns: auto 1fr auto 1fr auto;
+            }
+
+            .request-status-pill {
+                min-width: 0;
+                min-height: 36px;
+                padding: 0.45rem 0.8rem;
+                font-size: 0.8rem;
+            }
+
+            .request-status-step:first-child .request-status-pill {
+                min-width: 58px;
+                padding-right: 1rem;
+            }
+
+            .request-status-time {
+                max-width: 72px;
+                font-size: 0.7rem;
+            }
+
+            .request-status-connector {
+                height: 36px;
+            }
+
+            .request-status-connector::before {
+                top: 16px;
+                left: -34px;
+                right: -34px;
+            }
+        }
+
         .app-pagination {
             display: flex;
             justify-content: center;
@@ -99,27 +233,27 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
         @media (max-width: 767.98px) {
             .requests-table tbody {
                 display: block;
-                padding: 0.4rem;
+                padding: 0.75rem 0.8rem 0.95rem;
             }
 
             .requests-table tbody tr {
                 display: block;
                 border: 1px solid rgba(15, 23, 42, 0.08);
-                border-radius: 0.7rem;
+                border-radius: 1rem;
                 background: #fff;
-                box-shadow: 0 8px 18px rgba(15, 23, 42, 0.045);
-                padding: 0.52rem 0.58rem;
+                box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
+                padding: 0.8rem 0.85rem;
             }
 
             .requests-table tbody tr + tr {
-                margin-top: 0.45rem;
+                margin-top: 0.7rem;
             }
 
             .requests-table tbody td {
                 display: block;
                 width: 100%;
                 border: 0;
-                padding: 0 0 0.3rem;
+                padding: 0 0 0.4rem;
             }
 
             .requests-table tbody td:last-child {
@@ -138,26 +272,26 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
             .requests-table tbody .btn-outline-primary {
                 flex: 1;
                 justify-content: center;
-                min-height: 1.7rem;
-                padding: 0.18rem 0.4rem;
-                font-size: 0.7rem;
+                min-height: 2rem;
+                padding: 0.28rem 0.55rem;
+                font-size: 0.72rem;
                 line-height: 1.1;
             }
 
             .requests-table .caption-text {
-                font-size: 0.7rem;
-                line-height: 1.15;
+                font-size: 0.82rem;
+                line-height: 1.25;
             }
 
             .requests-table .sub-text,
             .requests-table .text-light {
-                font-size: 0.58rem !important;
-                line-height: 1.15;
+                font-size: 0.68rem !important;
+                line-height: 1.3;
             }
 
             .requests-table .badge {
-                font-size: 0.6rem !important;
-                padding: 0.1rem 0.38rem !important;
+                font-size: 0.68rem !important;
+                padding: 0.2rem 0.55rem !important;
             }
 
             .app-pagination {
@@ -380,6 +514,18 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
             const titleEl = document.getElementById('request-detail-title');
             const metaEl = document.getElementById('request-detail-meta');
             const contentEl = document.getElementById('request-detail-content');
+            const phaseOrder = ['new', 'processing', 'final'];
+            const phaseLabels = {
+                new: '<?php e(t('status_new') !== 'status_new' ? t('status_new') : 'New'); ?>',
+                processing: '<?php e(t('status_processing') !== 'status_processing' ? t('status_processing') : 'Processing'); ?>',
+                final: ''
+            };
+            const phaseClasses = {
+                new: 'text-bg-info-soft',
+                processing: 'text-bg-warning-soft',
+                done: 'text-bg-success-soft',
+                rejected: 'text-bg-danger-soft'
+            };
 
             titleEl.innerText = detail.title || '<?php e(t('request_detail_title') !== 'request_detail_title' ? t('request_detail_title') : 'Detail požadavku'); ?>';
 
@@ -391,10 +537,32 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
                 ? submittedAt.toLocaleString('cs-CZ')
                 : '';
 
+            const normalizedStatus = String(detail.status || '').toLowerCase();
+            const timeline = detail.status_timeline || {};
+            const isKnownPhase = ['new', 'processing', 'done', 'rejected'].includes(normalizedStatus);
+            const finalPhaseKey = normalizedStatus === 'rejected' ? 'rejected' : 'done';
+
+            phaseLabels.final = finalPhaseKey === 'rejected'
+                ? '<?php e(t('status_rejected') !== 'status_rejected' ? t('status_rejected') : 'Rejected'); ?>'
+                : '<?php e(t('status_done') !== 'status_done' ? t('status_done') : 'Done'); ?>';
+
+            const trackerHtml = isKnownPhase
+                ? phaseOrder.map((phase, index) => `
+                    <div class="request-status-step">
+                        <span class="request-status-pill ${isPhaseReached(phase, normalizedStatus) ? `is-active ${phaseClasses[getPhaseColorKey(phase, finalPhaseKey)]}` : ''}">${escapeHtml(phaseLabels[phase])}</span>
+                        <span class="request-status-time">${getPhaseTimestamp(phase, timeline, finalPhaseKey) ? escapeHtml(formatPhaseDate(getPhaseTimestamp(phase, timeline, finalPhaseKey))) : '&nbsp;'}</span>
+                    </div>
+                    ${index < phaseOrder.length - 1 ? `<span class="request-status-connector ${connectorIsActive(index, normalizedStatus) ? 'is-active' : ''}"></span>` : ''}
+                `).join('')
+                : '';
+
             metaEl.innerHTML = `
-                <div class="d-flex flex-wrap gap-2 align-items-center">
-                    <span class="badge text-bg-primary-soft rounded-pill px-3 py-2">${escapeHtml(detail.status || '')}</span>
-                    ${formattedDate ? `<span class="text-soft small">${escapeHtml(formattedDate)}</span>` : ''}
+                <div class="d-flex flex-column gap-2">
+                    ${trackerHtml ? `<div class="request-status-flow">${trackerHtml}</div>` : ''}
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                        ${!isKnownPhase ? `<span class="badge text-bg-primary-soft rounded-pill px-3 py-2">${escapeHtml(detail.status || '')}</span>` : ''}
+                        ${!isKnownPhase && formattedDate ? `<span class="text-soft small">${escapeHtml(formattedDate)}</span>` : ''}
+                    </div>
                 </div>
             `;
 
@@ -428,6 +596,65 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
             }).join('');
 
             contentEl.innerHTML = `<div class="request-detail-list">${rowsHtml}</div>`;
+        }
+
+        function formatPhaseDate(value) {
+            const parsed = value ? new Date(String(value).replace(' ', 'T')) : null;
+
+            if (!parsed || isNaN(parsed.getTime())) {
+                return '';
+            }
+
+            return parsed.toLocaleString('cs-CZ');
+        }
+
+        function getPhaseStateKey(phase, currentStatus, finalPhaseKey) {
+            if (phase === 'final') {
+                return finalPhaseKey;
+            }
+
+            return phase;
+        }
+
+        function getPhaseColorKey(phase, finalPhaseKey) {
+            if (phase === 'final') {
+                return finalPhaseKey;
+            }
+
+            return phase;
+        }
+
+        function getPhaseTimestamp(phase, timeline, finalPhaseKey) {
+            const stateKey = getPhaseStateKey(phase, finalPhaseKey, finalPhaseKey);
+            return timeline[stateKey] || '';
+        }
+
+        function isPhaseReached(phase, currentStatus) {
+            if (phase === 'new') {
+                return ['new', 'processing', 'done', 'rejected'].includes(currentStatus);
+            }
+
+            if (phase === 'processing') {
+                return ['processing', 'done', 'rejected'].includes(currentStatus);
+            }
+
+            if (phase === 'final') {
+                return ['done', 'rejected'].includes(currentStatus);
+            }
+
+            return false;
+        }
+
+        function connectorIsActive(index, currentStatus) {
+            if (index === 0) {
+                return ['processing', 'done', 'rejected'].includes(currentStatus);
+            }
+
+            if (index === 1) {
+                return ['done', 'rejected'].includes(currentStatus);
+            }
+
+            return false;
         }
 
         function escapeHtml(value) {

@@ -70,6 +70,9 @@ class RequestModel {
                 fs.id_form,
                 fs.status,
                 fs.submitted_at,
+                fs.processing_at,
+                fs.done_at,
+                fs.rejected_at,
                 f.title_localized_key AS form_title_key
             FROM form_submissions fs
             JOIN forms f ON fs.id_form = f.id

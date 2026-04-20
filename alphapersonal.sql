@@ -758,6 +758,9 @@ CREATE TABLE `form_submissions` (
   `ip_address` varchar(45) DEFAULT NULL,
   `user_agent` varchar(500) DEFAULT NULL,
   `submitted_at` datetime NOT NULL DEFAULT current_timestamp(),
+  `processing_at` datetime DEFAULT NULL,
+  `done_at` datetime DEFAULT NULL,
+  `rejected_at` datetime DEFAULT NULL,
   `is_read` tinyint(1) DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
 
@@ -765,9 +768,9 @@ CREATE TABLE `form_submissions` (
 -- Vypisuji data pro tabulku `form_submissions`
 --
 
-INSERT INTO `form_submissions` (`id`, `id_form`, `id_lang`, `id_client`, `status`, `ip_address`, `user_agent`, `submitted_at`, `is_read`) VALUES
-(1, 4, 1, 3, 'done', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '2026-04-13 18:56:54', 1),
-(2, 4, 1, 3, 'new', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '2026-04-13 19:35:17', 1);
+INSERT INTO `form_submissions` (`id`, `id_form`, `id_lang`, `id_client`, `status`, `ip_address`, `user_agent`, `submitted_at`, `processing_at`, `done_at`, `rejected_at`, `is_read`) VALUES
+(1, 4, 1, 3, 'done', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '2026-04-13 18:56:54', NULL, NULL, NULL, 1),
+(2, 4, 1, 3, 'new', '::1', 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/145.0.0.0 Safari/537.36 OPR/129.0.0.0', '2026-04-13 19:35:17', NULL, NULL, NULL, 1);
 
 -- --------------------------------------------------------
 

@@ -111,6 +111,12 @@ class RequestController {
                 'title' => t($detail['form_title_key'] ?? ''),
                 'status' => $detail['status'],
                 'submitted_at' => $detail['submitted_at'],
+                'status_timeline' => [
+                    'new' => $detail['submitted_at'],
+                    'processing' => $detail['processing_at'] ?? null,
+                    'done' => $detail['done_at'] ?? null,
+                    'rejected' => $detail['rejected_at'] ?? null,
+                ],
                 'rows' => $rows,
             ],
         ]);
