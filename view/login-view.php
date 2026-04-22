@@ -21,12 +21,25 @@
     <link rel="stylesheet" href="assets/css/style.css?v1.1.0">
     <style>
         .app-footer-row {
+            justify-content: center;
             gap: 0.5rem 1rem;
+            text-align: center;
         }
 
         .app-footer-nav {
+            display: flex;
+            flex-wrap: wrap;
             justify-content: center;
             gap: 0.125rem 0.25rem;
+        }
+
+        .nk-footer-links,
+        .nk-footer-copyright {
+            width: 100%;
+        }
+
+        .nk-footer-copyright {
+            text-align: center;
         }
 
         .app-footer-nav .nav-item {
@@ -151,7 +164,7 @@
 
                 <div class="nk-footer">
                     <div class="container-xl">
-                        <div class="d-flex align-items-center flex-wrap justify-content-between mx-n3 app-footer-row">
+                        <div class="d-flex align-items-center flex-wrap justify-content-center mx-n3 app-footer-row">
                             <div class="nk-footer-links px-3">
                                 <ul class="nav nav-sm app-footer-nav">
                                     <li class="nav-item">

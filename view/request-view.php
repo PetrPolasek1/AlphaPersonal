@@ -3,8 +3,9 @@
  * -------------------------------------------------
  * View: Requests
  * -------------------------------------------------
- * Renderuje seznam klientskych pozadavku
- * a modal pro detail vybraneho podani.
+ * Render request list and detail UI.
+ * Desktop uses modal. Mobile uses
+ * in-page detail screen like messages.
  */
 ?>
 <?php
@@ -27,7 +28,7 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
     <nav class="app-pagination" aria-label="Pagination">
         <ul class="pagination pagination-sm mb-0">
             <li class="page-item <?= $currentPageNumber <= 1 ? 'disabled' : '' ?>">
-                <a class="page-link" href="<?= $currentPageNumber <= 1 ? '#' : htmlspecialchars($urlBuilder($currentPageNumber - 1), ENT_QUOTES, 'UTF-8') ?>">‹</a>
+                <a class="page-link" href="<?= $currentPageNumber <= 1 ? '#' : htmlspecialchars($urlBuilder($currentPageNumber - 1), ENT_QUOTES, 'UTF-8') ?>">&#8249;</a>
             </li>
             <?php for ($pageNumber = $startPage; $pageNumber <= $endPage; $pageNumber++): ?>
                 <li class="page-item <?= $pageNumber === $currentPageNumber ? 'active' : '' ?>">
@@ -35,7 +36,7 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
                 </li>
             <?php endfor; ?>
             <li class="page-item <?= $currentPageNumber >= $totalPageCount ? 'disabled' : '' ?>">
-                <a class="page-link" href="<?= $currentPageNumber >= $totalPageCount ? '#' : htmlspecialchars($urlBuilder($currentPageNumber + 1), ENT_QUOTES, 'UTF-8') ?>">›</a>
+                <a class="page-link" href="<?= $currentPageNumber >= $totalPageCount ? '#' : htmlspecialchars($urlBuilder($currentPageNumber + 1), ENT_QUOTES, 'UTF-8') ?>">&#8250;</a>
             </li>
         </ul>
     </nav>
@@ -48,9 +49,124 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?php e(t('requests_title') !== 'requests_title' ? t('requests_title') : 'Požadavky'); ?> - CopyGen</title>
+    <title><?php e(t('requests_title') !== 'requests_title' ? t('requests_title') : 'Requests'); ?> - CopyGen</title>
     <link rel="stylesheet" href="assets/css/style.css?v1.1.0">
     <style>
+        .request-card-main {
+            min-width: 0;
+        }
+
+        .request-card-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.75rem;
+            min-width: 0;
+        }
+
+        .request-card-title-wrap {
+            display: flex;
+            align-items: flex-start;
+            gap: 0.5rem;
+            min-width: 0;
+            flex: 1 1 auto;
+        }
+
+        .request-card-title {
+            min-width: 0;
+            font-size: 0.95rem;
+            line-height: 1.35;
+            color: #1f2b3d;
+        }
+
+        .request-card-title strong {
+            display: block;
+            overflow-wrap: anywhere;
+        }
+
+        .request-card-type {
+            margin-top: 0.2rem;
+            color: #7b8794;
+            font-size: 0.78rem;
+            line-height: 1.35;
+            word-break: break-word;
+        }
+
+            .request-card-status {
+                display: none;
+                flex: 0 0 auto;
+            }
+
+        #mobile-request-detail-status {
+            display: none !important;
+        }
+
+        .request-status-badge {
+            min-width: 0;
+            font-size: 0.72rem !important;
+            font-weight: 700;
+            padding: 0.26rem 0.68rem !important;
+            border-radius: 0.85rem !important;
+            white-space: nowrap;
+        }
+
+        .request-card-meta {
+            font-size: 0.78rem;
+            line-height: 1.35;
+            color: #98a2b3;
+            white-space: nowrap;
+        }
+
+        .requests-table .tb-col-status {
+            width: 150px;
+            text-align: center;
+        }
+
+        .requests-table .tb-col-time {
+            width: 210px;
+            text-align: center;
+        }
+
+        .requests-table .tb-col-time .request-card-meta {
+            display: inline-flex;
+            justify-content: center;
+            gap: 0.55rem;
+        }
+
+        .request-updated-dot {
+            width: 10px;
+            height: 10px;
+            padding: 0;
+            display: inline-block !important;
+            flex: 0 0 auto;
+            margin-top: 0.35rem;
+            border-radius: 999px;
+            background-color: #e85347 !important;
+            box-shadow: 0 0 0 2px #fff;
+        }
+
+        .request-updated-dot-action {
+            display: inline-block;
+            margin-right: 0.15rem;
+        }
+
+        .request-mobile-header {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 0.75rem;
+        }
+
+        .request-mobile-meta {
+            line-height: 1.6;
+        }
+
+        #mobile-request-detail-view .card {
+            border-radius: 1rem;
+            overflow: hidden;
+            box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+        }
+
         .request-detail-list {
             border: 1px solid rgba(15, 23, 42, 0.12);
             border-radius: 1rem;
@@ -238,65 +354,120 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
         @media (max-width: 767.98px) {
             .requests-table tbody {
                 display: block;
-                padding: 0.75rem 0.8rem 0.95rem;
+                padding: 1rem 1.05rem 1.25rem;
             }
 
             .requests-table tbody tr {
                 display: block;
                 border: 1px solid rgba(15, 23, 42, 0.08);
-                border-radius: 1rem;
+                border-radius: 1.05rem;
                 background: #fff;
                 box-shadow: 0 12px 28px rgba(15, 23, 42, 0.06);
-                padding: 0.8rem 0.85rem;
+                padding: 0 !important;
+                overflow: hidden;
             }
 
             .requests-table tbody tr + tr {
-                margin-top: 0.7rem;
+                margin-top: 1.05rem;
             }
 
             .requests-table tbody td {
                 display: block;
                 width: 100%;
                 border: 0;
-                padding: 0 0 0.4rem;
+                padding: 0 1.25rem 0.6rem !important;
             }
 
             .requests-table tbody td:last-child {
                 padding-bottom: 0;
             }
 
+            .requests-table tbody .tb-col {
+                padding-top: 1.15rem !important;
+                padding-bottom: 0.5rem !important;
+            }
+
+            .requests-table tbody .tb-col-md {
+                display: none;
+            }
+
+            .requests-table tbody .tb-col-status {
+                display: none;
+            }
+
             .requests-table tbody .tb-col-end {
                 text-align: left !important;
+                padding-top: 0.4rem !important;
+                padding-bottom: 1.15rem !important;
             }
 
             .requests-table tbody .tb-col-end > .d-inline-flex {
+                display: flex !important;
                 width: 100%;
-                justify-content: space-between;
+                justify-content: center;
             }
 
             .requests-table tbody .btn-outline-primary {
-                flex: 1;
+                display: inline-flex;
+                flex: 1 1 100%;
+                width: 100%;
+                max-width: 100%;
                 justify-content: center;
-                min-height: 2rem;
-                padding: 0.28rem 0.55rem;
-                font-size: 0.72rem;
+                min-height: 3rem;
+                padding: 0.75rem 0.9rem;
+                font-size: 0.88rem;
+                font-weight: 600;
                 line-height: 1.1;
+                margin: 0;
+                border-radius: 0.5rem;
+                box-sizing: border-box;
+                transition: background-color 0.2s ease, border-color 0.2s ease, color 0.2s ease, box-shadow 0.2s ease;
             }
 
-            .requests-table .caption-text {
-                font-size: 0.82rem;
-                line-height: 1.25;
+            .requests-table tbody .btn-outline-primary:hover,
+            .requests-table tbody .btn-outline-primary:focus,
+            .requests-table tbody .btn-outline-primary:active {
+                background-color: #4f46e5;
+                border-color: #4f46e5;
+                color: #fff;
+                box-shadow: none;
             }
 
-            .requests-table .sub-text,
-            .requests-table .text-light {
-                font-size: 0.68rem !important;
+            .request-card-title {
+                font-size: 0.96rem;
                 line-height: 1.3;
+                margin-top: 0;
             }
 
-            .requests-table .badge {
-                font-size: 0.68rem !important;
-                padding: 0.2rem 0.55rem !important;
+            .request-card-type,
+            .request-card-meta {
+                font-size: 0.76rem !important;
+                line-height: 1.35;
+            }
+
+            .request-card-header {
+                align-items: flex-start;
+                gap: 0.75rem;
+            }
+
+            .request-card-title-wrap {
+                display: block;
+                padding-top: 0;
+            }
+
+            .request-card-status {
+                display: block;
+            }
+
+            .request-updated-dot {
+                width: 0.95rem;
+                height: 0.95rem;
+                margin-top: 0;
+                box-shadow: 0 0 0 0.16rem #fff;
+            }
+
+            .request-updated-dot-action {
+                display: inline-block;
             }
 
             .app-pagination {
@@ -307,6 +478,28 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
                 min-width: 1.65rem;
                 padding: 0.16rem 0.35rem;
                 font-size: 0.7rem;
+            }
+
+            #requests-main-view {
+                padding-bottom: 1.25rem;
+            }
+
+            #mobile-request-detail-view {
+                padding: 0.35rem 0.2rem 1.25rem;
+            }
+
+            #mobile-request-detail-view .nk-block-head {
+                margin-bottom: 1rem;
+            }
+
+            #mobile-request-detail-view .request-mobile-title {
+                margin-bottom: 0.5rem;
+                font-size: 2rem;
+                line-height: 1.15;
+            }
+
+            #mobile-request-detail-view .request-status-flow {
+                margin-top: 1rem;
             }
         }
     </style>
@@ -325,99 +518,130 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
                         <div class="nk-content-inner">
                             <div class="nk-content-body">
 
-                                <div class="nk-block-head nk-page-head">
-                                    <div class="nk-block-head-between flex-wrap gap g-2">
-                                        <div class="nk-block-head-content">
-                                            <h2 class="display-6"><?php e(t('requests_heading') !== 'requests_heading' ? t('requests_heading') : 'Požadavky'); ?></h2>
-                                            <p><?php e(t('requests_summary') !== 'requests_summary' ? t('requests_summary') : 'Přehled vašich odeslaných požadavků'); ?></p>
+                                <div id="requests-main-view">
+                                    <div class="nk-block-head nk-page-head">
+                                        <div class="nk-block-head-between flex-wrap gap g-2">
+                                            <div class="nk-block-head-content">
+                                                <h2 class="display-6"><?php e(t('requests_heading') !== 'requests_heading' ? t('requests_heading') : 'Requests'); ?></h2>
+                                                <p><?php e(t('requests_summary') !== 'requests_summary' ? t('requests_summary') : 'Overview of all your submitted forms.'); ?></p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="nk-block">
+                                        <div class="card shadow-none">
+                                            <table class="table table-middle mb-0 requests-table">
+                                                <tbody>
+                                                    <?php if (empty($requests)): ?>
+                                                        <tr><td class="text-center py-4"><?php e(t('no_requests_found') !== 'no_requests_found' ? t('no_requests_found') : 'No requests found.'); ?></td></tr>
+                                                    <?php else: ?>
+                                                        <?php foreach ($requests as $request):
+                                                            $statusClass = 'text-bg-primary-soft';
+                                                            $statusLabel = (string) ($request['status'] ?? '');
+                                                            $showUpdatedDot = (int) ($request['is_read'] ?? 1) === 0;
+                                                            switch ($request['status']) {
+                                                                case 'new':
+                                                                    $statusClass = 'text-bg-info-soft';
+                                                                    $statusLabel = t('status_new') !== 'status_new' ? t('status_new') : 'New';
+                                                                    break;
+                                                                case 'processing':
+                                                                    $statusClass = 'text-bg-warning-soft';
+                                                                    $statusLabel = t('status_processing') !== 'status_processing' ? t('status_processing') : 'Processing';
+                                                                    break;
+                                                                case 'done':
+                                                                    $statusClass = 'text-bg-success-soft';
+                                                                    $statusLabel = t('status_done') !== 'status_done' ? t('status_done') : 'Completed';
+                                                                    break;
+                                                                case 'rejected':
+                                                                    $statusClass = 'text-bg-danger-soft';
+                                                                    $statusLabel = t('status_rejected') !== 'status_rejected' ? t('status_rejected') : 'Rejected';
+                                                                    break;
+                                                            }
+                                                            $displayTitle = !empty($request['klientsky_nazev']) ? $request['klientsky_nazev'] : (t('untitled_request') !== 'untitled_request' ? t('untitled_request') : 'Untitled request');
+                                                        ?>
+                                                        <tr data-request-row="<?= (int) $request['submission_id'] ?>">
+                                                            <td class="tb-col">
+                                                                <div class="request-card-main">
+                                                                    <div class="request-card-header">
+                                                                        <div class="request-card-title-wrap">
+                                                                            <div class="request-card-title">
+                                                                                <strong><?php e($displayTitle); ?></strong>
+                                                                                <div class="request-card-type">
+                                                                                    <?php e(t($request['typ_formulare'])); ?>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                        <div class="request-card-status">
+                                                                            <div class="badge <?= $statusClass ?> rounded-pill px-2 py-1 fs-6 lh-sm">
+                                                                                <?php e($statusLabel); ?>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </td>
+                                                            <td class="tb-col tb-col-status">
+                                                                <div class="badge <?= $statusClass ?> request-status-badge">
+                                                                    <?php e($statusLabel); ?>
+                                                                </div>
+                                                            </td>
+                                                            <td class="tb-col tb-col-md tb-col-time">
+                                                                <div class="request-card-meta">
+                                                                    <span><?= date('M d, Y', strtotime($request['datum'])) ?></span>
+                                                                    <span><?= date('h:i A', strtotime($request['datum'])) ?></span>
+                                                                </div>
+                                                            </td>
+                                                            <td class="tb-col tb-col-end text-end">
+                                                                <div class="d-inline-flex align-items-center gap-2">
+                                                                    <?php if ($showUpdatedDot): ?>
+                                                                        <span
+                                                                            class="request-updated-dot request-updated-dot-action"
+                                                                            data-request-unread-dot-action="<?= (int) $request['submission_id'] ?>"
+                                                                            title="<?php e(t('request_updated_label') !== 'request_updated_label' ? t('request_updated_label') : 'Updated request'); ?>"
+                                                                        ></span>
+                                                                    <?php endif; ?>
+                                                                    <button
+                                                                        type="button"
+                                                                        class="btn btn-sm btn-outline-primary"
+                                                                        data-request-id="<?= (int) $request['submission_id'] ?>"
+                                                                        data-request-title="<?php e($displayTitle); ?>"
+                                                                        onclick="openRequestDetail(this)"
+                                                                    >
+                                                                        <em class="icon ni ni-eye"></em> <span><?php e(t('request_detail_btn') !== 'request_detail_btn' ? t('request_detail_btn') : 'Detail'); ?></span>
+                                                                    </button>
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                        <?php endforeach; ?>
+                                                    <?php endif; ?>
+                                                </tbody>
+                                            </table>
+                                            <?= $renderRequestPagination($requestsPage, $requestsPages, static fn (int $pageNumber): string => $requestPageUrl($pageNumber)) ?>
                                         </div>
                                     </div>
                                 </div>
 
-                                <div class="nk-block">
-                                    <div class="card shadow-none">
-                                        <table class="table table-middle mb-0 requests-table">
-                                            <tbody>
-                                                <?php if (empty($requests)): ?>
-                                                    <tr><td class="text-center py-4"><?php e(t('no_requests_found') !== 'no_requests_found' ? t('no_requests_found') : 'Žádné požadavky nebyly nalezeny.'); ?></td></tr>
-                                                <?php else: ?>
-                                                    <?php foreach ($requests as $request):
-                                                        $statusClass = 'text-bg-primary-soft';
-                                                        $statusLabel = (string) ($request['status'] ?? '');
-                                                        switch ($request['status']) {
-                                                            case 'new':
-                                                                $statusClass = 'text-bg-info-soft';
-                                                                $statusLabel = t('status_new') !== 'status_new' ? t('status_new') : 'New';
-                                                                break;
-                                                            case 'processing':
-                                                                $statusClass = 'text-bg-warning-soft';
-                                                                $statusLabel = t('status_processing') !== 'status_processing' ? t('status_processing') : 'Processing';
-                                                                break;
-                                                            case 'done':
-                                                                $statusClass = 'text-bg-success-soft';
-                                                                $statusLabel = t('status_done') !== 'status_done' ? t('status_done') : 'Completed';
-                                                                break;
-                                                            case 'rejected':
-                                                                $statusClass = 'text-bg-danger-soft';
-                                                                $statusLabel = t('status_rejected') !== 'status_rejected' ? t('status_rejected') : 'Rejected';
-                                                                break;
-                                                        }
-                                                        $displayTitle = !empty($request['klientsky_nazev']) ? $request['klientsky_nazev'] : (t('untitled_request') !== 'untitled_request' ? t('untitled_request') : 'Bez názvu');
-                                                    ?>
-                                                    <tr data-request-row="<?= (int) $request['submission_id'] ?>">
-                                                        <td class="tb-col">
-                                                            <div class="caption-text line-clamp-1">
-                                                                <?php if ((int) ($request['is_read'] ?? 1) === 0): ?>
-                                                                    <span class="badge rounded-pill bg-danger flex-shrink-0"
-                                                                        data-request-unread-dot="<?= (int) $request['submission_id'] ?>"
-                                                                        style="width: 10px; height: 10px; padding: 0;"
-                                                                        title="<?php e(t('request_updated_label') !== 'request_updated_label' ? t('request_updated_label') : 'Změněný požadavek'); ?>"></span>
-                                                                <?php endif; ?>
-                                                                <strong><?php e($displayTitle); ?></strong>
-                                                            </div>
-                                                            <div class="sub-text text-soft">
-                                                                <?php e(t($request['typ_formulare'])); ?>
-                                                            </div>
-                                                        </td>
-
-                                                        <td class="tb-col tb-col-sm">
-                                                            <div class="badge <?= $statusClass ?> rounded-pill px-2 py-1 fs-6 lh-sm">
-                                                                <?php e($statusLabel); ?>
-                                                            </div>
-                                                        </td>
-                                                        <td class="tb-col tb-col-md">
-                                                            <div class="fs-6 text-light d-inline-flex flex-wrap gap gx-2">
-                                                                <span><?= date('M d, Y', strtotime($request['datum'])) ?></span>
-                                                                <span><?= date('h:i A', strtotime($request['datum'])) ?></span>
-                                                            </div>
-                                                        </td>
-                                                        <td class="tb-col tb-col-end text-end">
-                                                            <div class="d-inline-flex align-items-center gap-2">
-                                                                <?php if ((int) ($request['is_read'] ?? 1) === 0): ?>
-                                                                    <span
-                                                                        class="d-inline-block rounded-circle bg-danger flex-shrink-0"
-                                                                        data-request-unread-dot-action="<?= (int) $request['submission_id'] ?>"
-                                                                        style="width: 10px; height: 10px;"
-                                                                        title="<?php e(t('request_updated_label') !== 'request_updated_label' ? t('request_updated_label') : 'Změněný požadavek'); ?>"
-                                                                    ></span>
-                                                                <?php endif; ?>
-                                                                <button
-                                                                    type="button"
-                                                                    class="btn btn-sm btn-outline-primary"
-                                                                    data-request-id="<?= (int) $request['submission_id'] ?>"
-                                                                    data-request-title="<?php e($displayTitle); ?>"
-                                                                    onclick="openRequestDetail(this)"
-                                                                >
-                                                                    <em class="icon ni ni-eye"></em> <span><?php e(t('request_detail_btn') !== 'request_detail_btn' ? t('request_detail_btn') : 'Detail'); ?></span>
-                                                                </button>
-                                                            </div>
-                                                        </td>
-                                                    </tr>
-                                                    <?php endforeach; ?>
-                                                <?php endif; ?>
-                                            </tbody>
-                                        </table>
-                                        <?= $renderRequestPagination($requestsPage, $requestsPages, static fn (int $pageNumber): string => $requestPageUrl($pageNumber)) ?>
+                                <div id="mobile-request-detail-view" class="d-none">
+                                    <div class="nk-block-head">
+                                        <button onclick="closeMobileRequestDetail()" class="btn btn-outline-light bg-white d-inline-flex align-items-center mb-3">
+                                            <em class="icon ni ni-arrow-left"></em>
+                                            <span><?php e(t('back_to_requests') !== 'back_to_requests' ? t('back_to_requests') : 'Back to requests'); ?></span>
+                                        </button>
+                                        <div class="request-mobile-header">
+                                            <div class="min-w-0">
+                                                <h2 class="display-6 request-mobile-title" id="mobile-request-detail-title"><?php e(t('request_detail_title') !== 'request_detail_title' ? t('request_detail_title') : 'Request detail'); ?></h2>
+                                                <p class="text-soft request-mobile-meta mb-0">
+                                                    <span id="mobile-request-detail-type"></span>
+                                                    <span id="mobile-request-detail-date"></span>
+                                                </p>
+                                            </div>
+                                            <div id="mobile-request-detail-status"></div>
+                                        </div>
+                                        <div id="mobile-request-detail-meta" class="mt-4"></div>
+                                    </div>
+                                    <div class="nk-block">
+                                        <div class="card card-bordered">
+                                            <div class="card-inner" id="mobile-request-detail-content"></div>
+                                        </div>
                                     </div>
                                 </div>
 
@@ -430,7 +654,7 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
         <div class="modal-dialog modal-dialog-centered modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="request-detail-title"><?php e(t('request_detail_title') !== 'request_detail_title' ? t('request_detail_title') : 'Detail požadavku'); ?></h5>
+                    <h5 class="modal-title" id="request-detail-title"><?php e(t('request_detail_title') !== 'request_detail_title' ? t('request_detail_title') : 'Request detail'); ?></h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
                 </div>
                 <div class="modal-body">
@@ -453,26 +677,53 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
             if (typeof bootstrap !== 'undefined' && modalEl) {
                 requestDetailModal = new bootstrap.Modal(modalEl);
             }
+
+            syncResponsiveRequestState();
         });
+
+        window.addEventListener('resize', syncResponsiveRequestState);
 
         function openRequestDetail(button) {
             const requestId = button.getAttribute('data-request-id');
-            const fallbackTitle = button.getAttribute('data-request-title') || '<?php e(t('request_detail_title') !== 'request_detail_title' ? t('request_detail_title') : 'Detail požadavku'); ?>';
-            const titleEl = document.getElementById('request-detail-title');
-            const metaEl = document.getElementById('request-detail-meta');
-            const contentEl = document.getElementById('request-detail-content');
+            const fallbackTitle = button.getAttribute('data-request-title') || '<?php e(t('request_detail_title') !== 'request_detail_title' ? t('request_detail_title') : 'Request detail'); ?>';
+            const isMobile = window.innerWidth < 768;
 
-            titleEl.innerText = fallbackTitle;
-            metaEl.innerHTML = '';
-            contentEl.innerHTML = `
+            const desktopTitleEl = document.getElementById('request-detail-title');
+            const desktopMetaEl = document.getElementById('request-detail-meta');
+            const desktopContentEl = document.getElementById('request-detail-content');
+
+            const mobileTitleEl = document.getElementById('mobile-request-detail-title');
+            const mobileTypeEl = document.getElementById('mobile-request-detail-type');
+            const mobileDateEl = document.getElementById('mobile-request-detail-date');
+            const mobileStatusEl = document.getElementById('mobile-request-detail-status');
+            const mobileMetaEl = document.getElementById('mobile-request-detail-meta');
+            const mobileContentEl = document.getElementById('mobile-request-detail-content');
+
+            const loadingHtml = `
                 <div class="text-center py-4">
                     <div class="spinner-border text-primary" role="status">
-                        <span class="visually-hidden"><?php e(t('loading') !== 'loading' ? t('loading') : 'Načítání...'); ?></span>
+                        <span class="visually-hidden"><?php e(t('loading') !== 'loading' ? t('loading') : 'Loading...'); ?></span>
                     </div>
                 </div>
             `;
 
-            if (requestDetailModal) {
+            desktopTitleEl.innerText = fallbackTitle;
+            desktopMetaEl.innerHTML = '';
+            desktopContentEl.innerHTML = loadingHtml;
+
+            mobileTitleEl.innerText = fallbackTitle;
+            mobileTypeEl.innerText = '';
+            mobileDateEl.innerText = '';
+            if (mobileStatusEl) {
+                mobileStatusEl.innerHTML = '';
+            }
+            mobileMetaEl.innerHTML = '';
+            mobileContentEl.innerHTML = loadingHtml;
+
+            if (isMobile) {
+                document.getElementById('requests-main-view').classList.add('d-none');
+                document.getElementById('mobile-request-detail-view').classList.remove('d-none');
+            } else if (requestDetailModal) {
                 requestDetailModal.show();
             }
 
@@ -488,19 +739,47 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
                 .then(response => response.json())
                 .then(data => {
                     if (!data.success) {
-                        throw new Error(data.message || '<?php e(t('request_detail_load_error') !== 'request_detail_load_error' ? t('request_detail_load_error') : 'Detail se nepodařilo načíst.'); ?>');
+                        throw new Error(data.message || '<?php e(t('request_detail_load_error') !== 'request_detail_load_error' ? t('request_detail_load_error') : 'Failed to load detail.'); ?>');
                     }
 
                     markRequestAsReadInUi(data.submissionId, data.updatedRequestsCount);
                     renderRequestDetail(data.detail);
                 })
                 .catch(error => {
-                    contentEl.innerHTML = `
+                    const errorHtml = `
                         <div class="alert alert-danger mb-0">
                             <em class="icon ni ni-alert-circle"></em> ${escapeHtml(error.message)}
                         </div>
                     `;
+
+                    desktopContentEl.innerHTML = errorHtml;
+                    mobileContentEl.innerHTML = errorHtml;
                 });
+        }
+
+        function syncResponsiveRequestState() {
+            const mobileDetailView = document.getElementById('mobile-request-detail-view');
+            const modalEl = document.getElementById('requestDetailModal');
+            const isMobile = window.innerWidth < 768;
+
+            if (!isMobile && mobileDetailView && !mobileDetailView.classList.contains('d-none')) {
+                closeMobileRequestDetail();
+            }
+
+            if (isMobile && requestDetailModal && modalEl && modalEl.classList.contains('show')) {
+                requestDetailModal.hide();
+            }
+        }
+
+        function closeMobileRequestDetail() {
+            document.getElementById('mobile-request-detail-view').classList.add('d-none');
+            document.getElementById('requests-main-view').classList.remove('d-none');
+            document.getElementById('mobile-request-detail-meta').innerHTML = '';
+            document.getElementById('mobile-request-detail-content').innerHTML = '';
+            const mobileStatusEl = document.getElementById('mobile-request-detail-status');
+            if (mobileStatusEl) {
+                mobileStatusEl.innerHTML = '';
+            }
         }
 
         function markRequestAsReadInUi(submissionId, updatedRequestsCount) {
@@ -529,9 +808,17 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
         }
 
         function renderRequestDetail(detail) {
-            const titleEl = document.getElementById('request-detail-title');
-            const metaEl = document.getElementById('request-detail-meta');
-            const contentEl = document.getElementById('request-detail-content');
+            const desktopTitleEl = document.getElementById('request-detail-title');
+            const desktopMetaEl = document.getElementById('request-detail-meta');
+            const desktopContentEl = document.getElementById('request-detail-content');
+
+            const mobileTitleEl = document.getElementById('mobile-request-detail-title');
+            const mobileTypeEl = document.getElementById('mobile-request-detail-type');
+            const mobileDateEl = document.getElementById('mobile-request-detail-date');
+            const mobileStatusEl = document.getElementById('mobile-request-detail-status');
+            const mobileMetaEl = document.getElementById('mobile-request-detail-meta');
+            const mobileContentEl = document.getElementById('mobile-request-detail-content');
+
             const phaseOrder = ['new', 'processing', 'final'];
             const phaseLabels = {
                 new: '<?php e(t('status_new') !== 'status_new' ? t('status_new') : 'New'); ?>',
@@ -545,7 +832,13 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
                 rejected: 'text-bg-danger-soft'
             };
 
-            titleEl.innerText = detail.title || '<?php e(t('request_detail_title') !== 'request_detail_title' ? t('request_detail_title') : 'Detail požadavku'); ?>';
+            const resolvedTitle = detail.display_title || detail.title || '<?php e(t('request_detail_title') !== 'request_detail_title' ? t('request_detail_title') : 'Request detail'); ?>';
+            const statusClass = detail.status_class || 'text-bg-primary-soft';
+            const statusLabel = detail.status_label || detail.status || '';
+            const formTypeLabel = detail.form_type_label || '';
+
+            desktopTitleEl.innerText = resolvedTitle;
+            mobileTitleEl.innerText = resolvedTitle;
 
             const submittedAt = detail.submitted_at
                 ? new Date(detail.submitted_at.replace(' ', 'T'))
@@ -574,18 +867,29 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
                 `).join('')
                 : '';
 
-            metaEl.innerHTML = `
+            desktopMetaEl.innerHTML = `
                 <div class="d-flex flex-column gap-2">
                     ${trackerHtml ? `<div class="request-status-flow">${trackerHtml}</div>` : ''}
                     <div class="d-flex flex-wrap gap-2 align-items-center">
-                        ${!isKnownPhase ? `<span class="badge text-bg-primary-soft rounded-pill px-3 py-2">${escapeHtml(detail.status || '')}</span>` : ''}
+                        ${!isKnownPhase && statusLabel ? `<span class="badge ${escapeAttribute(statusClass)} rounded-pill px-3 py-2">${escapeHtml(statusLabel)}</span>` : ''}
                         ${!isKnownPhase && formattedDate ? `<span class="text-soft small">${escapeHtml(formattedDate)}</span>` : ''}
                     </div>
                 </div>
             `;
 
+            mobileTypeEl.innerText = formTypeLabel;
+            mobileDateEl.innerText = formattedDate ? ` | ${formattedDate}` : '';
+            if (mobileStatusEl) {
+                mobileStatusEl.innerHTML = statusLabel
+                    ? `<span class="badge ${escapeAttribute(statusClass)} rounded-pill px-3 py-2">${escapeHtml(statusLabel)}</span>`
+                    : '';
+            }
+            mobileMetaEl.innerHTML = trackerHtml ? `<div class="request-status-flow">${trackerHtml}</div>` : '';
+
             if (!detail.rows || !detail.rows.length) {
-                contentEl.innerHTML = '<div class="alert alert-light mb-0"><?php e(t('no_request_values') !== 'no_request_values' ? t('no_request_values') : 'Tento požadavek zatím nemá uložené žádné hodnoty.'); ?></div>';
+                const emptyHtml = '<div class="alert alert-light mb-0"><?php e(t('no_request_values') !== 'no_request_values' ? t('no_request_values') : 'This request does not have any saved values yet.'); ?></div>';
+                desktopContentEl.innerHTML = emptyHtml;
+                mobileContentEl.innerHTML = emptyHtml;
                 return;
             }
 
@@ -599,7 +903,7 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
 
                     return `
                         <div class="request-detail-item">
-                            <span class="request-detail-label">${escapeHtml(row.label || '<?php e(t('field_file_fallback') !== 'field_file_fallback' ? t('field_file_fallback') : 'Soubor'); ?>')}:</span>
+                            <span class="request-detail-label">${escapeHtml(row.label || '<?php e(t('field_file_fallback') !== 'field_file_fallback' ? t('field_file_fallback') : 'File'); ?>')}:</span>
                             <div class="request-detail-files">${filesHtml}</div>
                         </div>
                     `;
@@ -607,13 +911,15 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
 
                 return `
                     <div class="request-detail-item">
-                        <span class="request-detail-label">${escapeHtml(row.label || '<?php e(t('field_value_fallback') !== 'field_value_fallback' ? t('field_value_fallback') : 'Pole'); ?>')}:</span>
+                        <span class="request-detail-label">${escapeHtml(row.label || '<?php e(t('field_value_fallback') !== 'field_value_fallback' ? t('field_value_fallback') : 'Field'); ?>')}:</span>
                         <span class="request-detail-value"> ${escapeHtml(row.value || '-')}</span>
                     </div>
                 `;
             }).join('');
 
-            contentEl.innerHTML = `<div class="request-detail-list">${rowsHtml}</div>`;
+            const contentHtml = `<div class="request-detail-list">${rowsHtml}</div>`;
+            desktopContentEl.innerHTML = contentHtml;
+            mobileContentEl.innerHTML = contentHtml;
         }
 
         function formatPhaseDate(value) {
@@ -626,7 +932,7 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
             return parsed.toLocaleString('cs-CZ');
         }
 
-        function getPhaseStateKey(phase, currentStatus, finalPhaseKey) {
+        function getPhaseStateKey(phase, finalPhaseKey) {
             if (phase === 'final') {
                 return finalPhaseKey;
             }
@@ -643,7 +949,7 @@ $renderRequestPagination = static function (int $currentPageNumber, int $totalPa
         }
 
         function getPhaseTimestamp(phase, timeline, finalPhaseKey) {
-            const stateKey = getPhaseStateKey(phase, finalPhaseKey, finalPhaseKey);
+            const stateKey = getPhaseStateKey(phase, finalPhaseKey);
             return timeline[stateKey] || '';
         }
 

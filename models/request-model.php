@@ -73,7 +73,15 @@ class RequestModel {
                 fs.processing_at,
                 fs.done_at,
                 fs.rejected_at,
-                f.title_localized_key AS form_title_key
+                f.title_localized_key AS form_title_key,
+                (
+                    SELECT COALESCE(NULLIF(v.value_string, ''), NULLIF(v.value_text, ''))
+                    FROM form_submission_values v
+                    JOIN form_fields ff ON ff.id = v.id_form_field
+                    WHERE v.id_submission = fs.id
+                      AND ff.code = 'predmet'
+                    LIMIT 1
+                ) AS klientsky_nazev
             FROM form_submissions fs
             JOIN forms f ON fs.id_form = f.id
             WHERE fs.id = ? AND fs.id_client = ?

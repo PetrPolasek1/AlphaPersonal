@@ -103,13 +103,21 @@ class RequestController {
             $rows[] = $row;
         }
 
+        $statusMeta = $this->getStatusMeta((string) ($detail['status'] ?? ''));
+        $displayTitle = $this->resolveDisplayTitle((string) ($detail['klientsky_nazev'] ?? ''));
+        $formTypeLabel = t($detail['form_title_key'] ?? '');
+
         json_response([
             'success' => true,
             'submissionId' => $submissionId,
             'updatedRequestsCount' => (int) $this->model->getUpdatedRequestsCount($this->userId),
             'detail' => [
-                'title' => t($detail['form_title_key'] ?? ''),
+                'title' => $displayTitle,
+                'display_title' => $displayTitle,
+                'form_type_label' => $formTypeLabel,
                 'status' => $detail['status'],
+                'status_label' => $statusMeta['label'],
+                'status_class' => $statusMeta['class'],
                 'submitted_at' => $detail['submitted_at'],
                 'status_timeline' => [
                     'new' => $detail['submitted_at'],
@@ -120,6 +128,46 @@ class RequestController {
                 'rows' => $rows,
             ],
         ]);
+    }
+
+    private function getStatusMeta(string $status): array {
+        switch ($status) {
+            case 'new':
+                return [
+                    'class' => 'text-bg-info-soft',
+                    'label' => t('status_new') !== 'status_new' ? t('status_new') : 'New',
+                ];
+            case 'processing':
+                return [
+                    'class' => 'text-bg-warning-soft',
+                    'label' => t('status_processing') !== 'status_processing' ? t('status_processing') : 'Processing',
+                ];
+            case 'done':
+                return [
+                    'class' => 'text-bg-success-soft',
+                    'label' => t('status_done') !== 'status_done' ? t('status_done') : 'Completed',
+                ];
+            case 'rejected':
+                return [
+                    'class' => 'text-bg-danger-soft',
+                    'label' => t('status_rejected') !== 'status_rejected' ? t('status_rejected') : 'Rejected',
+                ];
+            default:
+                return [
+                    'class' => 'text-bg-primary-soft',
+                    'label' => $status,
+                ];
+        }
+    }
+
+    private function resolveDisplayTitle(string $value): string {
+        $trimmedValue = trim($value);
+
+        if ($trimmedValue !== '') {
+            return $trimmedValue;
+        }
+
+        return t('untitled_request') !== 'untitled_request' ? t('untitled_request') : 'Bez názvu';
     }
 
     private function normalizeFieldValue(array $field) {
