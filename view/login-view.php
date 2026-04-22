@@ -80,8 +80,8 @@
     <div class="nk-app-root " data-sidebar-collapse="lg">
         <div class="nk-main">
             <div class="nk-wrap has-shape flex-column">
-                <div class="nk-shape bg-shape-blur-a start-0 top-0"></div>
-                <div class="nk-shape bg-shape-blur-b end-0 bottom-0"></div>
+                <!-- <div class="nk-shape bg-shape-blur-a start-0 top-0"></div> -->
+                <!-- <div class="nk-shape bg-shape-blur-b end-0 bottom-0"></div> -->
                 <div class="text-center pt-5">
                     <a href="javascript:void(0)" class="logo-link">
                         <div class="logo-wrap">
